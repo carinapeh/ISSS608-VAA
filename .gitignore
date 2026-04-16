@@ -9,3 +9,5 @@
 **/*.quarto_ipynb
 R-4.5.3-arm64.pkg
 RStudio-2026.01.2-418.dmg
+pacman/
+pacman_0.5.1.tar.gz
