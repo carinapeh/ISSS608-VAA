@@ -1,23 +1,20 @@
 project:
   type: website
-
 website:
   title: "ISSS608-VAA"
   navbar:
     left:
     - text: "Hands-on Exercise"
       menu:
-        - text: "Hands-On-Ex01.html"
-          href: "Hands-on_Ex01/Hands-On Ex01.html"
+        - text: "Hands-on Exercise 1"
+          href: "Hands-on_Ex01/Hands-On-Ex01.html"
     right:
       - href: index.qmd
         text: Home
       - about.qmd
-
 format:
   html:
     theme: cosmo
     css: styles.css
     toc: true
-
 editor: visual
