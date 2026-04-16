@@ -208,6 +208,7 @@ ggplot(data=exam_data,
 ```
 
 ## Basic bar chart (vertical)
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x=RACE)) +
@@ -215,6 +216,7 @@ ggplot(data=exam_data,
 ```
 
 ## Flipped bar chart (horizontal)
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x=RACE)) +
@@ -228,6 +230,7 @@ ggplot(data=exam_data,
   geom_point() +
   geom_smooth(method=lm, size=0.5)
 ```
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x= MATHS, y=ENGLISH)) +
@@ -247,6 +250,7 @@ ggplot(data=exam_data,
 ```
 
 Bar Chart using theme_gray
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x=RACE)) +
@@ -256,6 +260,7 @@ ggplot(data=exam_data,
 ```
 
 Bar Chart using theme_classic
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x=RACE)) +
@@ -265,6 +270,7 @@ ggplot(data=exam_data,
 ```
 
 Bar Chart using theme minimal
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x=RACE)) +
