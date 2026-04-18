@@ -1,7 +1,19 @@
 ---
 title: "Hands-on Exercise 1"
 author: "carinapeh"
+date: "April 10, 2026"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
 ---
+
+## Loading Tidyverse
+
+This code chunk use pacman's [p_load()](https://cran.r-project.org/web/packages/pacman/refman/pacman.html#p_load) to
+load tidyverse family of package into R environment.
 
 # Getting Started
 
@@ -12,8 +24,6 @@ The code chunk below uses p_load() of pacman package to check if tidyverse packa
 ```{r}
 pacman::p_load(tidyverse)
 ```
-
-## Importing the data
 
 ```{r}
 exam_data <- read_csv("Exam_data.csv")
@@ -249,7 +259,7 @@ ggplot(data=exam_data,
   theme_gray()
 ```
 
-Bar Chart using theme_gray
+## Bar Chart using theme_gray
 
 ```{r}
 ggplot(data=exam_data, 
@@ -259,7 +269,7 @@ ggplot(data=exam_data,
   theme_gray()
 ```
 
-Bar Chart using theme_classic
+## Bar Chart using theme_classic
 
 ```{r}
 ggplot(data=exam_data, 
@@ -269,7 +279,7 @@ ggplot(data=exam_data,
   theme_classic()
 ```
 
-Bar Chart using theme minimal
+## Bar Chart using theme minimal
 
 ```{r}
 ggplot(data=exam_data, 
