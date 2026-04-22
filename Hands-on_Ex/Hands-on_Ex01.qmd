@@ -38,13 +38,13 @@ ggplot(data = exam_data,
   geom_bar()
 ```
 
-## **R Graphics histogram:**
+## R Graphics histogram
 
 ```{r}
 hist(exam_data$MATHS)
 ```
 
-## **ggplot2 histogram:**
+## ggplot2 histogram
 
 ```{r}
 ggplot(data=exam_data, aes(x = MATHS)) +
@@ -55,20 +55,28 @@ ggplot(data=exam_data, aes(x = MATHS)) +
   ggtitle("Distribution of Maths scores")
 ```
 
+## Empty canvas
+
 ```{r}
 ggplot(data=exam_data)
 ```
+
+## Canvas with aesthetic
 
 ```{r}
 ggplot(data=exam_data, 
        aes(x= MATHS))
 ```
 
+## Dot plot
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x = MATHS)) +
   geom_dotplot(dotsize = 0.5)
 ```
+
+## Dot plot with cleaned y-axis
 
 ```{r}
 ggplot(data=exam_data, 
@@ -79,11 +87,15 @@ ggplot(data=exam_data,
                      breaks = NULL)
 ```
 
+## Default histogram
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x = MATHS)) +
   geom_histogram()
 ```
+
+## Histogram with 20 bins
 
 ```{r}
 ggplot(data=exam_data, 
@@ -93,6 +105,8 @@ ggplot(data=exam_data,
                  fill="light blue")
 ```
 
+## Histogram by gender
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x= MATHS, 
@@ -101,7 +115,7 @@ ggplot(data=exam_data,
                  color="grey30")
 ```
 
-## **Basic density plot**
+## Basic density plot
 
 ```{r}
 ggplot(data=exam_data, 
@@ -109,7 +123,7 @@ ggplot(data=exam_data,
   geom_density()
 ```
 
-## **Density by gender**
+## Density by gender
 
 ```{r}
 ggplot(data=exam_data, 
@@ -136,6 +150,8 @@ ggplot(data=exam_data,
   geom_boxplot(notch=TRUE)
 ```
 
+## Violin plot
+
 ```{r}
 ggplot(data=exam_data, 
        aes(y = MATHS, 
@@ -143,12 +159,16 @@ ggplot(data=exam_data,
   geom_violin()
 ```
 
+## Basic scatterplot
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x= MATHS, 
            y=ENGLISH)) +
   geom_point()
 ```
+
+## Boxplot with jitter points
 
 ```{r}
 ggplot(data=exam_data, 
@@ -159,11 +179,15 @@ ggplot(data=exam_data,
              size = 0.5)
 ```
 
+## Boxplot only
+
 ```{r}
 ggplot(data=exam_data, 
        aes(y = MATHS, x= GENDER)) +
   geom_boxplot()
 ```
+
+## Boxplot with mean point
 
 ```{r}
 ggplot(data=exam_data, 
@@ -175,12 +199,16 @@ ggplot(data=exam_data,
                size=4)  
 ```
 
-```{R}
+## Scatterplot with curved smooth line
+
+```{r}
 ggplot(data=exam_data, 
        aes(x= MATHS, y=ENGLISH)) +
   geom_point() +
   geom_smooth(size=0.5)
 ```
+
+## Scatterplot with linear regression line
 
 ```{r}
 ggplot(data=exam_data, 
@@ -190,6 +218,8 @@ ggplot(data=exam_data,
   geom_smooth(method=lm, 
               linewidth=0.5)
 ```
+
+## Scatterplot with fixed axis range
 
 ```{r}
 ggplot(data=exam_data, 
@@ -202,12 +232,16 @@ ggplot(data=exam_data,
 
 ## Facets
 
+### Facet wrap by class
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x= MATHS)) +
   geom_histogram(bins=20) +
     facet_wrap(~ CLASS)
 ```
+
+### Facet grid by class
 
 ```{r}
 ggplot(data=exam_data, 
@@ -233,12 +267,16 @@ ggplot(data=exam_data,
   coord_flip()
 ```
 
+## Scatterplot with regression line
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x= MATHS, y=ENGLISH)) +
   geom_point() +
   geom_smooth(method=lm, size=0.5)
 ```
+
+## Scatterplot with axis limits
 
 ```{r}
 ggplot(data=exam_data, 
@@ -248,14 +286,6 @@ ggplot(data=exam_data,
               size=0.5) +  
   coord_cartesian(xlim=c(0,100),
                   ylim=c(0,100))
-```
-
-```{r}
-ggplot(data=exam_data, 
-       aes(x=RACE)) +
-  geom_bar() +
-  coord_flip() +
-  theme_gray()
 ```
 
 ## Bar Chart using theme_gray
@@ -278,7 +308,7 @@ ggplot(data=exam_data,
   theme_classic()
 ```
 
-## Bar Chart using theme minimal
+## Bar Chart using theme_minimal
 
 ```{r}
 ggplot(data=exam_data, 

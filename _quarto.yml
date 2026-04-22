@@ -3,6 +3,7 @@ project:
 website:
   title: "ISSS608-VAA"
   navbar:
+    logo: images/site-logo.png
     left:
     - text: "Hands-on Exercise"
       menu:
@@ -16,7 +17,7 @@ website:
       - about.qmd
 format:
   html:
-    theme: cosmo
+    theme: minty
     css: styles.css
     toc: true
 editor: visual

@@ -184,3 +184,56 @@ p3 + inset_element(p2,
 patchwork <- (p1 / p2) | p3
 patchwork & theme_economist()
 ```
+
+## Extra Alternatives
+
+### Alternative 1: Using theme_wsj()
+
+I used theme_wsj() instead of theme_economist() for a cleaner, more minimal Wall Street Journal style.
+
+```{r}
+ggplot(data=exam_data, aes(x = MATHS)) +
+  geom_histogram(bins=20, color="grey25", fill="grey90") +
+  ggtitle("Distribution of Maths scores") +
+  theme_wsj()
+```
+
+### Alternative 2: Using theme_fivethirtyeight()
+
+This theme mimics the style used by FiveThirtyEight, great for clean data journalism visuals.
+
+```{r}
+ggplot(data=exam_data, aes(x = MATHS)) +
+  geom_histogram(bins=20, color="grey25", fill="grey90") +
+  ggtitle("Distribution of Maths scores") +
+  theme_fivethirtyeight()
+```
+
+### Alternative 3: Different patchwork layout
+
+Instead of stacking p1/p2 on the left, I place p1 on top spanning full width for better visual hierarchy.
+
+```{r}
+p1 / (p2 | p3)
+```
+
+### Alternative 4: Letter tags instead of Roman numerals
+
+Using letter tags (A, B, C) makes subplots easier to reference in written explanations.
+
+```{r}
+((p1 / p2) | p3) + 
+  plot_annotation(tag_levels = 'A')
+```
+
+### Alternative 5: Inset in different position
+
+Placing the inset in the bottom right instead of top left avoids covering the main data cluster.
+
+```{r}
+p3 + inset_element(p2,
+                   left = 0.5,
+                   bottom = 0.0,
+                   right = 1.0,
+                   top = 0.4)
+```

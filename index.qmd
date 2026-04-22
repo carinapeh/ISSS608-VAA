@@ -1,5 +1,21 @@
 ---
-title: "ISSS608-VAA"
+title: "My Visual Analytics Journey"
 ---
 
-Welcome to **ISSS608** **Visual Analytics and Applications.** In this website, you will find my coursework prepared for this course.
+## Welcome
+
+Hi, I am **Carina Peh** and welcome to my course portfolio for **ISSS608 Visual Analytics and Applications**.
+
+## Latest Updates
+
+### Hands-on Exercise 2 — Beyond ggplot2 Fundamentals
+
+Explored ggplot2 extensions including ggrepel, ggthemes, hrbrthemes and patchwork.
+
+[Read more →](Hands-on_Ex/Hands-on_Ex02.qmd)
+
+### Hands-on Exercise 1 — A Layered Grammar of Graphics
+
+Introduction to ggplot2 and building statistical charts in R.
+
+[Read more →](Hands-on_Ex/Hands-on_Ex01.qmd)

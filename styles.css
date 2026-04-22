@@ -1,1 +1,35 @@
-/* css styles */
+/* Background image */
+body {
+  background-image: url('images/background.png');
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+/* Navbar */
+.navbar {
+  background-color: #d4e8e1 !important;
+}
+
+/* Navbar logo size */
+.navbar-logo img {
+  max-height: 80px !important;
+  width: auto !important;
+}
+
+/* Headings */
+h1, h2, h3 {
+  color: #4a7c6f;
+}
+
+/* Links */
+a {
+  color: #7aadab;
+}
+
+/* Make content readable over background */
+.page-columns {
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: 8px;
+  padding: 20px;
+}
