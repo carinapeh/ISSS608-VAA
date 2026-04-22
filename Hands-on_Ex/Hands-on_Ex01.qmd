@@ -12,8 +12,7 @@ execute:
 
 ## Loading Tidyverse
 
-This code chunk use pacman's [p_load()](https://cran.r-project.org/web/packages/pacman/refman/pacman.html#p_load) to
-load tidyverse family of package into R environment.
+This code chunk use pacman's [p_load()](https://cran.r-project.org/web/packages/pacman/refman/pacman.html#p_load) to load tidyverse family of package into R environment.
 
 # Getting Started
 

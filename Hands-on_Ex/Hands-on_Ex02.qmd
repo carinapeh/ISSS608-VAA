@@ -1,0 +1,12 @@
+---
+title: "Hands-on Exercise 2: Beyond ggplot2 Fundamentals"
+author: "carina peh"
+date: "April 22, 2026"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+format: html
+---
