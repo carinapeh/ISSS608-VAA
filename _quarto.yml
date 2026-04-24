@@ -4,6 +4,7 @@ website:
   title: "ISSS608-VAA"
   navbar:
     logo: images/site-logo.png
+    title: false
     left:
     - text: "Hands-on Exercise"
       menu:

@@ -4,20 +4,38 @@ body {
   background-size: cover;
   background-attachment: fixed;
   background-repeat: no-repeat;
+  font-size: 15px;
 }
 
-/* Navbar */
+/* Navbar - smaller height */
 .navbar {
   background-color: #d4e8e1 !important;
+  position: relative !important;
+  min-height: 70px !important;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}
+
+/* Center the navbar logo */
+.navbar-brand {
+  position: absolute !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
 }
 
 /* Navbar logo size */
 .navbar-logo img {
-  max-height: 50px !important;
-  width: auto !important;
+  max-height: 60px !important;
+  width: 133px !important;
+  mix-blend-mode: multiply !important;
 }
 
-/* Headings */
+/* Headings smaller */
+h1 { font-size: 1.6rem !important; }
+h2 { font-size: 1.3rem !important; }
+h3 { font-size: 1.1rem !important; }
+
+/* Headings colour */
 h1, h2, h3 {
   color: #4a7c6f;
 }

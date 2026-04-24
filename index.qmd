@@ -1,12 +1,14 @@
 ---
-title: "My Visual Analytics Journey"
+format:
+  html:
+    toc: true
 ---
 
-## Welcome
+### Welcome
 
 Hi, I am **Carina Peh** and welcome to my course portfolio for **ISSS608 Visual Analytics and Applications**.
 
-## Latest Updates
+### Latest Updates
 
 ### Hands-on Exercise 2 — Beyond ggplot2 Fundamentals
 

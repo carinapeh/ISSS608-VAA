@@ -9,9 +9,9 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "My Visual Analytics Journey",
+    "title": "ISSS608-VAA",
     "section": "",
-    "text": "Hi, I am Carina Peh and welcome to my course portfolio for ISSS608 Visual Analytics and Applications."
+    "text": "Welcome\nHi, I am Carina Peh and welcome to my course portfolio for ISSS608 Visual Analytics and Applications.\n\n\nLatest Updates\n\n\nHands-on Exercise 2 — Beyond ggplot2 Fundamentals\nExplored ggplot2 extensions including ggrepel, ggthemes, hrbrthemes and patchwork.\nRead more →\n\n\nHands-on Exercise 1 — A Layered Grammar of Graphics\nIntroduction to ggplot2 and building statistical charts in R.\nRead more →"
   },
   {
     "objectID": "Hands-on_Ex01/Hands-On Ex01.html",
