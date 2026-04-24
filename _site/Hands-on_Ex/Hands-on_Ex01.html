@@ -79,7 +79,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-158031087360bce0ff56dc785ce39e06.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-4397f41838bf6696a92fdfbed53ac40c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -119,8 +119,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">ISSS608-VAA</span>
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../images/site-logo.png" alt="" class="navbar-logo light-content">
+    <img src="../images/site-logo.png" alt="" class="navbar-logo dark-content">
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -177,18 +178,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#plotting-a-simple-bar-chart" id="toc-plotting-a-simple-bar-chart" class="nav-link" data-scroll-target="#plotting-a-simple-bar-chart">Plotting a simple bar chart</a>
   <ul class="collapse">
-  <li><a href="#r-graphics-histogram" id="toc-r-graphics-histogram" class="nav-link" data-scroll-target="#r-graphics-histogram"><strong>R Graphics histogram:</strong></a></li>
-  <li><a href="#ggplot2-histogram" id="toc-ggplot2-histogram" class="nav-link" data-scroll-target="#ggplot2-histogram"><strong>ggplot2 histogram:</strong></a></li>
-  <li><a href="#basic-density-plot" id="toc-basic-density-plot" class="nav-link" data-scroll-target="#basic-density-plot"><strong>Basic density plot</strong></a></li>
-  <li><a href="#density-by-gender" id="toc-density-by-gender" class="nav-link" data-scroll-target="#density-by-gender"><strong>Density by gender</strong></a></li>
+  <li><a href="#r-graphics-histogram" id="toc-r-graphics-histogram" class="nav-link" data-scroll-target="#r-graphics-histogram">R Graphics histogram</a></li>
+  <li><a href="#ggplot2-histogram" id="toc-ggplot2-histogram" class="nav-link" data-scroll-target="#ggplot2-histogram">ggplot2 histogram</a></li>
+  <li><a href="#empty-canvas" id="toc-empty-canvas" class="nav-link" data-scroll-target="#empty-canvas">Empty canvas</a></li>
+  <li><a href="#canvas-with-aesthetic" id="toc-canvas-with-aesthetic" class="nav-link" data-scroll-target="#canvas-with-aesthetic">Canvas with aesthetic</a></li>
+  <li><a href="#dot-plot" id="toc-dot-plot" class="nav-link" data-scroll-target="#dot-plot">Dot plot</a></li>
+  <li><a href="#dot-plot-with-cleaned-y-axis" id="toc-dot-plot-with-cleaned-y-axis" class="nav-link" data-scroll-target="#dot-plot-with-cleaned-y-axis">Dot plot with cleaned y-axis</a></li>
+  <li><a href="#default-histogram" id="toc-default-histogram" class="nav-link" data-scroll-target="#default-histogram">Default histogram</a></li>
+  <li><a href="#histogram-with-20-bins" id="toc-histogram-with-20-bins" class="nav-link" data-scroll-target="#histogram-with-20-bins">Histogram with 20 bins</a></li>
+  <li><a href="#histogram-by-gender" id="toc-histogram-by-gender" class="nav-link" data-scroll-target="#histogram-by-gender">Histogram by gender</a></li>
+  <li><a href="#basic-density-plot" id="toc-basic-density-plot" class="nav-link" data-scroll-target="#basic-density-plot">Basic density plot</a></li>
+  <li><a href="#density-by-gender" id="toc-density-by-gender" class="nav-link" data-scroll-target="#density-by-gender">Density by gender</a></li>
   <li><a href="#basic-boxplot" id="toc-basic-boxplot" class="nav-link" data-scroll-target="#basic-boxplot">Basic boxplot</a></li>
   <li><a href="#notched-boxplot" id="toc-notched-boxplot" class="nav-link" data-scroll-target="#notched-boxplot">Notched boxplot</a></li>
-  <li><a href="#facets" id="toc-facets" class="nav-link" data-scroll-target="#facets">Facets</a></li>
+  <li><a href="#violin-plot" id="toc-violin-plot" class="nav-link" data-scroll-target="#violin-plot">Violin plot</a></li>
+  <li><a href="#basic-scatterplot" id="toc-basic-scatterplot" class="nav-link" data-scroll-target="#basic-scatterplot">Basic scatterplot</a></li>
+  <li><a href="#boxplot-with-jitter-points" id="toc-boxplot-with-jitter-points" class="nav-link" data-scroll-target="#boxplot-with-jitter-points">Boxplot with jitter points</a></li>
+  <li><a href="#boxplot-only" id="toc-boxplot-only" class="nav-link" data-scroll-target="#boxplot-only">Boxplot only</a></li>
+  <li><a href="#boxplot-with-mean-point" id="toc-boxplot-with-mean-point" class="nav-link" data-scroll-target="#boxplot-with-mean-point">Boxplot with mean point</a></li>
+  <li><a href="#scatterplot-with-curved-smooth-line" id="toc-scatterplot-with-curved-smooth-line" class="nav-link" data-scroll-target="#scatterplot-with-curved-smooth-line">Scatterplot with curved smooth line</a></li>
+  <li><a href="#scatterplot-with-linear-regression-line" id="toc-scatterplot-with-linear-regression-line" class="nav-link" data-scroll-target="#scatterplot-with-linear-regression-line">Scatterplot with linear regression line</a></li>
+  <li><a href="#scatterplot-with-fixed-axis-range" id="toc-scatterplot-with-fixed-axis-range" class="nav-link" data-scroll-target="#scatterplot-with-fixed-axis-range">Scatterplot with fixed axis range</a></li>
+  <li><a href="#facets" id="toc-facets" class="nav-link" data-scroll-target="#facets">Facets</a>
+  <ul class="collapse">
+  <li><a href="#facet-wrap-by-class" id="toc-facet-wrap-by-class" class="nav-link" data-scroll-target="#facet-wrap-by-class">Facet wrap by class</a></li>
+  <li><a href="#facet-grid-by-class" id="toc-facet-grid-by-class" class="nav-link" data-scroll-target="#facet-grid-by-class">Facet grid by class</a></li>
+  </ul></li>
   <li><a href="#basic-bar-chart-vertical" id="toc-basic-bar-chart-vertical" class="nav-link" data-scroll-target="#basic-bar-chart-vertical">Basic bar chart (vertical)</a></li>
   <li><a href="#flipped-bar-chart-horizontal" id="toc-flipped-bar-chart-horizontal" class="nav-link" data-scroll-target="#flipped-bar-chart-horizontal">Flipped bar chart (horizontal)</a></li>
+  <li><a href="#scatterplot-with-regression-line" id="toc-scatterplot-with-regression-line" class="nav-link" data-scroll-target="#scatterplot-with-regression-line">Scatterplot with regression line</a></li>
+  <li><a href="#scatterplot-with-axis-limits" id="toc-scatterplot-with-axis-limits" class="nav-link" data-scroll-target="#scatterplot-with-axis-limits">Scatterplot with axis limits</a></li>
   <li><a href="#bar-chart-using-theme_gray" id="toc-bar-chart-using-theme_gray" class="nav-link" data-scroll-target="#bar-chart-using-theme_gray">Bar Chart using theme_gray</a></li>
   <li><a href="#bar-chart-using-theme_classic" id="toc-bar-chart-using-theme_classic" class="nav-link" data-scroll-target="#bar-chart-using-theme_classic">Bar Chart using theme_classic</a></li>
-  <li><a href="#bar-chart-using-theme-minimal" id="toc-bar-chart-using-theme-minimal" class="nav-link" data-scroll-target="#bar-chart-using-theme-minimal">Bar Chart using theme minimal</a></li>
+  <li><a href="#bar-chart-using-theme_minimal" id="toc-bar-chart-using-theme_minimal" class="nav-link" data-scroll-target="#bar-chart-using-theme_minimal">Bar Chart using theme_minimal</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -262,7 +284,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <section id="r-graphics-histogram" class="level2">
-<h2 class="anchored" data-anchor-id="r-graphics-histogram"><strong>R Graphics histogram:</strong></h2>
+<h2 class="anchored" data-anchor-id="r-graphics-histogram">R Graphics histogram</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(exam_data<span class="sc">$</span>MATHS)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
@@ -275,7 +297,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 <section id="ggplot2-histogram" class="level2">
-<h2 class="anchored" data-anchor-id="ggplot2-histogram"><strong>ggplot2 histogram:</strong></h2>
+<h2 class="anchored" data-anchor-id="ggplot2-histogram">ggplot2 histogram</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, <span class="fu">aes</span>(<span class="at">x =</span> MATHS)) <span class="sc">+</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins=</span><span class="dv">10</span>, </span>
@@ -291,6 +313,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+</section>
+<section id="empty-canvas" class="level2">
+<h2 class="anchored" data-anchor-id="empty-canvas">Empty canvas</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
@@ -301,6 +326,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+</section>
+<section id="canvas-with-aesthetic" class="level2">
+<h2 class="anchored" data-anchor-id="canvas-with-aesthetic">Canvas with aesthetic</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span> MATHS))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -312,6 +340,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+</section>
+<section id="dot-plot" class="level2">
+<h2 class="anchored" data-anchor-id="dot-plot">Dot plot</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> MATHS)) <span class="sc">+</span></span>
@@ -324,6 +355,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+</section>
+<section id="dot-plot-with-cleaned-y-axis" class="level2">
+<h2 class="anchored" data-anchor-id="dot-plot-with-cleaned-y-axis">Dot plot with cleaned y-axis</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> MATHS)) <span class="sc">+</span></span>
@@ -339,6 +373,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+</section>
+<section id="default-histogram" class="level2">
+<h2 class="anchored" data-anchor-id="default-histogram">Default histogram</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> MATHS)) <span class="sc">+</span></span>
@@ -351,6 +388,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+</section>
+<section id="histogram-with-20-bins" class="level2">
+<h2 class="anchored" data-anchor-id="histogram-with-20-bins">Histogram with 20 bins</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span> MATHS)) <span class="sc">+</span></span>
@@ -365,6 +405,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+</section>
+<section id="histogram-by-gender" class="level2">
+<h2 class="anchored" data-anchor-id="histogram-by-gender">Histogram by gender</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span> MATHS, </span>
@@ -381,7 +424,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 <section id="basic-density-plot" class="level2">
-<h2 class="anchored" data-anchor-id="basic-density-plot"><strong>Basic density plot</strong></h2>
+<h2 class="anchored" data-anchor-id="basic-density-plot">Basic density plot</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> MATHS)) <span class="sc">+</span></span>
@@ -396,7 +439,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 <section id="density-by-gender" class="level2">
-<h2 class="anchored" data-anchor-id="density-by-gender"><strong>Density by gender</strong></h2>
+<h2 class="anchored" data-anchor-id="density-by-gender">Density by gender</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> MATHS, </span>
@@ -442,6 +485,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+</section>
+<section id="violin-plot" class="level2">
+<h2 class="anchored" data-anchor-id="violin-plot">Violin plot</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">y =</span> MATHS, </span>
@@ -455,6 +501,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+</section>
+<section id="basic-scatterplot" class="level2">
+<h2 class="anchored" data-anchor-id="basic-scatterplot">Basic scatterplot</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span> MATHS, </span>
@@ -468,6 +517,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+</section>
+<section id="boxplot-with-jitter-points" class="level2">
+<h2 class="anchored" data-anchor-id="boxplot-with-jitter-points">Boxplot with jitter points</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">y =</span> MATHS, </span>
@@ -483,6 +535,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+</section>
+<section id="boxplot-only" class="level2">
+<h2 class="anchored" data-anchor-id="boxplot-only">Boxplot only</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">y =</span> MATHS, <span class="at">x=</span> GENDER)) <span class="sc">+</span></span>
@@ -495,6 +550,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+</section>
+<section id="boxplot-with-mean-point" class="level2">
+<h2 class="anchored" data-anchor-id="boxplot-with-mean-point">Boxplot with mean point</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">y =</span> MATHS, <span class="at">x=</span> GENDER)) <span class="sc">+</span></span>
@@ -511,6 +569,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+</section>
+<section id="scatterplot-with-curved-smooth-line" class="level2">
+<h2 class="anchored" data-anchor-id="scatterplot-with-curved-smooth-line">Scatterplot with curved smooth line</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span> MATHS, <span class="at">y=</span>ENGLISH)) <span class="sc">+</span></span>
@@ -524,6 +585,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+</section>
+<section id="scatterplot-with-linear-regression-line" class="level2">
+<h2 class="anchored" data-anchor-id="scatterplot-with-linear-regression-line">Scatterplot with linear regression line</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span> MATHS, </span>
@@ -539,6 +603,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+</section>
+<section id="scatterplot-with-fixed-axis-range" class="level2">
+<h2 class="anchored" data-anchor-id="scatterplot-with-fixed-axis-range">Scatterplot with fixed axis range</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span> MATHS, </span>
@@ -557,6 +624,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="facets" class="level2">
 <h2 class="anchored" data-anchor-id="facets">Facets</h2>
+<section id="facet-wrap-by-class" class="level3">
+<h3 class="anchored" data-anchor-id="facet-wrap-by-class">Facet wrap by class</h3>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span> MATHS)) <span class="sc">+</span></span>
@@ -570,6 +639,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+</section>
+<section id="facet-grid-by-class" class="level3">
+<h3 class="anchored" data-anchor-id="facet-grid-by-class">Facet grid by class</h3>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span> MATHS)) <span class="sc">+</span></span>
@@ -583,6 +655,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+</section>
 </section>
 <section id="basic-bar-chart-vertical" class="level2">
 <h2 class="anchored" data-anchor-id="basic-bar-chart-vertical">Basic bar chart (vertical)</h2>
@@ -614,6 +687,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+</section>
+<section id="scatterplot-with-regression-line" class="level2">
+<h2 class="anchored" data-anchor-id="scatterplot-with-regression-line">Scatterplot with regression line</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span> MATHS, <span class="at">y=</span>ENGLISH)) <span class="sc">+</span></span>
@@ -627,6 +703,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+</section>
+<section id="scatterplot-with-axis-limits" class="level2">
+<h2 class="anchored" data-anchor-id="scatterplot-with-axis-limits">Scatterplot with axis limits</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span> MATHS, <span class="at">y=</span>ENGLISH)) <span class="sc">+</span></span>
@@ -643,6 +722,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+</section>
+<section id="bar-chart-using-theme_gray" class="level2">
+<h2 class="anchored" data-anchor-id="bar-chart-using-theme_gray">Bar Chart using theme_gray</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>RACE)) <span class="sc">+</span></span>
@@ -658,14 +740,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="bar-chart-using-theme_gray" class="level2">
-<h2 class="anchored" data-anchor-id="bar-chart-using-theme_gray">Bar Chart using theme_gray</h2>
+<section id="bar-chart-using-theme_classic" class="level2">
+<h2 class="anchored" data-anchor-id="bar-chart-using-theme_classic">Bar Chart using theme_classic</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>RACE)) <span class="sc">+</span></span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
 <span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_gray</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -675,35 +757,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="bar-chart-using-theme_classic" class="level2">
-<h2 class="anchored" data-anchor-id="bar-chart-using-theme_classic">Bar Chart using theme_classic</h2>
+<section id="bar-chart-using-theme_minimal" class="level2">
+<h2 class="anchored" data-anchor-id="bar-chart-using-theme_minimal">Bar Chart using theme_minimal</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>RACE)) <span class="sc">+</span></span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
 <span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
 <p><img src="Hands-on_Ex01_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="bar-chart-using-theme-minimal" class="level2">
-<h2 class="anchored" data-anchor-id="bar-chart-using-theme-minimal">Bar Chart using theme minimal</h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>RACE)) <span class="sc">+</span></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Hands-on_Ex01_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
