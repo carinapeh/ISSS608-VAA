@@ -2,8 +2,42 @@
 title: "About"
 ---
 
-About this site
-
-```{r}
-1 + 1
+```{=html}
+<div style="text-align: center; padding: 20px 0 10px 0;">
+  <img src="images/me_and_meko.jpg" 
+       alt="Carina and Meko" 
+       style="width: 280px; height: 280px; object-fit: cover; 
+              border-radius: 50%; border: 4px solid #b5d9a0; 
+              box-shadow: 0 4px 16px rgba(90,154,90,0.15);"/>
+</div>
 ```
+
+## About Me
+
+Hi there! Thank you for visiting my page, where I document my learning 
+journey through **ISSS608 Visual Analytics and Applications** as part of 
+my **Master of IT in Business** programme at **Singapore Management 
+University (SMU)**. I hope your journey is as fulfilling as mine!
+
+I'm Carina — passionate about turning raw data into clear, meaningful 
+stories through the power of visualisation. When I'm not exploring data, 
+you'll find me spending time with my fluffy Persian Munchkin cat, 
+**Meko** 🐱, or discovering new cafes around Singapore ☕
+
+Special thanks to **Prof. Kam Tin Seong** for his dedication, patience, 
+and generosity in sharing his knowledge. 🙏
+
+
+## About This Course
+
+The course draws from research and practice across **Data Visualisation**, **Human-Computer Interaction**, **Data Analytics**, and **Usability Engineering**. It equips students with the skills to:
+
+- Interact with data from various sources and formats using visual analytics techniques
+- Build interactive and reproducible data visualisation applications
+- Apply a layered grammar of graphics to communicate data insights effectively
+- Use tools such as **R**, **ggplot2**, **Quarto**, and **Shiny** to create compelling visual narratives
+
+This portfolio documents my learning journey through the hands-on exercises, in-class activities, and take-home projects assigned throughout the course.
+
+---
+

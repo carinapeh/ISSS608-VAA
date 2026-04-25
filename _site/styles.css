@@ -1,10 +1,7 @@
-/* Background image */
+/* Body */
 body {
-  background-image: url('images/background.png');
-  background-size: cover;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
   font-size: 15px;
+  background-color: #f0f7ec;
 }
 
 /* Navbar - smaller height */
@@ -45,7 +42,7 @@ a {
   color: #7aadab;
 }
 
-/* Make content readable over background */
+/* Make content readable */
 .page-columns {
   background-color: rgba(255, 255, 255, 0.85);
   border-radius: 8px;
