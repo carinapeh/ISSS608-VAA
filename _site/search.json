@@ -16,163 +16,163 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html",
     "href": "Hands-on_Ex/Hands-on_Ex01.html",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "",
-    "text": "This code chunk use pacman’s p_load() to load tidyverse family of package into R environment."
+    "text": "In this exercise, I was introduced to ggplot2 and the layered grammar of graphics. I learned that every chart in R is built by adding layers — starting from data, then aesthetics, then geometry. I explored many different chart types including histograms, dot plots, box plots, violin plots, and scatter plots. I also discovered how facets allow us to split charts by categories, and how built-in themes like theme_classic() and theme_minimal() can instantly change the look of a chart. This exercise showed me that ggplot2 is both systematic and flexible."
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#loading-tidyverse",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#loading-tidyverse",
-    "title": "Hands-on Exercise 1",
-    "section": "",
-    "text": "This code chunk use pacman’s p_load() to load tidyverse family of package into R environment."
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
+    "section": "Loading Tidyverse",
+    "text": "Loading Tidyverse\nThis code chunk uses pacman’s p_load() to load tidyverse family of packages into R environment.\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data = exam_data,\n       aes(x = RACE)) +\n  geom_bar()"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#install-and-launching-r-packages",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#install-and-launching-r-packages",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "Install and launching R packages",
     "text": "Install and launching R packages\nThe code chunk below uses p_load() of pacman package to check if tidyverse packages are installed in the computer. If they are, then they will be launched into R.\n\npacman::p_load(tidyverse)\n\n\nexam_data &lt;- read_csv(\"Exam_data.csv\")"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#r-graphics-histogram",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#r-graphics-histogram",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "R Graphics histogram",
-    "text": "R Graphics histogram\n\nhist(exam_data$MATHS)"
+    "text": "R Graphics histogram\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nhist(exam_data$MATHS)"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#ggplot2-histogram",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#ggplot2-histogram",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "ggplot2 histogram",
-    "text": "ggplot2 histogram\n\nggplot(data=exam_data, aes(x = MATHS)) +\n  geom_histogram(bins=10, \n                 boundary = 100,\n                 color=\"black\", \n                 fill=\"grey\") +\n  ggtitle(\"Distribution of Maths scores\")"
+    "text": "ggplot2 histogram\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, aes(x = MATHS)) +\n  geom_histogram(bins=10, \n                 boundary = 100,\n                 color=\"black\", \n                 fill=\"grey\") +\n  ggtitle(\"Distribution of Maths scores\")"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#empty-canvas",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#empty-canvas",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "Empty canvas",
-    "text": "Empty canvas\n\nggplot(data=exam_data)"
+    "text": "Empty canvas\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data)"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#canvas-with-aesthetic",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#canvas-with-aesthetic",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "Canvas with aesthetic",
-    "text": "Canvas with aesthetic\n\nggplot(data=exam_data, \n       aes(x= MATHS))"
+    "text": "Canvas with aesthetic\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(x= MATHS))"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#dot-plot",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#dot-plot",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "Dot plot",
-    "text": "Dot plot\n\nggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot(dotsize = 0.5)"
+    "text": "Dot plot\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot(dotsize = 0.5)"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#dot-plot-with-cleaned-y-axis",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#dot-plot-with-cleaned-y-axis",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "Dot plot with cleaned y-axis",
-    "text": "Dot plot with cleaned y-axis\n\nggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot(binwidth=2.5,         \n               dotsize = 0.5) +      \n  scale_y_continuous(NULL,           \n                     breaks = NULL)"
+    "text": "Dot plot with cleaned y-axis\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot(binwidth=2.5,         \n               dotsize = 0.5) +      \n  scale_y_continuous(NULL,           \n                     breaks = NULL)"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#default-histogram",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#default-histogram",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "Default histogram",
-    "text": "Default histogram\n\nggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_histogram()"
+    "text": "Default histogram\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_histogram()"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#histogram-with-20-bins",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#histogram-with-20-bins",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "Histogram with 20 bins",
-    "text": "Histogram with 20 bins\n\nggplot(data=exam_data, \n       aes(x= MATHS)) +\n  geom_histogram(bins=20,            \n                 color=\"black\",      \n                 fill=\"light blue\")"
+    "text": "Histogram with 20 bins\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(x= MATHS)) +\n  geom_histogram(bins=20,            \n                 color=\"black\",      \n                 fill=\"light blue\")"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#histogram-by-gender",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#histogram-by-gender",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "Histogram by gender",
-    "text": "Histogram by gender\n\nggplot(data=exam_data, \n       aes(x= MATHS, \n           fill = GENDER)) +\n  geom_histogram(bins=20, \n                 color=\"grey30\")"
+    "text": "Histogram by gender\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(x= MATHS, \n           fill = GENDER)) +\n  geom_histogram(bins=20, \n                 color=\"grey30\")"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#basic-density-plot",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#basic-density-plot",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "Basic density plot",
-    "text": "Basic density plot\n\nggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_density()"
+    "text": "Basic density plot\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_density()"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#density-by-gender",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#density-by-gender",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "Density by gender",
-    "text": "Density by gender\n\nggplot(data=exam_data, \n       aes(x = MATHS, \n           colour = GENDER)) +\n  geom_density()"
+    "text": "Density by gender\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(x = MATHS, \n           colour = GENDER)) +\n  geom_density()"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#basic-boxplot",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#basic-boxplot",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "Basic boxplot",
-    "text": "Basic boxplot\n\nggplot(data=exam_data, \n       aes(y = MATHS,       \n           x= GENDER)) +    \n  geom_boxplot()"
+    "text": "Basic boxplot\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(y = MATHS,       \n           x= GENDER)) +    \n  geom_boxplot()"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#notched-boxplot",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#notched-boxplot",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "Notched boxplot",
-    "text": "Notched boxplot\n\nggplot(data=exam_data, \n       aes(y = MATHS, \n           x= GENDER)) +\n  geom_boxplot(notch=TRUE)"
+    "text": "Notched boxplot\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(y = MATHS, \n           x= GENDER)) +\n  geom_boxplot(notch=TRUE)"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#violin-plot",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#violin-plot",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "Violin plot",
-    "text": "Violin plot\n\nggplot(data=exam_data, \n       aes(y = MATHS, \n           x= GENDER)) +\n  geom_violin()"
+    "text": "Violin plot\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(y = MATHS, \n           x= GENDER)) +\n  geom_violin()"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#basic-scatterplot",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#basic-scatterplot",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "Basic scatterplot",
-    "text": "Basic scatterplot\n\nggplot(data=exam_data, \n       aes(x= MATHS, \n           y=ENGLISH)) +\n  geom_point()"
+    "text": "Basic scatterplot\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(x= MATHS, \n           y=ENGLISH)) +\n  geom_point()"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#boxplot-with-jitter-points",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#boxplot-with-jitter-points",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "Boxplot with jitter points",
-    "text": "Boxplot with jitter points\n\nggplot(data=exam_data, \n       aes(y = MATHS, \n           x= GENDER)) +\n  geom_boxplot() +                    \n  geom_point(position=\"jitter\", \n             size = 0.5)"
+    "text": "Boxplot with jitter points\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(y = MATHS, \n           x= GENDER)) +\n  geom_boxplot() +                    \n  geom_point(position=\"jitter\", \n             size = 0.5)"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#boxplot-only",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#boxplot-only",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "Boxplot only",
-    "text": "Boxplot only\n\nggplot(data=exam_data, \n       aes(y = MATHS, x= GENDER)) +\n  geom_boxplot()"
+    "text": "Boxplot only\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(y = MATHS, x= GENDER)) +\n  geom_boxplot()"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#boxplot-with-mean-point",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#boxplot-with-mean-point",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "Boxplot with mean point",
-    "text": "Boxplot with mean point\n\nggplot(data=exam_data, \n       aes(y = MATHS, x= GENDER)) +\n  geom_boxplot() +\n  stat_summary(geom = \"point\",       \n               fun = \"mean\",         \n               colour =\"red\",        \n               size=4)"
+    "text": "Boxplot with mean point\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(y = MATHS, x= GENDER)) +\n  geom_boxplot() +\n  stat_summary(geom = \"point\",       \n               fun = \"mean\",         \n               colour =\"red\",        \n               size=4)"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#scatterplot-with-curved-smooth-line",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#scatterplot-with-curved-smooth-line",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "Scatterplot with curved smooth line",
-    "text": "Scatterplot with curved smooth line\n\nggplot(data=exam_data, \n       aes(x= MATHS, y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(size=0.5)"
+    "text": "Scatterplot with curved smooth line\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(x= MATHS, y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(linewidth=0.5)"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#scatterplot-with-linear-regression-line",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#scatterplot-with-linear-regression-line",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "Scatterplot with linear regression line",
-    "text": "Scatterplot with linear regression line\n\nggplot(data=exam_data, \n       aes(x= MATHS, \n           y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, \n              linewidth=0.5)"
+    "text": "Scatterplot with linear regression line\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(x= MATHS, \n           y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, \n              linewidth=0.5)"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#scatterplot-with-fixed-axis-range",
@@ -191,16 +191,16 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#basic-bar-chart-vertical",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#basic-bar-chart-vertical",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "Basic bar chart (vertical)",
-    "text": "Basic bar chart (vertical)\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar()"
+    "text": "Basic bar chart (vertical)\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar()"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#flipped-bar-chart-horizontal",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#flipped-bar-chart-horizontal",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "Flipped bar chart (horizontal)",
-    "text": "Flipped bar chart (horizontal)\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip()"
+    "text": "Flipped bar chart (horizontal)\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip()"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#scatterplot-with-regression-line",
@@ -212,30 +212,30 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#scatterplot-with-axis-limits",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#scatterplot-with-axis-limits",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "Scatterplot with axis limits",
-    "text": "Scatterplot with axis limits\n\nggplot(data=exam_data, \n       aes(x= MATHS, y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, \n              size=0.5) +  \n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100))"
+    "text": "Scatterplot with axis limits\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(x= MATHS, y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, \n              linewidth=0.5) +  \n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100))"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#bar-chart-using-theme_gray",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#bar-chart-using-theme_gray",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "Bar Chart using theme_gray",
-    "text": "Bar Chart using theme_gray\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_gray()"
+    "text": "Bar Chart using theme_gray\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_gray()"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#bar-chart-using-theme_classic",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#bar-chart-using-theme_classic",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "Bar Chart using theme_classic",
-    "text": "Bar Chart using theme_classic\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_classic()"
+    "text": "Bar Chart using theme_classic\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_classic()"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html#bar-chart-using-theme_minimal",
     "href": "Hands-on_Ex/Hands-on_Ex01.html#bar-chart-using-theme_minimal",
-    "title": "Hands-on Exercise 1",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
     "section": "Bar Chart using theme_minimal",
-    "text": "Bar Chart using theme_minimal\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_minimal()"
+    "text": "Bar Chart using theme_minimal\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_minimal()"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex02.html",
@@ -299,5 +299,26 @@
     "title": "Hands-on Exercise 2: Beyond ggplot2 Fundamentals",
     "section": "",
     "text": "In this exercise, I explored ggplot2 extensions that go beyond basic charts. I learned how ggrepel prevents overlapping text labels, making scatter plots much cleaner and easier to read. I also experimented with ggthemes and hrbrthemes to apply professional styling, and used patchwork to combine multiple plots into a single layout. These tools showed me that good data visualisation is as much about presentation as it is about the data itself."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01.html#reflections",
+    "href": "Hands-on_Ex/Hands-on_Ex01.html#reflections",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
+    "section": "",
+    "text": "In this exercise, I was introduced to ggplot2 and the layered grammar of graphics. I learned that every chart in R is built by adding layers — starting from data, then aesthetics, then geometry. I explored many different chart types including histograms, dot plots, box plots, violin plots, and scatter plots. I also discovered how facets allow us to split charts by categories, and how built-in themes like theme_classic() and theme_minimal() can instantly change the look of a chart. This exercise showed me that ggplot2 is both systematic and flexible."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01.html#facet-wrap-by-class",
+    "href": "Hands-on_Ex/Hands-on_Ex01.html#facet-wrap-by-class",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
+    "section": "Facet wrap by class",
+    "text": "Facet wrap by class\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(x= MATHS)) +\n  geom_histogram(bins=20) +\n    facet_wrap(~ CLASS)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01.html#facet-grid-by-class",
+    "href": "Hands-on_Ex/Hands-on_Ex01.html#facet-grid-by-class",
+    "title": "Hands-on Exercise 1: A Layered Grammar of Graphics",
+    "section": "Facet grid by class",
+    "text": "Facet grid by class\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n       aes(x= MATHS)) +\n  geom_histogram(bins=20) +\n    facet_grid(~ CLASS)"
   }
 ]
