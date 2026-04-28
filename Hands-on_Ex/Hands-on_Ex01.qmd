@@ -3,6 +3,7 @@ title: "Hands-on Exercise 1: A Layered Grammar of Graphics"
 author: "carinapeh"
 date: "April 10, 2026"
 date-modified: "last-modified"
+description: "Introduction to ggplot2 and building statistical charts in R."
 execute:
   eval: true
   echo: true
@@ -14,7 +15,7 @@ execute:
 
 In this exercise, I was introduced to ggplot2 and the layered grammar of graphics. I learned that every chart in R is built by adding layers — starting from data, then aesthetics, then geometry. I explored many different chart types including histograms, dot plots, box plots, violin plots, and scatter plots. I also discovered how facets allow us to split charts by categories, and how built-in themes like theme_classic() and theme_minimal() can instantly change the look of a chart. This exercise showed me that ggplot2 is both systematic and flexible.
 
----
+------------------------------------------------------------------------
 
 # Getting Started
 
@@ -30,7 +31,7 @@ pacman::p_load(tidyverse)
 exam_data <- read_csv("Exam_data.csv")
 ```
 
----
+------------------------------------------------------------------------
 
 # Plotting a Simple Bar Chart
 
@@ -38,7 +39,7 @@ exam_data <- read_csv("Exam_data.csv")
 
 This code chunk uses pacman's [p_load()](https://cran.r-project.org/web/packages/pacman/refman/pacman.html#p_load) to load tidyverse family of packages into R environment.
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -56,16 +57,15 @@ ggplot(data = exam_data,
        aes(x = RACE)) +
   geom_bar()
 ```
-
 :::
 
----
+------------------------------------------------------------------------
 
 # Geometric Objects
 
 ## R Graphics histogram
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -79,12 +79,11 @@ hist(exam_data$MATHS)
 #| eval: false
 hist(exam_data$MATHS)
 ```
-
 :::
 
 ## ggplot2 histogram
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -108,12 +107,11 @@ ggplot(data=exam_data, aes(x = MATHS)) +
                  fill="grey") +
   ggtitle("Distribution of Maths scores")
 ```
-
 :::
 
 ## Empty canvas
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -127,12 +125,11 @@ ggplot(data=exam_data)
 #| eval: false
 ggplot(data=exam_data)
 ```
-
 :::
 
 ## Canvas with aesthetic
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -148,12 +145,11 @@ ggplot(data=exam_data,
 ggplot(data=exam_data, 
        aes(x= MATHS))
 ```
-
 :::
 
 ## Dot plot
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -171,12 +167,11 @@ ggplot(data=exam_data,
        aes(x = MATHS)) +
   geom_dotplot(dotsize = 0.5)
 ```
-
 :::
 
 ## Dot plot with cleaned y-axis
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -200,12 +195,11 @@ ggplot(data=exam_data,
   scale_y_continuous(NULL,           
                      breaks = NULL)
 ```
-
 :::
 
 ## Default histogram
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -223,12 +217,11 @@ ggplot(data=exam_data,
        aes(x = MATHS)) +
   geom_histogram()
 ```
-
 :::
 
 ## Histogram with 20 bins
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -250,12 +243,11 @@ ggplot(data=exam_data,
                  color="black",      
                  fill="light blue")
 ```
-
 :::
 
 ## Histogram by gender
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -277,12 +269,11 @@ ggplot(data=exam_data,
   geom_histogram(bins=20, 
                  color="grey30")
 ```
-
 :::
 
 ## Basic density plot
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -300,12 +291,11 @@ ggplot(data=exam_data,
        aes(x = MATHS)) +
   geom_density()
 ```
-
 :::
 
 ## Density by gender
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -325,12 +315,11 @@ ggplot(data=exam_data,
            colour = GENDER)) +
   geom_density()
 ```
-
 :::
 
 ## Basic boxplot
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -350,12 +339,11 @@ ggplot(data=exam_data,
            x= GENDER)) +    
   geom_boxplot()
 ```
-
 :::
 
 ## Notched boxplot
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -375,12 +363,11 @@ ggplot(data=exam_data,
            x= GENDER)) +
   geom_boxplot(notch=TRUE)
 ```
-
 :::
 
 ## Violin plot
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -400,12 +387,11 @@ ggplot(data=exam_data,
            x= GENDER)) +
   geom_violin()
 ```
-
 :::
 
 ## Basic scatterplot
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -425,12 +411,11 @@ ggplot(data=exam_data,
            y=ENGLISH)) +
   geom_point()
 ```
-
 :::
 
 ## Boxplot with jitter points
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -454,12 +439,11 @@ ggplot(data=exam_data,
   geom_point(position="jitter", 
              size = 0.5)
 ```
-
 :::
 
 ## Boxplot only
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -477,12 +461,11 @@ ggplot(data=exam_data,
        aes(y = MATHS, x= GENDER)) +
   geom_boxplot()
 ```
-
 :::
 
 ## Boxplot with mean point
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -508,16 +491,15 @@ ggplot(data=exam_data,
                colour ="red",        
                size=4)
 ```
-
 :::
 
----
+------------------------------------------------------------------------
 
 # Scatterplots and Smooth Lines
 
 ## Scatterplot with curved smooth line
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -537,12 +519,11 @@ ggplot(data=exam_data,
   geom_point() +
   geom_smooth(linewidth=0.5)
 ```
-
 :::
 
 ## Scatterplot with linear regression line
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -566,12 +547,11 @@ ggplot(data=exam_data,
   geom_smooth(method=lm, 
               linewidth=0.5)
 ```
-
 :::
 
 ## Scatterplot with axis limits
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -597,16 +577,15 @@ ggplot(data=exam_data,
   coord_cartesian(xlim=c(0,100),
                   ylim=c(0,100))
 ```
-
 :::
 
----
+------------------------------------------------------------------------
 
 # Facets
 
 ## Facet wrap by class
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -626,12 +605,11 @@ ggplot(data=exam_data,
   geom_histogram(bins=20) +
     facet_wrap(~ CLASS)
 ```
-
 :::
 
 ## Facet grid by class
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -651,16 +629,15 @@ ggplot(data=exam_data,
   geom_histogram(bins=20) +
     facet_grid(~ CLASS)
 ```
-
 :::
 
----
+------------------------------------------------------------------------
 
 # Coordinates and Themes
 
 ## Basic bar chart (vertical)
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -678,12 +655,11 @@ ggplot(data=exam_data,
        aes(x=RACE)) +
   geom_bar()
 ```
-
 :::
 
 ## Flipped bar chart (horizontal)
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -703,12 +679,11 @@ ggplot(data=exam_data,
   geom_bar() +
   coord_flip()
 ```
-
 :::
 
 ## Bar Chart using theme_gray
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -730,12 +705,11 @@ ggplot(data=exam_data,
   coord_flip() +
   theme_gray()
 ```
-
 :::
 
 ## Bar Chart using theme_classic
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -757,12 +731,11 @@ ggplot(data=exam_data,
   coord_flip() +
   theme_classic()
 ```
-
 :::
 
 ## Bar Chart using theme_minimal
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -784,5 +757,4 @@ ggplot(data=exam_data,
   coord_flip() +
   theme_minimal()
 ```
-
 :::

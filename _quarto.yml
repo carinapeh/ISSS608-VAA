@@ -2,10 +2,9 @@ project:
   type: website
 
 website:
-  title: "carina's"
+  title: "Exploring Visual Analytics"
   navbar:
-    logo: images/carina_VAA.png
-    title: false
+    title: "Visual Analytics Journey"
     left:
       - text: "Hands-on Exercises"
         menu:
