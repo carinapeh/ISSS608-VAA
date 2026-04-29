@@ -3,6 +3,7 @@ title: "Hands-on Exercise 3a: Programming Interactive Data Visualisation with R"
 author: "carina peh"
 date: "April 29, 2026"
 date-modified: "last-modified"
+description: "In this exercise, I explored how to make static ggplot2 charts interactive using ggiraph and plotly."
 execute:
   eval: true
   echo: true

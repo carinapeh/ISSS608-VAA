@@ -294,6 +294,48 @@
     "text": "Linked Brushing — crosstalk method\n\nThe plotThe code chunk\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nd &lt;- highlight_key(exam_data) \np &lt;- ggplot(d, \n            aes(ENGLISH, \n                MATHS)) + \n  geom_point(size=1) +\n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100))\n\ngg &lt;- highlight(ggplotly(p),        \n                \"plotly_selected\")  \n\ncrosstalk::bscols(gg,               \n                  DT::datatable(d), \n                  widths = 5)"
   },
   {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03b.html",
+    "href": "Hands-on_Ex/Hands-on_Ex03b.html",
+    "title": "Hands-on Exercise 3b: Programming Animated Statistical Graphics with R",
+    "section": "",
+    "text": "Animated graphics can make data stories more engaging and memorable compared to static charts. In this exercise, I learnt how to create animated visualisations using gganimate and plotly, while also practising data wrangling with tidyr and dplyr.\nBefore diving in, it’s worth asking, does animation actually add value here? For exploratory analysis, probably not. But for presentations, a well-placed animation can really help the audience connect with the data."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03b.html#overview",
+    "href": "Hands-on_Ex/Hands-on_Ex03b.html#overview",
+    "title": "Hands-on Exercise 3b: Programming Animated Statistical Graphics with R",
+    "section": "",
+    "text": "Animated graphics can make data stories more engaging and memorable compared to static charts. In this exercise, I learnt how to create animated visualisations using gganimate and plotly, while also practising data wrangling with tidyr and dplyr.\nBefore diving in, it’s worth asking, does animation actually add value here? For exploratory analysis, probably not. But for presentations, a well-placed animation can really help the audience connect with the data."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03b.html#reflections",
+    "href": "Hands-on_Ex/Hands-on_Ex03b.html#reflections",
+    "title": "Hands-on Exercise 3b: Programming Animated Statistical Graphics with R",
+    "section": "Reflections",
+    "text": "Reflections\nThis was my first time making charts interactive in R. The ggiraph package was surprisingly straightforward — just swap geom_point() for geom_point_interactive() and wrap it in girafe().\nThe most interesting part was the coordinated multiple views where hovering on one chart highlights the same student in another chart. This is really useful for spotting patterns across different variables at the same time.\nI found plotly easier to use than ggiraph since ggplotly() can just wrap an existing ggplot chart. The crosstalk + DT combination was also very cool, being able to filter a chart by clicking on a table row is something I can see being very useful in real dashboards."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03b.html#getting-started",
+    "href": "Hands-on_Ex/Hands-on_Ex03b.html#getting-started",
+    "title": "Hands-on Exercise 3b: Programming Animated Statistical Graphics with R",
+    "section": "Getting Started",
+    "text": "Getting Started\n\nLoading packages\n\npacman::p_load(readxl, gifski, gapminder,\n               plotly, gganimate, tidyverse)\n\n\n\nImporting data\nThis exercise uses a different dataset — GlobalPopulation.xls instead of Exam_data.csv.\n\ncol &lt;- c(\"Country\", \"Continent\")\nglobalPop &lt;- read_xls(\"GlobalPopulation.xls\",\n                      sheet=\"Data\") %&gt;%\n  mutate(across(all_of(col), as.factor)) %&gt;%\n  mutate(Year = as.integer(Year))"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03b.html#animated-data-visualisation-gganimate",
+    "href": "Hands-on_Ex/Hands-on_Ex03b.html#animated-data-visualisation-gganimate",
+    "title": "Hands-on Exercise 3b: Programming Animated Statistical Graphics with R",
+    "section": "Animated Data Visualisation — gganimate",
+    "text": "Animated Data Visualisation — gganimate\n\nStatic bubble plot first\nAlways good to build the static version before animating — helps check the layout looks right.\n\nThe plotThe code chunk\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(globalPop, aes(x = Old, y = Young, \n                      size = Population, \n                      colour = Country)) +\n  geom_point(alpha = 0.7, \n             show.legend = FALSE) +\n  scale_colour_manual(values = country_colors) +\n  scale_size(range = c(2, 12)) +\n  labs(title = 'Year: {frame_time}', \n       x = '% Aged', \n       y = '% Young')\n\n\n\n\n\n\nAnimated bubble plot\nAdding transition_time() animates the chart across years. ease_aes('linear') makes the movement smooth and consistent.\n\nThe plotThe code chunk\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(globalPop, aes(x = Old, y = Young, \n                      size = Population, \n                      colour = Country)) +\n  geom_point(alpha = 0.7, \n             show.legend = FALSE) +\n  scale_colour_manual(values = country_colors) +\n  scale_size(range = c(2, 12)) +\n  labs(title = 'Year: {frame_time}', \n       x = '% Aged', \n       y = '% Young') +\n  transition_time(Year) +       \n  ease_aes('linear')"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03b.html#animated-data-visualisation-plotly",
+    "href": "Hands-on_Ex/Hands-on_Ex03b.html#animated-data-visualisation-plotly",
+    "title": "Hands-on Exercise 3b: Programming Animated Statistical Graphics with R",
+    "section": "Animated Data Visualisation — plotly",
+    "text": "Animated Data Visualisation — plotly\n\nUsing ggplotly()\nThis converts the ggplot animation into an interactive plotly chart with a play/pause button and a year slider — much more user-friendly for presentations.\n\nThe plotThe code chunk\n\n\n\n\n\n\n\n\n\n\n\ngg &lt;- ggplot(globalPop, \n       aes(x = Old, \n           y = Young, \n           size = Population, \n           colour = Country)) +\n  geom_point(aes(size = Population,\n                 frame = Year),\n             alpha = 0.7) +\n  scale_colour_manual(values = country_colors) +\n  scale_size(range = c(2, 12)) +\n  labs(x = '% Aged', \n       y = '% Young') + \n  theme(legend.position='none')\n\nggplotly(gg)\n\n\n\n\n\n\nUsing plot_ly()\nBuilding the animated chart directly with plot_ly() — slightly different syntax but gives more control over the output.\n\nThe plotThe code chunk\n\n\n\n\n\n\n\n\n\n\n\nbp &lt;- globalPop %&gt;%\n  plot_ly(x = ~Old, \n          y = ~Young, \n          size = ~Population, \n          color = ~Continent,\n          sizes = c(2, 100),\n          frame = ~Year, \n          text = ~Country, \n          hoverinfo = \"text\",\n          type = 'scatter',\n          mode = 'markers') %&gt;%\n  layout(showlegend = FALSE)\nbp"
+  },
+  {
     "objectID": "Hands-on_Ex/Hands-on_Ex02.html",
     "href": "Hands-on_Ex/Hands-on_Ex02.html",
     "title": "Hands-on Exercise 2: Beyond ggplot2 Fundamentals",
@@ -354,6 +396,6 @@
     "href": "index.html",
     "title": "Exploring Visual Analytics",
     "section": "",
-    "text": "Welcome to my\n  \n  \n\n\nWelcome\nHi, I am Carina and welcome to my course portfolio for ISSS608 Visual Analytics and Applications.\n\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 2: Beyond ggplot2 Fundamentals\n\n\nExplored ggplot2 extensions including ggrepel, ggthemes, hrbrthemes and patchwork.\n\n\n\nApr 22, 2026\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 1: A Layered Grammar of Graphics\n\n\nIntroduction to ggplot2 and building statistical charts in R.\n\n\n\nApr 10, 2026\n\n\n\n\n\n\nNo matching items"
+    "text": "Welcome to my\n  \n  \n\n\nWelcome\nHi, I am Carina and welcome to my course portfolio for ISSS608 Visual Analytics and Applications.\n\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 3a: Programming Interactive Data Visualisation with R\n\n\nIn this exercise, I explored how to make static ggplot2 charts interactive using ggiraph and plotly.\n\n\n\nApr 29, 2026\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 3b: Programming Animated Statistical Graphics with R\n\n\nLearnt how to create animated bubble charts using gganimate and plotly to tell data stories across time.\n\n\n\nApr 29, 2026\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 2: Beyond ggplot2 Fundamentals\n\n\nExplored ggplot2 extensions including ggrepel, ggthemes, hrbrthemes and patchwork.\n\n\n\nApr 22, 2026\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 1: A Layered Grammar of Graphics\n\n\nIntroduction to ggplot2 and building statistical charts in R.\n\n\n\nApr 10, 2026\n\n\n\n\n\n\nNo matching items"
   }
 ]

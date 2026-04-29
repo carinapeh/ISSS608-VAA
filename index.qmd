@@ -3,12 +3,13 @@ listing:
   contents:
     - Hands-on_Ex/Hands-on_Ex01.qmd
     - Hands-on_Ex/Hands-on_Ex02.qmd
+    - Hands-on_Ex/Hands-on_Ex03a.qmd
+    - Hands-on_Ex/Hands-on_Ex03b.qmd
   type: grid
   sort: "date desc"
   grid-columns: 3
   fields: [image, date, title, description]
 ---
-
 ```{=html}
 <div style="text-align: center; padding: 20px 0 10px 0;">
   <p style="font-family: 'Georgia', serif;
