@@ -1,0 +1,25 @@
+---
+title: "In-Class Exercise 2: Superstore Sales and Profit Report"
+author: "carina peh"
+date: "April 26, 2026"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+## Overview
+
+In-Class Exercise 2 is a continuation of In-Class Exercise 1, where we used the Superstore dataset to build a sales and profit dashboard in Tableau Public.
+
+The dashboard visualises annual and monthly sales and profit by region from 2022 to 2025.
+
+## Dashboard
+
+The interactive dashboard can be viewed on Tableau Public at the link below:
+
+👉 [View Dashboard on Tableau Public](https://public.tableau.com/app/profile/carina.peh/viz/TableauInClassExercise2/Dashboard1)
+
+![Superstore Sales and Profit Report 2022-2025](../images/inclass-ex02.png)
