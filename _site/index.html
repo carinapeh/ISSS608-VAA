@@ -75,7 +75,7 @@ ul.task-list li input[type="checkbox"] {
 <script>
 
   window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
+    const listingTargetEl = window.document.querySelector('#listing-handson .list');
     if (!listingTargetEl) {
       // No listing discovered, do not attach.
       return; 
@@ -88,7 +88,63 @@ ul.task-list li input[type="checkbox"] {
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
+    window['quarto-listings']['listing-handson'] = new List('listing-handson', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-inclass .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-image','listing-date','listing-title','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      
+      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-inclass'] = new List('listing-inclass', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-takehome .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-image','listing-date','listing-title','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      
+      searchColumns: [],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-takehome'] = new List('listing-takehome', options);
 
     if (window['quarto-listing-loaded']) {
       window['quarto-listing-loaded']();
@@ -184,6 +240,10 @@ window.Quarto = {
     <a class="dropdown-item" href="./In Class Exercise/In-class_Ex02.html">
  <span class="dropdown-text">In-Class Exercise 2</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="./In Class Exercise/In-class_Ex03.html">
+ <span class="dropdown-text">In-Class Exercise 3</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -244,12 +304,9 @@ window.Quarto = {
 <section id="welcome" class="level3">
 <h3 class="anchored" data-anchor-id="welcome">Welcome</h3>
 <p>Hi, I am <strong>Carina</strong> and welcome to my course portfolio for <strong>ISSS608 Visual Analytics and Applications</strong>.</p>
-
-
-
-</section>
-
-<div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
+<hr>
+<p><img src="images/handson-exercise-label.jpeg" class="img-fluid"></p>
+<div id="listing-handson" class="quarto-listing quarto-listing-container-grid">
 <div class="list grid quarto-listing-cols-3">
 <div class="g-col-1" data-index="0" data-listing-date-sort="1777392000000" data-listing-file-modified-sort="1777479512458" data-listing-date-modified-sort="1777479512000" data-listing-reading-time-sort="30" data-listing-word-count-sort="5903">
 <a href="./Hands-on_Ex/Hands-on_Ex03a.html" class="quarto-grid-link">
@@ -308,20 +365,46 @@ Apr 22, 2026
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="3" data-listing-date-sort="1775750400000" data-listing-file-modified-sort="1777696720259" data-listing-date-modified-sort="1777696720000" data-listing-reading-time-sort="12" data-listing-word-count-sort="2225">
-<a href="./Hands-on_Ex/Hands-on_Ex01.html" class="quarto-grid-link">
+</div>
+<div class="listing-no-matching d-none">No matching items</div>
+</div>
+<hr>
+<p><img src="images/inclass-exercise-label.jpeg" class="img-fluid"></p>
+<div id="listing-inclass" class="quarto-listing quarto-listing-container-grid">
+<div class="list grid quarto-listing-cols-3">
+<div class="g-col-1" data-index="0" data-listing-date-sort="1777132800000" data-listing-file-modified-sort="1777541356031" data-listing-date-modified-sort="1777541356000" data-listing-reading-time-sort="1" data-listing-word-count-sort="63">
+<a href="./In Class Exercise/In-class_Ex02.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img loading='lazy' src="Hands-on_Ex/Hands-on_Ex01_files/figure-html/unnamed-chunk-3-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
+<p class="card-img-top"><img loading='lazy' src="images/inclass-ex02.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
-Hands-on Exercise 1: A Layered Grammar of Graphics
+In-Class Exercise 2: Superstore Sales and Profit Report
 </h5>
 <div class="card-text listing-description delink">
-<p>Introduction to ggplot2 and building statistical charts in R.</p>
+In-Class Exercise 2 is a continuation of In-Class Exercise 1, where we used the Superstore dataset to build a sales and profit dashboard in Tableau Public.
 </div>
 <div class="card-attribution card-text-small end">
 <div class="listing-date">
-Apr 10, 2026
+Apr 26, 2026
+</div>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="1" data-listing-date-sort="1746115200000" data-listing-file-modified-sort="1777727563017" data-listing-date-modified-sort="1777727563000" data-listing-reading-time-sort="3" data-listing-word-count-sort="490">
+<a href="./In Class Exercise/In-class_Ex03.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top"><img loading='lazy' src="images/SuperStore Sales Report.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+In-class Exercise 3
+</h5>
+<div class="card-text listing-description delink">
+In-Class Exercise 3 builds on previous Tableau exercises by creating two separate dashboards using different datasets.
+</div>
+<div class="card-attribution card-text-small end">
+<div class="listing-date">
+May 2, 2025
 </div>
 </div>
 </div>
@@ -329,7 +412,21 @@ Apr 10, 2026
 </div>
 </div>
 <div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+</div>
+<hr>
+<p><img src="images/takehome-exercise-label.jpeg" class="img-fluid"></p>
+<div id="listing-takehome" class="quarto-listing quarto-listing-container-grid">
+<div class="list grid quarto-listing-cols-3">
+
+</div>
+<div class="listing-no-matching d-none">No matching items</div>
+</div>
+
+
+
+</section>
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

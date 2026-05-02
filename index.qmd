@@ -1,16 +1,27 @@
 ---
 listing:
-  contents:
-    - Hands-on_Ex/Hands-on_Ex01.qmd
-    - Hands-on_Ex/Hands-on_Ex02.qmd
-    - Hands-on_Ex/Hands-on_Ex03a.qmd
-    - Hands-on_Ex/Hands-on_Ex03b.qmd
-    - In-class_Ex/In-class_Ex02.qmd
-  type: grid
-  sort: "date desc"
-  grid-columns: 3
-  fields: [image, date, title, description]
+  - id: handson
+    contents: Hands-on_Ex/*.qmd
+    type: grid
+    sort: "date desc"
+    max-items: 3
+    fields: [image, date, title, description]
+
+  - id: inclass
+    contents: In Class Exercise/*.qmd
+    type: grid
+    sort: "date desc"
+    max-items: 3
+    fields: [image, date, title, description]
+
+  - id: takehome
+    contents: Take-home_Ex/*.qmd
+    type: grid
+    sort: "date desc"
+    max-items: 3
+    fields: [image, date, title, description]
 ---
+
 ```{=html}
 <div style="text-align: center; padding: 20px 0 10px 0;">
   <p style="font-family: 'Georgia', serif;
@@ -28,5 +39,25 @@ listing:
 ```
 
 ### Welcome
-
 Hi, I am **Carina** and welcome to my course portfolio for **ISSS608 Visual Analytics and Applications**.
+
+---
+
+![](images/handson-exercise-label.jpeg)
+
+::: {#handson}
+:::
+
+---
+
+![](images/inclass-exercise-label.jpeg)
+
+::: {#inclass}
+:::
+
+---
+
+![](images/takehome-exercise-label.jpeg)
+
+::: {#takehome}
+:::

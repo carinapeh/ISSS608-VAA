@@ -69,4 +69,3 @@ Pink bars represent **Females** and blue bars represent **Males**.
 
 **Population Pyramids** required a different approach — splitting the dataset by sex and mirroring bars on opposite sides of a central axis. Comparing three planning areas side-by-side made demographic differences immediately visible, something a table of numbers could not achieve as effectively.
 
-Overall, this exercise reinforced that choosing the right chart type for the right question is more important than technical complexity. Both dashboards answer specific analytical questions clearly and concisely.
