@@ -4,9 +4,9 @@ title: "About"
 
 ```{=html}
 <div style="text-align: center; padding: 20px 0 10px 0;">
-  <img src="images/me_and_meko.jpg" 
+  <img src="images/me_and_meko.png" 
        alt="Carina and Meko" 
-       style="width: 280px; height: 280px; object-fit: cover; 
+       style="width: 400px; height: 400px; object-fit: cover; 
               border-radius: 12px;
               box-shadow: 0 4px 16px rgba(90,154,90,0.15);"/>
 </div>
@@ -21,8 +21,8 @@ University (SMU)**. I hope your journey is as fulfilling as mine!
 
 I'm Carina — passionate about turning raw data into clear, meaningful 
 stories through the power of visualisation. When I'm not exploring data, 
-you'll find me spending time with my fluffy Persian Munchkin cat, 
-**Meko** 🐱, or discovering new cafes around Singapore ☕
+you'll find me spending time with my cats, 
+**Meko** and **Zeko**, or discovering new cafes around Singapore ☕
 
 Special thanks to **Prof. Kam Tin Seong** for his dedication, patience, 
 and generosity in sharing his knowledge. 🙏
