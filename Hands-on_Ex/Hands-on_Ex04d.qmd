@@ -1,0 +1,293 @@
+---
+title: "Hands-on Exercise 4d: Building Funnel Plot with R"
+author: "carina peh"
+date: "May 6, 2026"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+## Overview
+
+A funnel plot is used for fair comparison between groups of different sizes. In this exercise I used COVID-19 data from Jakarta to compare cumulative fatality rates across sub-districts.
+
+## Reflections
+
+Funnel plots were completely new to me. The key insight is that comparing raw rates between areas of different sizes is unfair, a small sub-district with 2 deaths out of 10 cases looks much worse than a large one with 200 deaths out of 5000 cases, even if the true rate is similar.
+
+The funnel shape comes from the fact that uncertainty decreases as sample size grows, small areas sit further out in the funnel, and outliers outside the 95% or 99% limits are the ones worth investigating.
+
+Building the ggplot2 version from scratch was challenging but helped me understand exactly how the confidence limits are calculated.
+
+## Getting Started
+
+### Loading packages
+
+```{r}
+pacman::p_load(tidyverse, FunnelPlotR, plotly, knitr)
+```
+
+### Importing data
+
+```{r}
+covid19 <- read_csv("COVID-19_DKI_Jakarta.csv") %>%
+  mutate_if(is.character, as.factor)
+```
+
+## FunnelPlotR methods
+
+### Basic funnel plot
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+funnel_plot(
+  .data = covid19,
+  numerator = Positive,
+  denominator = Death,
+  group = `Sub-district`
+)
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+funnel_plot(
+  .data = covid19,
+  numerator = Positive,
+  denominator = Death,
+  group = `Sub-district`
+)
+```
+:::
+
+### Makeover 1 — using proportions
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+funnel_plot(
+  .data = covid19,
+  numerator = Death,
+  denominator = Positive,
+  group = `Sub-district`,
+  data_type = "PR",
+  xrange = c(0, 6500),
+  yrange = c(0, 0.05)
+)
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+funnel_plot(
+  .data = covid19,
+  numerator = Death,
+  denominator = Positive,
+  group = `Sub-district`,
+  data_type = "PR",
+  xrange = c(0, 6500),
+  yrange = c(0, 0.05)
+)
+```
+:::
+
+### Makeover 2 — with proper labels
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+funnel_plot(
+  .data = covid19,
+  numerator = Death,
+  denominator = Positive,
+  group = `Sub-district`,
+  data_type = "PR",
+  xrange = c(0, 6500),
+  yrange = c(0, 0.05),
+  label = NA,
+  title = "Cumulative COVID-19 Fatality Rate by Cumulative Total Number of COVID-19 Positive Cases",
+  x_label = "Cumulative COVID-19 Positive Cases",
+  y_label = "Cumulative Fatality Rate"
+)
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+funnel_plot(
+  .data = covid19,
+  numerator = Death,
+  denominator = Positive,
+  group = `Sub-district`,
+  data_type = "PR",
+  xrange = c(0, 6500),
+  yrange = c(0, 0.05),
+  label = NA,
+  title = "Cumulative COVID-19 Fatality Rate by Cumulative Total Number of COVID-19 Positive Cases",
+  x_label = "Cumulative COVID-19 Positive Cases",
+  y_label = "Cumulative Fatality Rate"
+)
+```
+:::
+
+## Funnel Plot using ggplot2
+
+### Computing derived fields
+
+```{r}
+df <- covid19 %>%
+  mutate(rate = Death / Positive) %>%
+  mutate(rate.se = sqrt((rate*(1-rate)) / (Positive))) %>%
+  filter(rate > 0)
+
+fit.mean <- weighted.mean(df$rate, 1/df$rate.se^2)
+```
+
+### Calculate 95% and 99.9% confidence limits
+
+```{r}
+number.seq <- seq(1, max(df$Positive), 1)
+number.ll95 <- fit.mean - 1.96 * sqrt((fit.mean*(1-fit.mean)) / (number.seq))
+number.ul95 <- fit.mean + 1.96 * sqrt((fit.mean*(1-fit.mean)) / (number.seq))
+number.ll999 <- fit.mean - 3.29 * sqrt((fit.mean*(1-fit.mean)) / (number.seq))
+number.ul999 <- fit.mean + 3.29 * sqrt((fit.mean*(1-fit.mean)) / (number.seq))
+dfCI <- data.frame(number.ll95, number.ul95,
+                   number.ll999, number.ul999,
+                   number.seq, fit.mean)
+```
+
+### Static funnel plot
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+p <- ggplot(df, aes(x = Positive, y = rate)) +
+  geom_point(aes(label=`Sub-district`),
+             alpha=0.4,
+             size=0.9) +
+  geom_line(data = dfCI,
+            aes(x = number.seq,
+                y = number.ll95),
+            linewidth = 0.4,
+            colour = "grey40",
+            linetype = "dashed") +
+  geom_line(data = dfCI,
+            aes(x = number.seq,
+                y = number.ul95),
+            linewidth = 0.4,
+            colour = "grey40",
+            linetype = "dashed") +
+  geom_line(data = dfCI,
+            aes(x = number.seq,
+                y = number.ll999),
+            linewidth = 0.4,
+            colour = "grey40") +
+  geom_line(data = dfCI,
+            aes(x = number.seq,
+                y = number.ul999),
+            linewidth = 0.4,
+            colour = "grey40") +
+  geom_hline(data = dfCI,
+             aes(yintercept = fit.mean),
+             linewidth = 0.4,
+             colour = "grey40") +
+  coord_cartesian(ylim=c(0,0.05)) +
+  annotate("text", x = 1, y = -0.13, label = "95%", size = 3, colour = "grey40") +
+  annotate("text", x = 4.5, y = -0.18, label = "99%", size = 3, colour = "grey40") +
+  ggtitle("Cumulative Fatality Rate by Cumulative Number of COVID-19 Cases") +
+  xlab("Cumulative Number of COVID-19 Cases") +
+  ylab("Cumulative Fatality Rate") +
+  theme_light() +
+  theme(plot.title = element_text(size=12),
+        legend.position = c(0.91,0.85),
+        legend.title = element_text(size=7),
+        legend.text = element_text(size=7),
+        legend.background = element_rect(colour = "grey60", linetype = "dotted"),
+        legend.key.height = unit(0.3, "cm"))
+p
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+p <- ggplot(df, aes(x = Positive, y = rate)) +
+  geom_point(aes(label=`Sub-district`),
+             alpha=0.4,
+             size=0.9) +
+  geom_line(data = dfCI,
+            aes(x = number.seq,
+                y = number.ll95),
+            linewidth = 0.4,
+            colour = "grey40",
+            linetype = "dashed") +
+  geom_line(data = dfCI,
+            aes(x = number.seq,
+                y = number.ul95),
+            linewidth = 0.4,
+            colour = "grey40",
+            linetype = "dashed") +
+  geom_line(data = dfCI,
+            aes(x = number.seq,
+                y = number.ll999),
+            linewidth = 0.4,
+            colour = "grey40") +
+  geom_line(data = dfCI,
+            aes(x = number.seq,
+                y = number.ul999),
+            linewidth = 0.4,
+            colour = "grey40") +
+  geom_hline(data = dfCI,
+             aes(yintercept = fit.mean),
+             linewidth = 0.4,
+             colour = "grey40") +
+  coord_cartesian(ylim=c(0,0.05)) +
+  ggtitle("Cumulative Fatality Rate by Cumulative Number of COVID-19 Cases") +
+  xlab("Cumulative Number of COVID-19 Cases") +
+  ylab("Cumulative Fatality Rate") +
+  theme_light() +
+  theme(plot.title = element_text(size=12))
+p
+```
+:::
+
+### Interactive funnel plot
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+fp_ggplotly <- ggplotly(p,
+  tooltip = c("label",
+              "x",
+              "y"))
+fp_ggplotly
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+fp_ggplotly <- ggplotly(p,
+  tooltip = c("label",
+              "x",
+              "y"))
+fp_ggplotly
+```
+:::

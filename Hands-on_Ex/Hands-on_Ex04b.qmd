@@ -1,0 +1,207 @@
+---
+title: "Hands-on Exercise 4b: Visual Statistical Analysis"
+author: "carina peh"
+date: "May 6, 2026"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+## Reflections
+
+`ggstatsplot` is really useful because it combines the chart and the statistical test result in one — something that would normally take two separate steps in R. The `ggbetweenstats()` function was the most interesting since it automatically runs the right test depending on the number of groups and shows the pairwise comparisons directly on the chart.
+
+The Bayes Factor in `gghistostats()` was new to me — it gives a more intuitive way to interpret evidence compared to just a p-value.
+
+## Getting Started
+
+### Loading packages
+
+```{r}
+pacman::p_load(ggstatsplot, tidyverse)
+```
+
+### Importing data
+
+```{r}
+exam <- read_csv("Exam_data.csv")
+```
+
+## One-sample test: gghistostats()
+
+Testing whether the mean English score is significantly different from 60.
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+set.seed(1234)
+
+gghistostats(
+  data = exam,
+  x = ENGLISH,
+  type = "bayes",
+  test.value = 60,
+  xlab = "English scores"
+)
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+set.seed(1234)
+
+gghistostats(
+  data = exam,
+  x = ENGLISH,
+  type = "bayes",
+  test.value = 60,
+  xlab = "English scores"
+)
+```
+:::
+
+## Two-sample mean test: ggbetweenstats()
+
+Comparing Maths scores between genders using a non-parametric test.
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggbetweenstats(
+  data = exam,
+  x = GENDER,
+  y = MATHS,
+  type = "np",
+  messages = FALSE
+)
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+ggbetweenstats(
+  data = exam,
+  x = GENDER,
+  y = MATHS,
+  type = "np",
+  messages = FALSE
+)
+```
+:::
+
+## Oneway ANOVA Test: ggbetweenstats()
+
+Comparing English scores across different races with pairwise comparisons.
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggbetweenstats(
+  data = exam,
+  x = RACE,
+  y = ENGLISH,
+  type = "p",
+  mean.ci = TRUE,
+  pairwise.comparisons = TRUE,
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE
+)
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+ggbetweenstats(
+  data = exam,
+  x = RACE,
+  y = ENGLISH,
+  type = "p",
+  mean.ci = TRUE,
+  pairwise.comparisons = TRUE,
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE
+)
+```
+:::
+
+## Significant Test of Correlation: ggscatterstats()
+
+Testing whether there is a significant correlation between Maths and English scores.
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggscatterstats(
+  data = exam,
+  x = MATHS,
+  y = ENGLISH,
+  marginal = FALSE
+)
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+ggscatterstats(
+  data = exam,
+  x = MATHS,
+  y = ENGLISH,
+  marginal = FALSE
+)
+```
+:::
+
+## Significant Test of Association: ggbarstats()
+
+Testing the association between Maths results (pass/fail) and gender.
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+exam1 <- exam %>%
+  mutate(MATHS_bins =
+           cut(MATHS,
+               breaks = c(0,60,75,85,100))
+)
+
+ggbarstats(exam1,
+           x = MATHS_bins,
+           y = GENDER)
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+exam1 <- exam %>%
+  mutate(MATHS_bins =
+           cut(MATHS,
+               breaks = c(0,60,75,85,100))
+)
+
+ggbarstats(exam1,
+           x = MATHS_bins,
+           y = GENDER)
+```
+:::
+
+## 
