@@ -12,15 +12,15 @@ execute:
 
 ## Overview
 
-A funnel plot is used for fair comparison between groups of different sizes. In this exercise I used COVID-19 data from Jakarta to compare cumulative fatality rates across sub-districts.
+A funnel plot is a type of scatter plot that compares groups of different sizes fairly. Each point represents a sub-district, plotted by its sample size against its rate. The "funnel" shape appears because smaller groups naturally have more variation they spread wider at the bottom. Points that fall outside the funnel limits are the outliers worth looking into.
+
+In this exercise I used COVID-19 data from Jakarta to compare cumulative fatality rates across sub-districts.
 
 ## Reflections
 
-Funnel plots were completely new to me. The key insight is that comparing raw rates between areas of different sizes is unfair, a small sub-district with 2 deaths out of 10 cases looks much worse than a large one with 200 deaths out of 5000 cases, even if the true rate is similar.
+The key insight is that comparing raw rates between areas of different sizes is unfair, a small sub-district with 2 deaths out of 10 cases looks much worse than a large one with 200 deaths out of 5000 cases, even if the true rate is similar.
 
 The funnel shape comes from the fact that uncertainty decreases as sample size grows, small areas sit further out in the funnel, and outliers outside the 95% or 99% limits are the ones worth investigating.
-
-Building the ggplot2 version from scratch was challenging but helped me understand exactly how the confidence limits are calculated.
 
 ## Getting Started
 
@@ -33,8 +33,7 @@ pacman::p_load(tidyverse, FunnelPlotR, plotly, knitr)
 ### Importing data
 
 ```{r}
-covid19 <- read_csv("COVID-19_DKI_Jakarta.csv") %>%
-  mutate_if(is.character, as.factor)
+covid19 <- read_csv("COVID-19_DKI_Jakarta.csv")
 ```
 
 ## FunnelPlotR methods
@@ -50,7 +49,8 @@ funnel_plot(
   .data = covid19,
   numerator = Positive,
   denominator = Death,
-  group = `Sub-district`
+  group = `Sub-district`,
+  title = "COVID-19 Cases vs Deaths by Sub-district"
 )
 ```
 
@@ -62,7 +62,8 @@ funnel_plot(
   .data = covid19,
   numerator = Positive,
   denominator = Death,
-  group = `Sub-district`
+  group = `Sub-district`,
+  title = "COVID-19 Cases vs Deaths by Sub-district"
 )
 ```
 :::
@@ -81,7 +82,8 @@ funnel_plot(
   group = `Sub-district`,
   data_type = "PR",
   xrange = c(0, 6500),
-  yrange = c(0, 0.05)
+  yrange = c(0, 0.05),
+  title = "COVID-19 Fatality Rate by Sub-district"
 )
 ```
 
@@ -96,7 +98,8 @@ funnel_plot(
   group = `Sub-district`,
   data_type = "PR",
   xrange = c(0, 6500),
-  yrange = c(0, 0.05)
+  yrange = c(0, 0.05),
+  title = "COVID-19 Fatality Rate by Sub-district"
 )
 ```
 :::
@@ -148,9 +151,9 @@ funnel_plot(
 ### Computing derived fields
 
 ```{r}
-df <- covid19 %>%
-  mutate(rate = Death / Positive) %>%
-  mutate(rate.se = sqrt((rate*(1-rate)) / (Positive))) %>%
+df <- covid19 |>
+  mutate(rate = Death / Positive) |>
+  mutate(rate.se = sqrt((rate*(1-rate)) / (Positive))) |>
   filter(rate > 0)
 
 fit.mean <- weighted.mean(df$rate, 1/df$rate.se^2)
