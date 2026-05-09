@@ -1,5 +1,11 @@
 project:
   type: website
+  render:
+    - "index.qmd"
+    - "about.qmd"
+    - "Hands-on_Ex/*.qmd"
+    - "In Class Exercise/*.qmd"
+    - "Take-home_Ex/**/*.qmd"
 website:
   title: "Exploring Visual Analytics"
   navbar:
@@ -29,10 +35,22 @@ website:
             href: "In Class Exercise/In-class_Ex02.qmd"
           - text: "In-Class Exercise 3"
             href: "In Class Exercise/In-class_Ex03.qmd"
+          - text: "In-Class Exercise 4"
+            href: "In Class Exercise/In-class_Ex04.qmd"
       - text: "Take-Home Exercises"
         menu:
+          - text: "---"
           - text: "Take-Home Exercise 1"
-            href: "Take-home_Ex/Take-home_Ex01.qmd"
+          - text: "Executive Summary"
+            href: "Take-home_Ex/Take-home_Ex01/Executive_Summary.qmd"
+          - text: "Technical Report"
+            href: "Take-home_Ex/Take-home_Ex01/Technical_Report.qmd"
+          - text: "---"
+          - text: "Take-Home Exercise 2"
+          - text: "Executive Summary"
+            href: "Take-home_Ex/Take-home_Ex02/Executive_Summary.qmd"
+          - text: "Technical Report"
+            href: "Take-home_Ex/Take-home_Ex02/Technical_Report.qmd"
     right:
       - icon: heart-fill
         href: about.qmd

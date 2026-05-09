@@ -1,0 +1,37 @@
+---
+title: "In-Class Exercise 4: Visual Statistical Analysis with Tableau"
+author: "carina peh"
+date: "May 3, 2026"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+## Overview
+
+In-Class Exercise 4 consists of two Tableau dashboards. One exploring English score distributions by class, and another analysing Food Service KPI ratings using diverging stacked bar charts.
+
+## Dashboard 1 — English Score Distribution by Class
+
+This dashboard shows a boxplot of English scores by class alongside a histogram of the overall score distribution. The average English score across all students is 67.18.
+
+![English Score Distribution by Class](../images/In%20Class%20Exercise%204.png)
+
+From the Exam Data, I noticed that 3D performed better than 3C in the English exam, as 3D has a higher overall score distribution. This shows that the boxplot is useful because it allows me to compare not only the general performance between classes, but also the spread and consistency of scores within each class.
+
+The boxplot also helps reduce the zone of irrelevancy. In a bar chart, the viewer may focus too much on small differences between bars that may not be meaningful, making minor gaps look more important than they really are. With a boxplot, I can see whether the scores actually overlap, whether the difference between classes is meaningful, and whether the overall distribution supports the conclusion. This makes the boxplot more useful for comparing exam performance across classes.
+
+## Dashboard 2 — Food Service KPI Report
+
+This dashboard uses diverging stacked bar charts to compare food service satisfaction ratings across different wards and months (October and November).
+
+![Food Service KPI Report](../images/Food%20Service%20KPI%20Report%20(Dashboard).png)
+
+For the Food Service Survey Data, the dashboards help summarise many responses in a clear and organised way. The charts made it easier to compare satisfaction levels across different food service items, months and wards. I could quickly see which areas received more positive ratings and which areas may need improvement.
+
+## Reflections
+
+Overall, I learnt that visual analytics is useful because it turns raw data into insights that are easier to understand, explain and use for decision making. Different chart types serve different purposes — boxplots are better for comparing distributions across groups, while diverging stacked bar charts work well for summarising Likert-scale survey data across multiple categories.
