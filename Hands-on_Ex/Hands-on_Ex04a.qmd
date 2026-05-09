@@ -14,6 +14,14 @@ execute:
 
 In this exercise I learnt two relatively new statistical graphic methods for visualising distribution — ridgeline plots and raincloud plots — using `ggridges` and `ggdist`.
 
+## Reflections
+
+This exercise introduced two new ways to visualise distribution. Ridgeline plots are great for comparing distributions across many groups at once, much cleaner than stacking multiple histograms.
+
+The raincloud plot was the most interesting, it combines three views in one chart: the density shape, the boxplot summary, and the actual data points. This gives a much more complete picture than just a boxplot alone.
+
+The step-by-step build up of the raincloud plot (half eye → boxplot → dots → flip) was a good way to understand how each layer adds information.
+
 ## Getting Started
 
 ### Loading packages
@@ -404,17 +412,3 @@ exam %>%
   theme_economist()
 ```
 :::
-
-## Reflections
-
-This exercise introduced two new ways to visualise distribution. Ridgeline plots are great for comparing distributions across many groups at once, much cleaner than stacking multiple histograms.
-
-The raincloud plot was the most interesting, it combines three views in one chart: the density shape, the boxplot summary, and the actual data points. This gives a much more complete picture than just a boxplot alone.
-
-The step-by-step build up of the raincloud plot (half eye → boxplot → dots → flip) was a good way to understand how each layer adds information.
-
-## References
-
--   [ggridges documentation](https://wilkelab.org/ggridges/)
--   [ggdist documentation](https://mjskay.github.io/ggdist/)
--   [R for Visual Analytics Chapter 9](https://r4va.netlify.app/chap09)
