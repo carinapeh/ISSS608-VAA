@@ -1,0 +1,165 @@
+---
+title: "5a. Building Ternary Plot with R"
+author: "carina peh"
+date: "May 13, 2026"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+## Overview
+
+Ternary plots display the distribution of three-part compositional data. Each side of the triangle represents one of three components. In this exercise I used Singapore population data to explore the proportion of young, economically active and old residents by planning area.
+
+## Reflections
+
+A ternary plot is useful when three variables always sum to a fixed total, something a standard scatter plot cannot show. The key takeaway is that the position of each point encodes all three proportions simultaneously, making it easy to spot which planning areas are ageing faster than others. The interactive plotly version added practical value since hovering reveals the exact planning area behind each point.
+
+## Getting Started
+
+### Loading packages
+
+```{r}
+pacman::p_load(plotly, ggtern, tidyverse)
+```
+
+### Importing data
+
+```{r}
+pop_data <- read_csv("respopagsex2000to2018_tidy.csv")
+```
+
+### Preparing the data
+
+```{r}
+agpop_mutated <- pop_data %>%
+  mutate(`Year` = as.character(Year)) %>%
+  spread(AG, Population) %>%
+  mutate(YOUNG = rowSums(.[4:8])) %>%
+  mutate(ACTIVE = rowSums(.[9:16])) %>%
+  mutate(OLD = rowSums(.[17:21])) %>%
+  mutate(TOTAL = rowSums(.[22:24])) %>%
+  filter(Year == "2018") %>%
+  filter(TOTAL > 0)
+```
+
+## Plotting Ternary Diagram with R
+
+### Static ternary plot — basic
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggtern(data = agpop_mutated,
+       aes(x = YOUNG, y = ACTIVE, z = OLD)) +
+  geom_point()
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+ggtern(data = agpop_mutated,
+       aes(x = YOUNG, y = ACTIVE, z = OLD)) +
+  geom_point()
+```
+:::
+
+### Static ternary plot — with theme
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggtern(data = agpop_mutated,
+       aes(x = YOUNG, y = ACTIVE, z = OLD)) +
+  geom_point() +
+  labs(title = "Population structure, 2018") +
+  theme_rgbw()
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+ggtern(data = agpop_mutated,
+       aes(x = YOUNG, y = ACTIVE, z = OLD)) +
+  geom_point() +
+  labs(title = "Population structure, 2018") +
+  theme_rgbw()
+```
+:::
+
+### Interactive ternary plot using plotly
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+label <- function(txt) {
+  list(
+    text = txt, x = 0.1, y = 1,
+    ax = 0, ay = 0,
+    xref = "paper", yref = "paper",
+    align = "center",
+    font = list(family = "serif", size = 15, color = "white"),
+    bgcolor = "#b3b3b3", bordercolor = "black", borderwidth = 2
+  )
+}
+axis <- function(txt) {
+  list(title = txt, tickformat = ".0%", tickfont = list(size = 10))
+}
+ternaryAxes <- list(
+  aaxis = axis("Young"),
+  baxis = axis("Active"),
+  caxis = axis("Old")
+)
+plot_ly(
+  agpop_mutated,
+  a = ~YOUNG, b = ~ACTIVE, c = ~OLD,
+  color = I("black"),
+  type = "scatterternary"
+) |>
+  layout(annotations = label("Ternary Markers"),
+         ternary = ternaryAxes)
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+label <- function(txt) {
+  list(
+    text = txt, x = 0.1, y = 1,
+    ax = 0, ay = 0,
+    xref = "paper", yref = "paper",
+    align = "center",
+    font = list(family = "serif", size = 15, color = "white"),
+    bgcolor = "#b3b3b3", bordercolor = "black", borderwidth = 2
+  )
+}
+axis <- function(txt) {
+  list(title = txt, tickformat = ".0%", tickfont = list(size = 10))
+}
+ternaryAxes <- list(
+  aaxis = axis("Young"),
+  baxis = axis("Active"),
+  caxis = axis("Old")
+)
+plot_ly(
+  agpop_mutated,
+  a = ~YOUNG, b = ~ACTIVE, c = ~OLD,
+  color = I("black"),
+  type = "scatterternary"
+) |>
+  layout(annotations = label("Ternary Markers"),
+         ternary = ternaryAxes)
+```
+:::

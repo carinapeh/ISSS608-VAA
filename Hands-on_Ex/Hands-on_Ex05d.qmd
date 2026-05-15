@@ -1,0 +1,215 @@
+---
+title: "5d. Visual Multivariate Analysis with Parallel Coordinates Plot"
+author: "carina peh"
+date: "May 13, 2026"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+## Overview
+
+Parallel coordinates plots are designed for comparing multiple numerical variables across many observations simultaneously. In this exercise I used the World Happiness 2018 data to explore patterns across happiness indicators by region.
+
+## Reflections
+
+The main strength of parallel coordinates plots is that they can show many variables at once without needing separate charts. Scaling with `uniminmax` was important because without it, variables with different units and ranges are impossible to compare on the same plot. The facet version by region revealed clear differences in the happiness profiles of different parts of the world. The interactive `parallelPlot` version was more practical for analysis since dragging on any axis filters the lines and makes it easier to focus on specific subgroups.
+
+## Getting Started
+
+### Loading packages
+
+```{r}
+pacman::p_load(GGally, parallelPlot, tidyverse)
+```
+
+### Importing data
+
+```{r}
+wh <- read_csv("WHData-2018.csv")
+
+wh <- wh |>
+  mutate(Region = as.factor(Region))
+```
+
+## Static Parallel Coordinates Plot
+
+### Basic parallel coordinates
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 7
+
+ggparcoord(
+  data = wh,
+  columns = 7:12,
+  groupColumn = "Region",
+  scale = "uniminmax",
+  alphaLines = 0.2,
+  boxplot = TRUE,
+  title = "Parallel Coordinates Plot of World Happiness Variables"
+) +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(size = 12),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+ggparcoord(data = wh, columns = c(7:12))
+```
+:::
+
+### With boxplot and colour by region
+
+::: panel-tabset
+## The plot
+
+```{r}
+ggparcoord(data = wh, 
+           columns = c(7:12))
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+ggparcoord(data = wh,
+           columns = c(7:12),
+           groupColumn = 2,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE,
+           title = "Parallel Coordinates Plot of World Happiness Variables")
+```
+:::
+
+### With facet by region
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggparcoord(data = wh,
+           columns = c(7:12),
+           groupColumn = 2,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE,
+           title = "Multiple Parallel Coordinates Plots of World Happiness Variables by Region") +
+  facet_wrap(~ Region)
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+ggparcoord(data = wh,
+           columns = c(7:12),
+           groupColumn = 2,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE,
+           title = "Multiple Parallel Coordinates Plots of World Happiness Variables by Region") +
+  facet_wrap(~ Region)
+```
+:::
+
+### With rotated x-axis labels
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggparcoord(data = wh,
+           columns = c(7:12),
+           groupColumn = 2,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE,
+           title = "Multiple Parallel Coordinates Plots of World Happiness Variables by Region") +
+  facet_wrap(~ Region) +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+ggparcoord(data = wh,
+           columns = c(7:12),
+           groupColumn = 2,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE,
+           title = "Multiple Parallel Coordinates Plots of World Happiness Variables by Region") +
+  facet_wrap(~ Region) +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+```
+:::
+
+## Interactive Parallel Coordinates Plot — parallelPlot
+
+### Basic interactive plot
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+wh |>
+  select("Happiness score", c(7:12)) |>
+  parallelPlot(refColumnDim = "Happiness score",
+               rotateTitle = TRUE)
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+wh |>
+  select("Happiness score", c(7:12)) |>
+  parallelPlot(refColumnDim = "Happiness score",
+               rotateTitle = TRUE)
+```
+:::
+
+### With histogram
+
+::: panel-tabset
+## The plot
+
+```{r}
+
+wh |>
+  select("Happiness score", c(7:12)) |>
+  parallelPlot(refColumnDim = "Happiness score",
+               rotateTitle = TRUE,
+               histoVisibility = rep(TRUE, 7))
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+wh |>
+  select("Happiness score", c(7:12)) |>
+  parallelPlot(refColumnDim = "Happiness score",
+               rotateTitle = TRUE,
+               histoVisibility = rep(TRUE, 7))
+```
+:::

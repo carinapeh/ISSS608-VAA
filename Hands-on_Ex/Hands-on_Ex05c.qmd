@@ -1,0 +1,358 @@
+---
+title: "5c. Visual Multivariate Analysis with Heatmap"
+author: "carina peh"
+date: "May 13, 2026"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+## Overview
+
+Heatmaps visualise multivariate data through colour variations, making it easy to spot patterns across many variables and observations at once. In this exercise I used the World Happiness 2018 data.
+
+## Reflections
+
+The main takeaway is that normalising the data before plotting is essential. Without it, variables with larger absolute values dominate the colour scale and make other variables impossible to compare. The `heatmaply` interactive version adds real value over the static version because you can hover over individual cells to read exact values and zoom into specific regions. Clustering the rows and columns together also helped reveal groups of countries with similar happiness profiles.
+
+## Getting Started
+
+### Loading packages
+
+```{r}
+pacman::p_load(seriation, dendextend, heatmaply, tidyverse)
+```
+
+### Importing and preparing data
+
+```{r}
+wh <- read_csv("WHData-2018.csv")
+row.names(wh) <- wh$Country
+wh1 <- dplyr::select(wh, c(3, 7:12))
+wh_matrix <- data.matrix(wh)
+```
+
+## Static Heatmap
+
+### Basic heatmap — no clustering
+
+::: panel-tabset
+## The plot
+
+```{r}
+wh_heatmap <- heatmap(wh_matrix,
+                      Rowv = NA, Colv = NA)
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+wh_heatmap <- heatmap(wh_matrix,
+                      Rowv = NA, Colv = NA)
+```
+:::
+
+### Cluster heatmap
+
+::: panel-tabset
+## The plot
+
+```{r}
+wh_heatmap <- heatmap(wh_matrix)
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+wh_heatmap <- heatmap(wh_matrix)
+```
+:::
+
+### Normalised heatmap
+
+::: panel-tabset
+## The plot
+
+```{r}
+wh_heatmap <- heatmap(wh_matrix,
+                      scale = "column",
+                      cexRow = 0.6,
+                      cexCol = 0.8,
+                      margins = c(10, 4))
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+wh_heatmap <- heatmap(wh_matrix,
+                      scale = "column",
+                      cexRow = 0.6,
+                      cexCol = 0.8,
+                      margins = c(10, 4))
+```
+:::
+
+## Interactive Heatmap with heatmaply
+
+### Working with heatmaply — basic syntax
+
+```{r}
+heatmaply(mtcars)
+```
+
+### Basic heatmaply with wh_matrix
+
+::: panel-tabset
+## The plot
+
+```{r}
+heatmaply(wh_matrix[, -c(1, 2, 4, 5)],
+          scale = "column")
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+heatmaply(wh_matrix[, -c(1, 2, 4, 5)],
+          scale = "column")
+```
+:::
+
+## Data Transformation
+
+### Normalising method
+
+::: panel-tabset
+## The plot
+
+```{r}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]))
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]))
+```
+:::
+
+### Percentising method
+
+::: panel-tabset
+## The plot
+
+```{r}
+heatmaply(percentize(wh_matrix[, -c(1, 2, 4, 5)]))
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+heatmaply(percentize(wh_matrix[, -c(1, 2, 4, 5)]))
+```
+:::
+
+## Clustering Algorithm
+
+### Manual approach
+
+::: panel-tabset
+## The plot
+
+```{r}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          dist_method = "euclidean",
+          hclust_method = "ward.D")
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          dist_method = "euclidean",
+          hclust_method = "ward.D")
+```
+:::
+
+### Statistical approach — finding optimal k
+
+```{r}
+wh_d <- dist(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+             method = "euclidean")
+dend_expend(wh_d)[[3]]
+```
+
+```{r}
+wh_clust <- hclust(wh_d, method = "average")
+num_k <- find_k(wh_clust)
+plot(num_k)
+```
+
+::: panel-tabset
+## The plot
+
+```{r}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          dist_method = "euclidean",
+          hclust_method = "average",
+          k_row = 3)
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          dist_method = "euclidean",
+          hclust_method = "average",
+          k_row = 3)
+```
+:::
+
+## Seriation
+
+### OLO method
+
+::: panel-tabset
+## The plot
+
+```{r}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          seriate = "OLO")
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          seriate = "OLO")
+```
+:::
+
+### GW method
+
+::: panel-tabset
+## The plot
+
+```{r}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          seriate = "GW")
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          seriate = "GW")
+```
+:::
+
+### Mean method
+
+::: panel-tabset
+## The plot
+
+```{r}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          seriate = "mean")
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          seriate = "mean")
+```
+:::
+
+### None method
+
+::: panel-tabset
+## The plot
+
+```{r}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          seriate = "none")
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          seriate = "none")
+```
+:::
+
+## Working with Colour Palettes
+
+### Blues palette
+
+::: panel-tabset
+## The plot
+
+```{r}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          seriate = "none",
+          colors = Blues)
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          seriate = "none",
+          colors = Blues)
+```
+:::
+
+## The Finishing Touch
+
+::: panel-tabset
+## The plot
+
+```{r}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          Colv = NA,
+          seriate = "none",
+          colors = Blues,
+          k_row = 5,
+          margins = c(NA, 200, 60, NA),
+          fontsize_row = 4,
+          fontsize_col = 5,
+          main = "World Happiness Score and Variables by Country, 2018 \nDataTransformation using Normalise Method",
+          xlab = "World Happiness Indicators",
+          ylab = "World Countries")
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          Colv = NA,
+          seriate = "none",
+          colors = Blues,
+          k_row = 5,
+          margins = c(NA, 200, 60, NA),
+          fontsize_row = 4,
+          fontsize_col = 5,
+          main = "World Happiness Score and Variables by Country, 2018 \nDataTransformation using Normalise Method",
+          xlab = "World Happiness Indicators",
+          ylab = "World Countries")
+```
+:::
