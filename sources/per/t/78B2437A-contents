@@ -1,0 +1,760 @@
+---
+title: "Hands-on Exercise 1: A Layered Grammar of Graphics"
+author: "carinapeh"
+date: "April 10, 2026"
+date-modified: "last-modified"
+description: "Introduction to ggplot2 and building statistical charts in R."
+execute:
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+## Reflections
+
+In this exercise, I was introduced to ggplot2 and the layered grammar of graphics. I learned that every chart in R is built by adding layers — starting from data, then aesthetics, then geometry. I explored many different chart types including histograms, dot plots, box plots, violin plots, and scatter plots. I also discovered how facets allow us to split charts by categories, and how built-in themes like theme_classic() and theme_minimal() can instantly change the look of a chart. This exercise showed me that ggplot2 is both systematic and flexible.
+
+------------------------------------------------------------------------
+
+# Getting Started
+
+## Install and launching R packages
+
+The code chunk below uses p_load() of pacman package to check if tidyverse packages are installed in the computer. If they are, then they will be launched into R.
+
+```{r}
+pacman::p_load(tidyverse)
+```
+
+```{r}
+exam_data <- read_csv("Exam_data.csv")
+```
+
+------------------------------------------------------------------------
+
+# Plotting a Simple Bar Chart
+
+## Loading Tidyverse
+
+This code chunk uses pacman's [p_load()](https://cran.r-project.org/web/packages/pacman/refman/pacman.html#p_load) to load tidyverse family of packages into R environment.
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data = exam_data,
+       aes(x = RACE)) +
+  geom_bar()
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data = exam_data,
+       aes(x = RACE)) +
+  geom_bar()
+```
+:::
+
+------------------------------------------------------------------------
+
+# Geometric Objects
+
+## R Graphics histogram
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+hist(exam_data$MATHS)
+```
+
+## The code
+
+```{r}
+#| eval: false
+hist(exam_data$MATHS)
+```
+:::
+
+## ggplot2 histogram
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, aes(x = MATHS)) +
+  geom_histogram(bins=10, 
+                 boundary = 100,
+                 color="black", 
+                 fill="grey") +
+  ggtitle("Distribution of Maths scores")
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, aes(x = MATHS)) +
+  geom_histogram(bins=10, 
+                 boundary = 100,
+                 color="black", 
+                 fill="grey") +
+  ggtitle("Distribution of Maths scores")
+```
+:::
+
+## Empty canvas
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data)
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data)
+```
+:::
+
+## Canvas with aesthetic
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, 
+       aes(x= MATHS))
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, 
+       aes(x= MATHS))
+```
+:::
+
+## Dot plot
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_dotplot(dotsize = 0.5)
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_dotplot(dotsize = 0.5)
+```
+:::
+
+## Dot plot with cleaned y-axis
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_dotplot(binwidth=2.5,         
+               dotsize = 0.5) +      
+  scale_y_continuous(NULL,           
+                     breaks = NULL)
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_dotplot(binwidth=2.5,         
+               dotsize = 0.5) +      
+  scale_y_continuous(NULL,           
+                     breaks = NULL)
+```
+:::
+
+## Default histogram
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_histogram()
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_histogram()
+```
+:::
+
+## Histogram with 20 bins
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, 
+       aes(x= MATHS)) +
+  geom_histogram(bins=20,            
+                 color="black",      
+                 fill="light blue")
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, 
+       aes(x= MATHS)) +
+  geom_histogram(bins=20,            
+                 color="black",      
+                 fill="light blue")
+```
+:::
+
+## Histogram by gender
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, 
+       aes(x= MATHS, 
+           fill = GENDER)) +
+  geom_histogram(bins=20, 
+                 color="grey30")
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, 
+       aes(x= MATHS, 
+           fill = GENDER)) +
+  geom_histogram(bins=20, 
+                 color="grey30")
+```
+:::
+
+## Basic density plot
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_density()
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_density()
+```
+:::
+
+## Density by gender
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, 
+       aes(x = MATHS, 
+           colour = GENDER)) +
+  geom_density()
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, 
+       aes(x = MATHS, 
+           colour = GENDER)) +
+  geom_density()
+```
+:::
+
+## Basic boxplot
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, 
+       aes(y = MATHS,       
+           x= GENDER)) +    
+  geom_boxplot()
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, 
+       aes(y = MATHS,       
+           x= GENDER)) +    
+  geom_boxplot()
+```
+:::
+
+## Notched boxplot
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, 
+       aes(y = MATHS, 
+           x= GENDER)) +
+  geom_boxplot(notch=TRUE)
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, 
+       aes(y = MATHS, 
+           x= GENDER)) +
+  geom_boxplot(notch=TRUE)
+```
+:::
+
+## Violin plot
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, 
+       aes(y = MATHS, 
+           x= GENDER)) +
+  geom_violin()
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, 
+       aes(y = MATHS, 
+           x= GENDER)) +
+  geom_violin()
+```
+:::
+
+## Basic scatterplot
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, 
+       aes(x= MATHS, 
+           y=ENGLISH)) +
+  geom_point()
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, 
+       aes(x= MATHS, 
+           y=ENGLISH)) +
+  geom_point()
+```
+:::
+
+## Boxplot with jitter points
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, 
+       aes(y = MATHS, 
+           x= GENDER)) +
+  geom_boxplot() +                    
+  geom_point(position="jitter", 
+             size = 0.5)
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, 
+       aes(y = MATHS, 
+           x= GENDER)) +
+  geom_boxplot() +                    
+  geom_point(position="jitter", 
+             size = 0.5)
+```
+:::
+
+## Boxplot only
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, 
+       aes(y = MATHS, x= GENDER)) +
+  geom_boxplot()
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, 
+       aes(y = MATHS, x= GENDER)) +
+  geom_boxplot()
+```
+:::
+
+## Boxplot with mean point
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, 
+       aes(y = MATHS, x= GENDER)) +
+  geom_boxplot() +
+  stat_summary(geom = "point",       
+               fun = "mean",         
+               colour ="red",        
+               size=4)
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, 
+       aes(y = MATHS, x= GENDER)) +
+  geom_boxplot() +
+  stat_summary(geom = "point",       
+               fun = "mean",         
+               colour ="red",        
+               size=4)
+```
+:::
+
+------------------------------------------------------------------------
+
+# Scatterplots and Smooth Lines
+
+## Scatterplot with curved smooth line
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, 
+       aes(x= MATHS, y=ENGLISH)) +
+  geom_point() +
+  geom_smooth(linewidth=0.5)
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, 
+       aes(x= MATHS, y=ENGLISH)) +
+  geom_point() +
+  geom_smooth(linewidth=0.5)
+```
+:::
+
+## Scatterplot with linear regression line
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, 
+       aes(x= MATHS, 
+           y=ENGLISH)) +
+  geom_point() +
+  geom_smooth(method=lm, 
+              linewidth=0.5)
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, 
+       aes(x= MATHS, 
+           y=ENGLISH)) +
+  geom_point() +
+  geom_smooth(method=lm, 
+              linewidth=0.5)
+```
+:::
+
+## Scatterplot with axis limits
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, 
+       aes(x= MATHS, y=ENGLISH)) +
+  geom_point() +
+  geom_smooth(method=lm, 
+              linewidth=0.5) +  
+  coord_cartesian(xlim=c(0,100),
+                  ylim=c(0,100))
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, 
+       aes(x= MATHS, y=ENGLISH)) +
+  geom_point() +
+  geom_smooth(method=lm, 
+              linewidth=0.5) +  
+  coord_cartesian(xlim=c(0,100),
+                  ylim=c(0,100))
+```
+:::
+
+------------------------------------------------------------------------
+
+# Facets
+
+## Facet wrap by class
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, 
+       aes(x= MATHS)) +
+  geom_histogram(bins=20) +
+    facet_wrap(~ CLASS)
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, 
+       aes(x= MATHS)) +
+  geom_histogram(bins=20) +
+    facet_wrap(~ CLASS)
+```
+:::
+
+## Facet grid by class
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, 
+       aes(x= MATHS)) +
+  geom_histogram(bins=20) +
+    facet_grid(~ CLASS)
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, 
+       aes(x= MATHS)) +
+  geom_histogram(bins=20) +
+    facet_grid(~ CLASS)
+```
+:::
+
+------------------------------------------------------------------------
+
+# Coordinates and Themes
+
+## Basic bar chart (vertical)
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar()
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar()
+```
+:::
+
+## Flipped bar chart (horizontal)
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip()
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip()
+```
+:::
+
+## Bar Chart using theme_gray
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip() +
+  theme_gray()
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip() +
+  theme_gray()
+```
+:::
+
+## Bar Chart using theme_classic
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip() +
+  theme_classic()
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip() +
+  theme_classic()
+```
+:::
+
+## Bar Chart using theme_minimal
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip() +
+  theme_minimal()
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip() +
+  theme_minimal()
+```
+:::

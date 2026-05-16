@@ -489,34 +489,36 @@ ggplot(data = realis2018_selected,
 
 ```{r}
 #| eval: false
-install.packages("devtools")
-```
 
-```{r}
-#| eval: false
+install.packages("devtools")
+install.packages("treemap")
+
 library(devtools)
 install_github("timelyportfolio/d3treeR")
 ```
 
+### Loading packages
+
 ```{r}
-#| eval: false
+library(treemap)
 library(d3treeR)
 ```
 
 ### Designing an interactive treemap
 
 ```{r}
-#| eval: false
-tm <- treemap(realis2018_summarised,
-        index = c("Planning Region", "Planning Area"),
-        vSize = "Total Unit Sold",
-        vColor = "Median Unit Price ($ psm)",
-        type = "value",
-        title = "Private Residential Property Sold, 2017",
-        title.legend = "Median Unit Price (S$ per sq. m)")
+tm <- treemap(
+  realis2018_summarised,
+  index = c("Planning Region", "Planning Area"),
+  vSize = "Total Unit Sold",
+  vColor = "Median Unit Price ($ psm)",
+  type = "value",
+  title = "Private Residential Property Sold, 2017",
+  title.legend = "Median Unit Price (S$ per sq. m)"
+)
 ```
 
 ```{r}
-#| eval: false
 d3tree(tm, rootname = "Singapore")
 ```
+
