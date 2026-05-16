@@ -47,6 +47,9 @@ website:
             href: "In Class Exercise/In-class_Ex03.qmd"
           - text: "In-Class Exercise 4"
             href: "In Class Exercise/In-class_Ex04.qmd"
+          - text: "In-Class Exercise 5"
+            href: "In Class Exercise/In-class_Ex05.qmd"
+
       - text: "Take-Home Exercises"
         menu:
           - text: "---"
