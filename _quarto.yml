@@ -64,6 +64,7 @@ website:
     right:
       - icon: heart-fill
         href: about.qmd
+      
 format:
   html:
     theme: minty
