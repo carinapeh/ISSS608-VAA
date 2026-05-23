@@ -3,6 +3,8 @@ title: "Take-home Exercise 1: Uncovering Loss Drivers in Motor Vehicle Insurance
 author: "Carina Peh"
 date: "May 17, 2026"
 date-modified: "last-modified"
+description: "Applying univariate and bivariate visual analytics techniques to explore key factors influencing profitability and volatility in a motor vehicle insurance portfolio."
+image: images/takehome1.png
 execute:
   eval: true
   echo: true
@@ -15,8 +17,7 @@ execute:
 
 ## 1.1 Background
 
-The Property & Casualty (P&C) insurance industry has long struggled withunderperforming portfolios where the root causes of poor profitability and high volatility remain unknown. Traditional approaches to data-driven decision-making in insurance have largely focused on dashboard reporting, which is limited by the general lack of advanced analytical capabilities which offers a more powerful alternative. 
-By combining data science,  risk knowledge and industry expertise, insurers can generate actionable insights to grow, optimise existing portfolios and improve operational efficiency. As noted bythe Swiss Re Institute (2019), leveraging visual analytics can potentially help  investigate trends in underlying loss drivers, while data enrichment using external  data can help refine segmentation and underwriting strategy.
+The Property & Casualty (P&C) insurance industry has long struggled withunderperforming portfolios where the root causes of poor profitability and high volatility remain unknown. Traditional approaches to data-driven decision-making in insurance have largely focused on dashboard reporting, which is limited by the general lack of advanced analytical capabilities which offers a more powerful alternative. By combining data science, risk knowledge and industry expertise, insurers can generate actionable insights to grow, optimise existing portfolios and improve operational efficiency. As noted bythe Swiss Re Institute (2019), leveraging visual analytics can potentially help investigate trends in underlying loss drivers, while data enrichment using external data can help refine segmentation and underwriting strategy.
 
 In this study, a motor vehicle insurance portfolio dataset from a Spanish insurance company, made publicly available via Mendeley Data, is used to demonstrate the potential of visual analytics techniques in exploring and analysing key factors influencing portfolio profitability and volatility.
 
@@ -24,11 +25,10 @@ In this study, a motor vehicle insurance portfolio dataset from a Spanish insura
 
 The data for this exercise is the motor vehicle insurance portfolio dataset retrieved from [Mendeley Data](https://data.mendeley.com/datasets/sw4jmdb2sm/1).
 
-
 The dataset contains **354,140 policy records** across **47 variables**, covering the period from 2022 to 2024. Variables are grouped into four broad categories:
 
 | Category | Description |
-|---|---|
+|----|----|
 | Policy & Insured characteristics | Policy type, status, business origin, payment frequency, bonus score |
 | Driver & Vehicle characteristics | Driver age, vehicle age, fuel type, vehicle brand, vehicle value, area |
 | Premiums | Total and coverage-level premiums collected |
@@ -38,14 +38,14 @@ The dataset contains **354,140 policy records** across **47 variables**, coverin
 
 Using appropriate **Exploratory Data Analysis (EDA)** methods and **ggplot2** functions, this study aims to:
 
-- Apply suitable **univariate** visual analytics techniques to explore the distributions and characteristics of numerical and categorical variables.
+-   Apply suitable **univariate** visual analytics techniques to explore the distributions and characteristics of numerical and categorical variables.
 
-- Apply suitable **bivariate** visual analytics techniques to investigate and statistically validate factors influencing the **profitability** and **volatility** of the insurance portfolio.
+-   Apply suitable **bivariate** visual analytics techniques to investigate and statistically validate factors influencing the **profitability** and **volatility** of the insurance portfolio.
 
 # 2 Loading Packages
 
 | Package | Description |
-|---|---|
+|----|----|
 | [**tidyverse**](https://www.tidyverse.org/) | A collection of R packages designed for data science, used for data import, wrangling and transformation |
 | [**readxl**](https://readxl.tidyverse.org/) | For reading Excel files such as the variable cookbook |
 | [**knitr**](https://yihui.org/knitr/) | For dynamic report generation and displaying formatted tables |
@@ -57,8 +57,7 @@ Using appropriate **Exploratory Data Analysis (EDA)** methods and **ggplot2** fu
 | [**ggpubr**](https://rpkgs.datanovia.com/ggpubr/) | For creating publication-ready ggplot2 plots |
 | [**ggstatsplot**](https://indrajeetpatil.github.io/ggstatsplot/) | For combining statistical tests with visualisations |
 
-The code chunk below uses `p_load()` of the [**pacman**](https://cran.r-project.org/web/packages/pacman/vignettes/Introduction_to_pacman.html) 
-package to check if the packages are installed. If they are, they will be loaded into R. If not, they will be installed first before being loaded.
+The code chunk below uses `p_load()` of the [**pacman**](https://cran.r-project.org/web/packages/pacman/vignettes/Introduction_to_pacman.html) package to check if the packages are installed. If they are, they will be loaded into R. If not, they will be installed first before being loaded.
 
 ```{r}
 pacman::p_load(tidyverse, readxl, knitr,
@@ -150,10 +149,10 @@ flowchart LR
 
 ## 4.1 Variable Selection
 
-Below are the variables retained for this study, which can be grouped into 4 broad categories of Policy & Insured Characteristics, Driver & Vehicle  Characteristics, Premiums, and Exposure, Claims & Incurred. Details are extracted from the cookbook(`Descriptive_of_variables.xlsx`):
+Below are the variables retained for this study, which can be grouped into 4 broad categories of Policy & Insured Characteristics, Driver & Vehicle Characteristics, Premiums, and Exposure, Claims & Incurred. Details are extracted from the cookbook(`Descriptive_of_variables.xlsx`):
 
 | Category | Variable | Description | Type | Encoding |
-|---|---|---|---|---|
+|----|----|----|----|----|
 | Policy & Insured | `policy_type` | Main coverage structure | CAT | TP, TPG, CC, COMP_E, COMP_N |
 | Policy & Insured | `policy_status` | Policy active or cancelled | CAT | A - Active, C - Cancelled |
 | Policy & Insured | `business_type` | Business origin | CAT | NB - New Business, P - Portfolio |
@@ -177,11 +176,11 @@ Below are the variables retained for this study, which can be grouped into 4 bro
 | Exposure, Claims & Incurred | `total_exposure` | Time-on-risk in policy years | NUM | 0 to 1 |
 | Exposure, Claims & Incurred | `total_claims` | Total claims reported | NUM | Count |
 | Exposure, Claims & Incurred | `total_incurred` | Total incurred cost of claims | NUM | In euros (€) |
-| Exposure, Claims & Incurred | `loss_ratio`* | Profitability measure | NUM | total_incurred / total_premium |
-| Exposure, Claims & Incurred | `claim_frequency`* | Volatility measure | NUM | total_claims / total_exposure |
-| Exposure, Claims & Incurred | `has_claim`* | Binary claim indicator | NUM | 1 if claims > 0, else 0 |
+| Exposure, Claims & Incurred | `loss_ratio`\* | Profitability measure | NUM | total_incurred / total_premium |
+| Exposure, Claims & Incurred | `claim_frequency`\* | Volatility measure | NUM | total_claims / total_exposure |
+| Exposure, Claims & Incurred | `has_claim`\* | Binary claim indicator | NUM | 1 if claims \> 0, else 0 |
 
-*Derived variables created in Section 4.5.
+\*Derived variables created in Section 4.5.
 
 The code chunk below uses `select()` of the **dplyr** package to retain only the variables relevant to this study.
 
@@ -212,7 +211,6 @@ insurance <- insurance %>%
 
 The resulting dataset retains **354,140 observations** across **30 variables**.
 
-
 ## 4.2 Handling Missing Values
 
 `is.na()` allows us to identify missing values in our dataset and `sum()` counts the frequency of such missing values.
@@ -233,12 +231,12 @@ gg_miss_var(insurance)
 
 The results show that four variables contain missing values:
 
-| Variable | Missing Count | % of Total |
-|---|---|---|
-| `fuel_type` | 1,287 | 0.36% |
-| `vehicle_value` | 513 | 0.14% |
-| `vehicle_age` | 2 | <0.01% |
-| `age_driving_licence` | 2 | <0.01% |
+| Variable              | Missing Count | \% of Total |
+|-----------------------|---------------|-------------|
+| `fuel_type`           | 1,287         | 0.36%       |
+| `vehicle_value`       | 513           | 0.14%       |
+| `vehicle_age`         | 2             | \<0.01%     |
+| `age_driving_licence` | 2             | \<0.01%     |
 
 As the missing values are very small in proportion (less than 0.5% of the total dataset), they will not significantly affect the analysis. `drop_na()` drops rows where any column specified contains a missing value.
 
@@ -260,8 +258,7 @@ colnames(insurance)
 
 ## 4.3 Recoding Categorical Variables
 
-`recode()` is primarily used to replace specific values in a vector with new ones. The recoded variable is then assigned using `mutate()` of the 
-**dplyr** package.
+`recode()` is primarily used to replace specific values in a vector with new ones. The recoded variable is then assigned using `mutate()` of the **dplyr** package.
 
 ::: panel-tabset
 ## Policy Type
@@ -280,8 +277,7 @@ insurance <- insurance %>%
 
 ## Policy Status
 
-`policy_status` is recoded to reflect whether the policy is active 
-or cancelled:
+`policy_status` is recoded to reflect whether the policy is active or cancelled:
 
 ```{r}
 insurance <- insurance %>%
@@ -358,9 +354,7 @@ insurance <- insurance %>%
     "U" = "Urban",
     "R" = "Rural"))
 ```
-
 :::
-
 
 ## 4.4 Data Type Conversion
 
@@ -420,15 +414,13 @@ insurance <- insurance %>%
   mutate(has_claim = ifelse(total_claims > 0, 1, 0))
 ```
 
-We use `glimpse()` to verify that the three newly created variables 
-have been successfully added to the dataset.
+We use `glimpse()` to verify that the three newly created variables have been successfully added to the dataset.
 
 ```{r}
 glimpse(insurance)
 ```
 
-The dataset now contains **352,338 observations** across **32 variables**, 
-with `loss_ratio`, `claim_frequency` and `has_claim` successfully added.
+The dataset now contains **352,338 observations** across **32 variables**, with `loss_ratio`, `claim_frequency` and `has_claim` successfully added.
 
 The *.rds* file format is usually smaller than its CSV counterpart and will therefore take up less storage space. The *.rds* file will also preserve data types and classes such as factors and numeric variables, eliminating the need to redefine data types after loading the file. For fast and space efficient data storage, the cleaned dataset is exported as an RDS file using `write_rds()` and can be re-imported using `read_rds()`.
 
@@ -439,7 +431,6 @@ write_rds(insurance, "insurance_clean.rds")
 ```{r}
 insurance <- read_rds("insurance_clean.rds")
 ```
-
 
 # 5 Univariate Analysis
 
@@ -482,7 +473,6 @@ ggplot(insurance_lr,
 ```
 
 The raincloud plot reveals that `loss_ratio` is highly right-skewed among policies with claims. Most policies record a loss ratio between 1.0 and 2.5, indicating that incurred costs typically exceed premiums collected. The long right tail suggests that a small number of policies experience exceptionally high losses, which significantly impacts overall portfolio profitability.
-
 
 The histogram and boxplot below provide a complementary view of the distribution of `loss_ratio`.
 
@@ -527,18 +517,13 @@ p2 / p1 +
   plot_layout(heights = c(1, 3.5))
 ```
 
-The distribution of `loss_ratio` is highly right-skewed, with the majority 
-of policies having a loss ratio of 0 (no claims made). The mean loss ratio 
-is higher than the median, indicating the presence of a small number of 
-policies with very high loss ratios that pull the mean upward.
+The distribution of `loss_ratio` is highly right-skewed, with the majority of policies having a loss ratio of 0 (no claims made). The mean loss ratio is higher than the median, indicating the presence of a small number of policies with very high loss ratios that pull the mean upward.
 
 ## Claim Frequency
 
-`claim_frequency` measures the ratio of total claims to total exposure. 
-A higher claim frequency indicates greater volatility in the portfolio.
+`claim_frequency` measures the ratio of total claims to total exposure. A higher claim frequency indicates greater volatility in the portfolio.
 
-The raincloud plot below provides a comprehensive view of the distribution 
-of `claim_frequency`.
+The raincloud plot below provides a comprehensive view of the distribution of `claim_frequency`.
 
 ```{r}
 #| warning: false
@@ -616,9 +601,7 @@ p4 / p3 +
 ```
 
 The distribution of `claim_frequency` is heavily right-skewed, with most policies recording a claim frequency of around 1, meaning one claim per policy year. The mean of 1.95 is noticeably higher than the median of 1.28, driven by a small number of high-frequency claimants. The boxplot reveals numerous outliers beyond the upper whisker, indicating that a subset of policies experience a disproportionately high number of claims, contributing significantly to portfolio volatility.
-
 :::
-
 
 ## Total Incurred
 
@@ -658,8 +641,7 @@ ggplot(insurance_ti,
         axis.ticks.y = element_blank())
 ```
 
-The histogram and boxplot below provide a complementary view of the 
-distribution of `total_incurred`.
+The histogram and boxplot below provide a complementary view of the distribution of `total_incurred`.
 
 ```{r}
 p5 <- ggplot(insurance_ti,
@@ -706,9 +688,7 @@ The distribution of `total_incurred` is moderately right-skewed, with most polic
 
 ## Has Claim
 
-`has_claim` is a binary variable indicating whether a policy has recorded 
-at least one claim (1) or no claims (0). A bar chart is used to visualise 
-the proportion of policies with and without claims.
+`has_claim` is a binary variable indicating whether a policy has recorded at least one claim (1) or no claims (0). A bar chart is used to visualise the proportion of policies with and without claims.
 
 ```{r}
 insurance %>%
@@ -735,18 +715,14 @@ insurance %>%
 
 The bar chart shows that **85.7%** of policies in the portfolio have not recorded any claims, while only **14.3%** have experienced at least one claim. This is typical of motor insurance portfolios where most policyholders do not make a claim in a given year. Despite being a small proportion, the 14.3% of policies with claims are of particular interest as they are the primary drivers of portfolio profitability and volatility.
 
-
 ## 5.2 Driver Characteristics
 
-This section explores the distribution of driver-related variables in the 
-portfolio, specifically `driver_age` and `bonus_score`.
+This section explores the distribution of driver-related variables in the portfolio, specifically `driver_age` and `bonus_score`.
 
 ::: panel-tabset
 ## Driver Age
 
-`driver_age` represents the age of the main driver associated with each 
-policy, measured in years. The histogram and boxplot below show the 
-distribution of driver ages in the portfolio.
+`driver_age` represents the age of the main driver associated with each policy, measured in years. The histogram and boxplot below show the distribution of driver ages in the portfolio.
 
 ```{r}
 p7 <- ggplot(insurance,
@@ -816,8 +792,8 @@ insurance %>%
   theme_minimal() +
   theme(legend.position = "none")
 ```
-The bar chart shows that **96.5%** of policies belong to policyholders with a Good bonus score, indicating a strong claims history across the portfolio. Only **2.2%** are Neutral and **1.3%** are Bad. This suggests that the portfolio is largely made up of low-risk, experienced policyholders who have rarely or never made a claim.
 
+The bar chart shows that **96.5%** of policies belong to policyholders with a Good bonus score, indicating a strong claims history across the portfolio. Only **2.2%** are Neutral and **1.3%** are Bad. This suggests that the portfolio is largely made up of low-risk, experienced policyholders who have rarely or never made a claim.
 :::
 
 ## 5.3 Vehicle Characteristics
@@ -951,9 +927,7 @@ The bar chart shows that **64.2%** of policies are associated with Diesel vehicl
 
 ## Vehicle Brand
 
-`vehicle_brand` represents the brand of the insured vehicle. As there are 
-65 brands in the dataset, only the top 10 most common brands are shown for 
-clarity.
+`vehicle_brand` represents the brand of the insured vehicle. As there are 65 brands in the dataset, only the top 10 most common brands are shown for clarity.
 
 ```{r}
 insurance %>%
@@ -976,8 +950,7 @@ insurance %>%
   theme_minimal()
 ```
 
-The bar chart shows that Renault (**9.7%**), Citroen (**9.2%**) and Peugeot (**8.4%**) are the three most common vehicle brands in the portfolio, reflecting the strong presence of French automobile brands in the Spanish market. The top 7 brands are all European, with SEAT being the only Spanish brand in the list. Toyota is the only Asian brand to appear in the top 10, ranking last with **4%** of policies.  Overall, the portfolio is heavily dominated by mainstream European brands, with luxury brands such as Audi and Mercedes accounting for a smaller share.
-
+The bar chart shows that Renault (**9.7%**), Citroen (**9.2%**) and Peugeot (**8.4%**) are the three most common vehicle brands in the portfolio, reflecting the strong presence of French automobile brands in the Spanish market. The top 7 brands are all European, with SEAT being the only Spanish brand in the list. Toyota is the only Asian brand to appear in the top 10, ranking last with **4%** of policies. Overall, the portfolio is heavily dominated by mainstream European brands, with luxury brands such as Audi and Mercedes accounting for a smaller share.
 :::
 
 ## 5.4 Policy Characteristics
@@ -1092,8 +1065,7 @@ insurance %>%
   theme(legend.position = "none")
 ```
 
-The bar chart shows that **81.3%** of policies are billed Annually, followed by Semi-Annual (**14.4%**) and Quarterly (**4.3%**). The overwhelming preference for annual billing suggests that most policyholders are comfortable committing to a full year of coverage upfront, which also benefits the insurer through more stable and  predictable cash flows.
-
+The bar chart shows that **81.3%** of policies are billed Annually, followed by Semi-Annual (**14.4%**) and Quarterly (**4.3%**). The overwhelming preference for annual billing suggests that most policyholders are comfortable committing to a full year of coverage upfront, which also benefits the insurer through more stable and predictable cash flows.
 :::
 
 ## 5.5 Geographic Characteristics
@@ -1128,8 +1100,7 @@ insurance %>%
         plot.margin = margin(t = 30))
 ```
 
-The bar chart shows that **64.6%** of policies are from Inland municipalities, followed by Coastal (**28.6%**) and Islands (**6.8%**). This reflects the geographic distribution of the Spanish population, where most people live in inland cities such as Madrid. The relatively high proportion of Coastal policies also reflects Spain's extensive coastline and densely populated coastal cities such as Barcelona and 
-Valencia.
+The bar chart shows that **64.6%** of policies are from Inland municipalities, followed by Coastal (**28.6%**) and Islands (**6.8%**). This reflects the geographic distribution of the Spanish population, where most people live in inland cities such as Madrid. The relatively high proportion of Coastal policies also reflects Spain's extensive coastline and densely populated coastal cities such as Barcelona and Valencia.
 
 ## Circulation Area
 
@@ -1158,7 +1129,6 @@ insurance %>%
 ```
 
 The bar chart shows that **53.8%** of policies are associated with Urban circulation, while **46.2%** are Rural. The split is relatively even compared to other variables, suggesting the portfolio covers both urban and rural drivers fairly equally. Urban drivers tend to face higher traffic density, which may lead to more frequent but less severe claims, while rural drivers may experience fewer but potentially more severe accidents due to higher speeds.
-
 :::
 
 # 6 Exploratory Data Analysis
@@ -1222,8 +1192,7 @@ ggbetweenstats(
 
 The Kruskal-Wallis test confirms a statistically significant difference in loss ratio across policy types (p = 5.09e-92). The **Third-Party** policy type has the highest median loss ratio of **4.29** (n = 241), which is notably higher than all other policy types. This may be due to the very small sample size of Third-Party policies, where a few large claims can heavily skew the median upward.
 
-Among the remaining policy types, **Third-Party Combined** (2.25) and **Third-Party with Glass** (2.22) have higher median loss ratios compared to **Comprehensive with Excess** (1.74) and **Comprehensive without Excess** (1.78). This suggests that comprehensive policies, despite offering broader coverage, are associated with lower loss ratios possibly because comprehensive policyholders tend to be more careful drivers who pay higher premiums, resulting in better profitability for the insurer. 
-
+Among the remaining policy types, **Third-Party Combined** (2.25) and **Third-Party with Glass** (2.22) have higher median loss ratios compared to **Comprehensive with Excess** (1.74) and **Comprehensive without Excess** (1.78). This suggests that comprehensive policies, despite offering broader coverage, are associated with lower loss ratios possibly because comprehensive policyholders tend to be more careful drivers who pay higher premiums, resulting in better profitability for the insurer.
 
 ## Fuel Type
 
@@ -1298,9 +1267,8 @@ ggscatterstats(
   marginal = TRUE
 )
 ```
-The Spearman correlation test reveals a statistically significant but very weak positive relationship between driver age and loss ratio (ρ = 0.03, p = 1.00e-07). The nearly flat blue trend line confirms 
-that while older drivers tend to have a very slightly higher loss ratio, the relationship is negligible in practical terms. The histograms show that most drivers are aged between 30 and 70, while most loss ratios are concentrated below 2.5. Overall, driver age alone is not a strong predictor of portfolio profitability.
 
+The Spearman correlation test reveals a statistically significant but very weak positive relationship between driver age and loss ratio (ρ = 0.03, p = 1.00e-07). The nearly flat blue trend line confirms that while older drivers tend to have a very slightly higher loss ratio, the relationship is negligible in practical terms. The histograms show that most drivers are aged between 30 and 70, while most loss ratios are concentrated below 2.5. Overall, driver age alone is not a strong predictor of portfolio profitability.
 :::
 
 ## 6.2 Factors Affecting Claim Frequency (Volatility)
@@ -1467,11 +1435,9 @@ insurance_lr %>%
   theme(legend.position = "none")
 ```
 
-The ridgeline plot provides a clearer view of how loss ratio distributions differ across policy types. **Comprehensive with Excess** and **Third-Party Combined** show the narrowest and most concentrated distributions, peaking sharply around 1–2, indicating consistent and predictable loss behaviour. **Comprehensive without Excess** and **Third-Party with Glass** display 
-slightly wider distributions with longer right tails, suggesting greater variability. Most notably, **Third-Party** policies exhibit a distinctive bimodal distribution with two peaks, one around 1–2 and another around 4–5, suggesting two distinct subgroups with very different loss behaviours. This may be attributed to its small sample size (n = 241) where a few extreme cases disproportionately influence the distribution shape.
+The ridgeline plot provides a clearer view of how loss ratio distributions differ across policy types. **Comprehensive with Excess** and **Third-Party Combined** show the narrowest and most concentrated distributions, peaking sharply around 1–2, indicating consistent and predictable loss behaviour. **Comprehensive without Excess** and **Third-Party with Glass** display slightly wider distributions with longer right tails, suggesting greater variability. Most notably, **Third-Party** policies exhibit a distinctive bimodal distribution with two peaks, one around 1–2 and another around 4–5, suggesting two distinct subgroups with very different loss behaviours. This may be attributed to its small sample size (n = 241) where a few extreme cases disproportionately influence the distribution shape.
 
 Overall, the ridgeline plot reinforces that Comprehensive policies generate more stable and predictable loss ratios, while Third-Party policies, particularly basic Third-Party exhibit greater variability and higher losses.
-
 
 ## Claim Frequency by Bonus Score
 
@@ -1501,9 +1467,7 @@ insurance_cf %>%
 The ridgeline plot clearly shows distinct distribution shapes across bonus score groups. **Good** bonus score policies show a sharp, concentrated peak around 1, reflecting consistently low claim frequencies among the majority of the portfolio. **Neutral** policies display a wider bimodal distribution with two visible peaks, suggesting greater variability in claim behaviour.
 
 **Bad** bonus score policies (median = 1.90) show the widest and most right-skewed distribution, with a long tail extending beyond 6, visually confirming the statistical findings from Section 6.2 that policyholders with a poor claims history not only make more frequent claims but also exhibit the most unpredictable claim behaviour in the portfolio.
-
 :::
-
 
 # 7 Summary
 
@@ -1529,14 +1493,13 @@ Comprehensive without Excess policies stand out as the most volatile policy type
 
 ## Recommendations for Future Research
 
-- **Confirmatory Data Analysis** — Future studies should incorporate additional statistical tests such as regression modelling to validate the findings from this exploratory analysis and establish more definitive relationships between the identified risk factors and portfolio outcomes.
+-   **Confirmatory Data Analysis** — Future studies should incorporate additional statistical tests such as regression modelling to validate the findings from this exploratory analysis and establish more definitive relationships between the identified risk factors and portfolio outcomes.
 
-- **Exploring Additional Variables** — A more exhaustive analysis incorporating a wider range of variables could yield deeper insights into portfolio profitability and volatility. Variables such as driver occupation, annual mileage, claims history duration and vehicle usage type could provide a more complete picture of risk segmentation.
+-   **Exploring Additional Variables** — A more exhaustive analysis incorporating a wider range of variables could yield deeper insights into portfolio profitability and volatility. Variables such as driver occupation, annual mileage, claims history duration and vehicle usage type could provide a more complete picture of risk segmentation.
 
-- **Longitudinal Analysis** — Conducting longitudinal studies to track changes in loss ratios and claim frequencies over a longer time period can reveal trends and seasonal patterns that a three-year snapshot may not capture.
+-   **Longitudinal Analysis** — Conducting longitudinal studies to track changes in loss ratios and claim frequencies over a longer time period can reveal trends and seasonal patterns that a three-year snapshot may not capture.
 
-- **Incorporating External Data** — As highlighted by the Swiss Re Institute (2019), enriching the portfolio data with external sources such as traffic density, weather patterns and regional accident statistics could further refine segmentation and improve underwriting strategy.
-
+-   **Incorporating External Data** — As highlighted by the Swiss Re Institute (2019), enriching the portfolio data with external sources such as traffic density, weather patterns and regional accident statistics could further refine segmentation and improve underwriting strategy.
 
 # 8 References
 

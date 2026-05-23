@@ -1,0 +1,113 @@
+---
+title: "In-Class Exercise 6: Designing Web-enabled Visual Analytics Application with Shiny"
+author: "Carina Peh"
+date: "May 23, 2026"
+date-modified: "last-modified"
+description: "Building interactive web-enabled visual analytics applications using R Shiny, covering UI layout, server logic, and reactivity."
+execute:
+  eval: false
+  echo: true
+  warning: false
+  freeze: true
+---
+
+## Overview
+
+In this in-class exercise, we explored **Shiny**, R's framework for building interactive, web-enabled visual analytics applications. Unlike static ggplot2 visualisations, Shiny allows users to interact with data dynamically through widgets such as sliders and dropdowns — without needing to write any JavaScript or HTML.
+
+## Reflections
+
+Building the Shiny app helped me understand the clear separation between the **UI** (what the user sees) and the **server** (the logic behind what gets displayed). What clicked for me was how reactivity works — outputs don't just run once, they automatically re-execute whenever a relevant input changes. This is a fundamentally different mental model from writing a standard R script top to bottom.
+
+I also noticed a practical difference between `aes()` and `aes_string()` — when the variable name comes from a reactive input (a string), `aes_string()` is needed so ggplot2 can interpret it correctly. Small details like this matter a lot when inputs are dynamic.
+
+## Key Concepts
+
+### Shiny Building Blocks
+
+Every Shiny app has two components:
+
+- **UI (User Interface)** — defines the layout and widgets the user interacts with
+- **Server** — contains the R logic that generates outputs in response to inputs
+
+### Reactivity
+
+Shiny's reactivity system ensures outputs update automatically when inputs change. The key reactive functions are:
+
+| Function | Purpose |
+|---|---|
+| `reactive()` | Creates a reactive expression that caches its result |
+| `observe()` | Runs code for side effects when inputs change |
+| `eventReactive()` | Only reacts when a specific event occurs (e.g. button click) |
+| `isolate()` | Reads a reactive value without triggering re-execution |
+
+## Pupils Exam Results Dashboard
+
+### Loading Packages and Data
+
+```{r}
+pacman::p_load(shiny, tidyverse)
+exam <- read_csv("Exam_data.csv")
+```
+
+### UI
+
+The UI uses `sidebarLayout()` with two widgets — a `selectInput()` for subject selection and a `sliderInput()` for controlling the number of histogram bins.
+
+```{r}
+ui <- fluidPage(
+  titlePanel("Pupils Exam Results Dashboard"),
+  sidebarLayout(
+    sidebarPanel(
+      selectInput(inputId = "variable",
+                  label = "Subject:",
+                  choices = c("English" = "ENGLISH",
+                              "Maths"   = "MATHS",
+                              "Science" = "SCIENCE"),
+                  selected = "ENGLISH"),
+      sliderInput(inputId = "bins",
+                  label = "Number of Bins",
+                  min   = 5,
+                  max   = 20,
+                  value = 10)
+    ),
+    mainPanel(
+      plotOutput("distPlot")
+    )
+  )
+)
+```
+
+### Server
+
+The server uses `aes_string()` to pass the reactive `input$variable` (a string) into ggplot2.
+
+```{r}
+server <- function(input, output) {
+  output$distPlot <- renderPlot({
+    ggplot(exam,
+           aes_string(x = input$variable)) +
+      geom_histogram(bins  = input$bins,
+                     color = "black",
+                     fill  = "light blue")
+  })
+}
+```
+
+### Running the App
+
+```{r}
+shinyApp(ui = ui, server = server)
+```
+
+## Live App
+
+The deployed app is embedded below — try changing the subject and number of bins:
+
+```{=html}
+<iframe src="https://carinapeh.shinyapps.io/shiny_demo/" 
+        width="100%" 
+        height="600px"
+        frameborder="0">
+</iframe>
+```
