@@ -6,16 +6,14 @@ listing:
     sort: "date desc"
     max-items: 3
     fields: [image, date, title, description]
-
   - id: inclass
     contents: In Class Exercise/*.qmd
     type: grid
     sort: "date desc"
     max-items: 3
     fields: [image, date, title, description]
-
   - id: takehome
-    contents: Take-home_Ex/*.qmd
+    contents: Take Home Exercise 1/*.qmd
     type: grid
     sort: "date desc"
     max-items: 3
