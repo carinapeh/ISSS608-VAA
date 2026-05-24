@@ -1,0 +1,41 @@
+cat > slides.css << 'EOF'
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap');
+
+.reveal {
+  font-family: 'Nunito', sans-serif;
+  font-size: 18px;
+}
+
+.reveal h1, .reveal h2 {
+  font-family: 'Nunito', sans-serif !important;
+  font-size: 0.9em !important;
+  font-weight: 700 !important;
+  color: #2c3e50 !important;
+  text-transform: none !important;
+}
+
+.reveal h3 {
+  font-family: 'Nunito', sans-serif !important;
+  font-size: 0.8em !important;
+  font-weight: 600 !important;
+  color: #2c3e50 !important;
+}
+
+.reveal ul, .reveal ol {
+  font-size: 0.55em;
+  line-height: 1.5;
+}
+
+.reveal p {
+  font-size: 0.55em;
+  line-height: 1.5;
+}
+
+.reveal table {
+  font-size: 0.5em;
+}
+
+.reveal .footer {
+  font-size: 0.45em;
+}
+EOF
