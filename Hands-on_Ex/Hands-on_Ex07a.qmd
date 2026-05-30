@@ -1,0 +1,408 @@
+---
+title: "7a. Modelling, Visualising and Analysing Network Data with R"
+author: "carina peh"
+date: "May 30, 2026"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+## Overview
+
+Network data consists of two key components — **nodes** (entities) and **edges** (relationships between entities). In this exercise, email correspondence data from GAStech, an oil exploration company, is used to explore and visualise communication patterns between 55 employees over two weeks.
+
+## Reflections
+
+Network visualisation uses nodes(data points) and edges (links) to visually map connected data, it reveals patterns that tabular data cannot such as which employees are central connectors, which departments communicate most, and whether communication clusters form around certain groups. The key takeaway is that `tidygraph` makes network data manipulation feel familiar using `dplyr` verbs, while `ggraph` extends `ggplot2` grammar to network graphs. The interactive `visNetwork` output added practical value by allowing exploration of individual nodes and edges dynamically.
+
+## Getting Started
+
+### Loading packages
+
+```{r}
+pacman::p_load(igraph, tidygraph, ggraph,
+               visNetwork, lubridate, clock,
+               tidyverse, graphlayouts,
+               concaveman, ggforce)
+```
+
+### Importing data
+
+```{r}
+GAStech_nodes <- read_csv("GAStech_email_node.csv")
+GAStech_edges <- read_csv("GAStech_email_edge-v2.csv")
+```
+
+### Reviewing the data
+
+```{r}
+glimpse(GAStech_edges)
+```
+
+## Data Wrangling
+
+### Wrangling time
+
+`SentDate` is imported as a character data type and needs to be converted to a proper date format. `dmy()` converts the date string and `wday()` extracts the day of the week — both from the **lubridate** package.
+
+```{r}
+GAStech_edges <- GAStech_edges %>%
+  mutate(SendDate = dmy(SentDate)) %>%
+  mutate(Weekday = wday(SentDate,
+                        label = TRUE,
+                        abbr = FALSE))
+```
+
+### Wrangling attributes
+
+We filter to keep only work-related emails and aggregate by source, target and weekday to count the number of emails sent.
+
+```{r}
+GAStech_edges_aggregated <- GAStech_edges %>%
+  filter(MainSubject == "Work related") %>%
+  group_by(source, target, Weekday) %>%
+  summarise(Weight = n()) %>%
+  filter(source != target) %>%
+  filter(Weight > 1) %>%
+  ungroup()
+```
+
+## Creating Network Objects with tidygraph
+
+### Building the tidygraph object
+
+`tbl_graph()` creates a network object from the nodes and edges dataframes.
+
+```{r}
+GAStech_graph <- tbl_graph(nodes = GAStech_nodes,
+                            edges = GAStech_edges_aggregated,
+                            directed = TRUE)
+GAStech_graph
+```
+
+### Changing the active object
+
+`tidygraph` allows switching between nodes and edges using `activate()`.
+
+```{r}
+GAStech_graph %>%
+  activate(edges) %>%
+  arrange(desc(Weight))
+```
+
+## Plotting Static Network Graphs with ggraph
+
+### Basic network graph
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggraph(GAStech_graph) +
+  geom_edge_link() +
+  geom_node_point()
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+ggraph(GAStech_graph) +
+  geom_edge_link() +
+  geom_node_point()
+```
+:::
+
+### With theme and colour
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+g <- ggraph(GAStech_graph,
+            layout = "fr") +
+  geom_edge_link(aes(colour = Weekday)) +
+  geom_node_point(aes(colour = Department),
+                  size = 3) +
+  theme_graph()
+g
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+g <- ggraph(GAStech_graph,
+            layout = "fr") +
+  geom_edge_link(aes(colour = Weekday)) +
+  geom_node_point(aes(colour = Department),
+                  size = 3) +
+  theme_graph()
+g
+```
+:::
+
+### Modifying edges by weight
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+g <- ggraph(GAStech_graph,
+            layout = "nicely") +
+  geom_edge_link(aes(width = Weight),
+                 alpha = 0.2) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(aes(colour = Department),
+                  size = 3) +
+  theme_graph()
+g
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+g <- ggraph(GAStech_graph,
+            layout = "nicely") +
+  geom_edge_link(aes(width = Weight),
+                 alpha = 0.2) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(aes(colour = Department),
+                  size = 3) +
+  theme_graph()
+g
+```
+:::
+
+## Creating Facet Graphs
+
+### Facet by edges
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+set_graph_style()
+g <- ggraph(GAStech_graph,
+            layout = "nicely") +
+  geom_edge_link(aes(width = Weight),
+                 alpha = 0.2) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(aes(colour = Department),
+                  size = 2)
+g + facet_edges(~Weekday)
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+set_graph_style()
+g <- ggraph(GAStech_graph,
+            layout = "nicely") +
+  geom_edge_link(aes(width = Weight),
+                 alpha = 0.2) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(aes(colour = Department),
+                  size = 2)
+g + facet_edges(~Weekday)
+```
+:::
+
+### Facet by nodes
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+set_graph_style()
+g <- ggraph(GAStech_graph,
+            layout = "nicely") +
+  geom_edge_link(aes(width = Weight),
+                 alpha = 0.2) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(aes(colour = Department),
+                  size = 2)
+g + facet_nodes(~Department) +
+  th_foreground(foreground = "grey80",
+                border = TRUE)
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+set_graph_style()
+g <- ggraph(GAStech_graph,
+            layout = "nicely") +
+  geom_edge_link(aes(width = Weight),
+                 alpha = 0.2) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(aes(colour = Department),
+                  size = 2)
+g + facet_nodes(~Department) +
+  th_foreground(foreground = "grey80",
+                border = TRUE)
+```
+:::
+
+## Network Metrics Analysis
+
+### Computing centrality indices
+
+`centrality_betweenness()` measures how often a node lies on the shortest path between other nodes — a key measure of influence.
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+g <- GAStech_graph %>%
+  mutate(betweenness_centrality = centrality_betweenness()) %>%
+  ggraph(layout = "fr") +
+  geom_edge_link(aes(width = Weight),
+                 alpha = 0.2) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(aes(colour = Department,
+                      size = betweenness_centrality)) +
+  theme_graph()
+g
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+g <- GAStech_graph %>%
+  mutate(betweenness_centrality = centrality_betweenness()) %>%
+  ggraph(layout = "fr") +
+  geom_edge_link(aes(width = Weight),
+                 alpha = 0.2) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(aes(colour = Department,
+                      size = betweenness_centrality)) +
+  theme_graph()
+g
+```
+:::
+
+### Visualising community
+
+`group_edge_betweenness()` detects communities — groups of nodes that are more connected to each other than to the rest of the network.
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+g <- GAStech_graph %>%
+  mutate(community = as.factor(
+    group_edge_betweenness(weights = Weight,
+                           directed = TRUE))) %>%
+  ggraph(layout = "fr") +
+  geom_edge_link(aes(width = Weight),
+                 alpha = 0.2) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(aes(colour = community),
+                  size = 3) +
+  theme_graph()
+g
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+g <- GAStech_graph %>%
+  mutate(community = as.factor(
+    group_edge_betweenness(weights = Weight,
+                           directed = TRUE))) %>%
+  ggraph(layout = "fr") +
+  geom_edge_link(aes(width = Weight),
+                 alpha = 0.2) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(aes(colour = community),
+                  size = 3) +
+  theme_graph()
+g
+```
+:::
+
+## Building Interactive Network Graph with visNetwork
+
+### Data preparation
+
+`visNetwork` requires nodes to have an `id` column and edges to have `from` and `to` columns.
+
+```{r}
+GAStech_edges_aggregated <- GAStech_edges_aggregated %>%
+  rename(from = source,
+         to = target)
+
+GAStech_nodes <- GAStech_nodes %>%
+  rename(id = id,
+         label = label)
+```
+
+### Basic interactive graph
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+visNetwork(GAStech_nodes,
+           GAStech_edges_aggregated) %>%
+  visIgraphLayout(layout = "layout_with_fr")
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+visNetwork(GAStech_nodes,
+           GAStech_edges_aggregated) %>%
+  visIgraphLayout(layout = "layout_with_fr")
+```
+:::
+
+### With visual attributes and interactivity
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+GAStech_nodes <- GAStech_nodes %>%
+  rename(group = Department)
+
+visNetwork(GAStech_nodes,
+           GAStech_edges_aggregated) %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visLegend() %>%
+  visLayout(randomSeed = 123)
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+GAStech_nodes <- GAStech_nodes %>%
+  rename(group = Department)
+
+visNetwork(GAStech_nodes,
+           GAStech_edges_aggregated) %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visLegend() %>%
+  visLayout(randomSeed = 123)
+```
+:::

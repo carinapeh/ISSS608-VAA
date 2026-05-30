@@ -1,0 +1,388 @@
+---
+title: "Executive Summary: Motor Vehicle Insurance Loss Drivers"
+subtitle: "Take-home Exercise 1"
+author: "Carina Peh"
+date: "May 24, 2026"
+format:
+  revealjs:
+    theme: simple
+    slide-number: true
+    transition: fade
+    preview-links: true
+    smaller: true
+    self-contained: true
+    footer: "ISSS608 Visual Analytics and Applications | Carina Peh"
+    css: slides.css
+execute:
+  echo: false
+  warning: false
+  message: false
+  freeze: auto
+editor: visual
+---
+
+```{r}
+#| label: setup
+#| include: false
+pacman::p_load(tidyverse, patchwork, scales, ggridges, ggdist, ggstatsplot, ggrepel)
+
+insurance <- read_rds("insurance_clean.rds")
+
+insurance_lr <- insurance %>%
+  filter(loss_ratio > 0, loss_ratio < 10)
+
+insurance_cf <- insurance %>%
+  filter(claim_frequency > 0, claim_frequency < 10)
+
+claim_summary <- insurance %>%
+  mutate(claim_status = ifelse(has_claim == 1, "Has Claim", "No Claim")) %>%
+  count(claim_status) %>%
+  mutate(pct = n / sum(n) * 100)
+
+policy_summary <- insurance %>%
+  count(policy_type) %>%
+  mutate(pct = n / sum(n) * 100)
+
+ti_stats <- insurance %>%
+  filter(total_incurred > 0, total_incurred < 10000) %>%
+  summarise(mean_ti = mean(total_incurred), median_ti = median(total_incurred))
+
+lr_stats <- insurance_lr %>%
+  summarise(mean_lr = mean(loss_ratio), median_lr = median(loss_ratio))
+
+cf_stats <- insurance_cf %>%
+  summarise(mean_cf = mean(claim_frequency), median_cf = median(claim_frequency))
+```
+
+
+## Contents
+
+1. Study Objective and Data Scope
+2. Portfolio Profile
+3. Claim Occurrence and Severity
+4. Profitability Patterns
+5. Volatility Patterns
+6. Portfolio Loss Ratio Trend
+7. Key Loss Drivers: Profitability
+8. Key Loss Drivers: Volatility
+9. Risk Concentration: Severity vs Frequency
+10. Executive Implications
+11. Recommendations and Next Steps
+
+## Study Objective and Data Scope
+
+**Objective:** identify visual and statistical patterns that explain poor profitability and high volatility.
+
+| Area | Summary |
+|---|---|
+| Dataset | Spanish motor vehicle insurance portfolio |
+| Original data | 354,140 policy records, 47 variables |
+| Analytical data | 352,338 records after missing value treatment |
+| Period | 2022 to 2024 |
+| Key outcomes | Loss ratio, claim frequency, has claim |
+
+**Three derived measures drive the analysis:**
+
+- **Loss ratio** = total incurred ÷ total premium — a ratio above 1 means the insurer paid out more than it collected
+- **Claim frequency** = total claims ÷ total exposure — higher values indicate a more volatile portfolio
+- **Has claim** = 1 if any claim was filed, 0 otherwise — separates claiming from non-claiming policies
+
+::: notes
+The analysis is based on a large real-world insurance portfolio covering 2022 to 2024. After cleaning, only 1,802 records were removed, so the final sample remains highly representative. Loss ratio answers the profitability question, are we collecting enough premium to cover claims? Claim frequency answers the volatility question, how often are claims occurring? Has claim allows us to isolate the 14.3% of policies that drive all portfolio losses.
+:::
+
+## Portfolio Profile
+
+```{r}
+#| fig-width: 8.5
+#| fig-height: 3.5
+p1 <- policy_summary %>%
+  ggplot(aes(x = reorder(policy_type, -n), y = n)) +
+  geom_col(fill = "#4a7c6f") +
+  geom_text(aes(label = paste0(round(pct, 1), "%")), vjust = -0.35, size = 3) +
+  scale_y_continuous(labels = comma) +
+  labs(title = "Policy Type Distribution", x = NULL, y = "Number of policies") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 15, hjust = 1, size = 7))
+
+p2 <- insurance %>%
+  count(bonus_score) %>%
+  mutate(pct = n / sum(n) * 100) %>%
+  ggplot(aes(x = reorder(bonus_score, -n), y = n)) +
+  geom_col(fill = "#7aadab") +
+  geom_text(aes(label = paste0(round(pct, 1), "%")), vjust = -0.35, size = 3) +
+  scale_y_continuous(labels = comma) +
+  labs(title = "Bonus Score Distribution", x = NULL, y = "Number of policies") +
+  theme_minimal()
+
+p1 + p2
+```
+
+- **Third-Party Combined (58%)** dominates, performance issues here affect the whole portfolio
+- **96.5%** of policyholders have a Good bonus score, portfolio appears low risk on the surface
+- Aggregate stability can mask concentrated pockets of high-risk segments
+
+::: notes
+The portfolio is heavily concentrated in Third-Party Combined policies at 58%, with Comprehensive with Excess second at 25.6%. Basic Third-Party is only 1.6% so patterns in this group must be interpreted carefully. The high proportion of Good bonus score policyholders creates a misleading picture of low overall risk, the real losses are concentrated in a small number of higher-risk segments that are not visible at the aggregate level.
+:::
+
+## Claim Occurrence and Severity
+
+```{r}
+#| fig-width: 10
+#| fig-height: 4
+p3 <- claim_summary %>%
+  ggplot(aes(x = claim_status, y = n, fill = claim_status)) +
+  geom_col() +
+  geom_text(aes(label = paste0(round(pct, 1), "%")), 
+            vjust = -0.5, size = 3.5) +
+  scale_y_continuous(labels = comma, 
+                     expand = expansion(mult = c(0, 0.15))) +
+  scale_fill_manual(values = c("Has Claim" = "#4a7c6f", "No Claim" = "#7aadab")) +
+  labs(title = "Claim Occurrence", x = NULL, y = "Number of policies") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+p4 <- insurance %>%
+  filter(total_incurred > 0, total_incurred < 10000) %>%
+  ggplot(aes(x = total_incurred)) +
+  geom_histogram(binwidth = 200, fill = "#4a7c6f", colour = "white") +
+  geom_vline(xintercept = ti_stats$mean_ti, colour = "red", linetype = "dashed") +
+  geom_vline(xintercept = ti_stats$median_ti, colour = "blue", linetype = "dashed") +
+  annotate("text", x = ti_stats$mean_ti + 500, y = Inf, vjust = 2,
+           label = paste0("Mean: €", round(ti_stats$mean_ti, 2)),
+           colour = "red", size = 3) +
+  annotate("text", x = ti_stats$median_ti + 500, y = Inf, vjust = 4,
+           label = paste0("Median: €", round(ti_stats$median_ti, 2)),
+           colour = "blue", size = 3) +
+  scale_x_continuous(labels = comma) +
+  scale_y_continuous(labels = comma,
+                     expand = expansion(mult = c(0, 0.15))) +
+  labs(title = "Total Incurred Distribution", x = "Total incurred (€)", y = "Count") +
+  theme_minimal()
+
+p3 + p4
+```
+
+- **85.7%** of policies record no claims but the **14.3%** with claims drive all losses
+- Most claims cost below €2,500 — but occasional large losses have an outsized impact
+- The average claim cost (€1,271.98) is well above the typical claim (€898.68) a sign that severe claims are pulling the average up
+
+::: notes
+Most policies do not generate claims. The 85.7% no-claim rate makes the portfolio look calm at a high level, but the smaller claiming group is responsible for all incurred costs. Most claims are relatively affordable below €2,500, but a small number of expensive claims pull the average well above the typical value. This pattern means the portfolio's profitability is more sensitive to large individual losses than to the volume of claims.
+:::
+
+## Profitability Patterns: Loss Ratio
+
+```{r}
+#| fig-width: 8.5
+#| fig-height: 3.5
+insurance_lr %>%
+  ggplot(aes(x = loss_ratio)) +
+  geom_histogram(binwidth = 0.1, fill = "#4a7c6f", colour = "white") +
+  geom_vline(xintercept = lr_stats$mean_lr, colour = "red", linetype = "dashed") +
+  geom_vline(xintercept = lr_stats$median_lr, colour = "blue", linetype = "dashed") +
+  annotate("text", x = lr_stats$mean_lr + 0.3, y = Inf, vjust = 2,
+           label = paste("Mean:", round(lr_stats$mean_lr, 2)), colour = "red", size = 3) +
+  annotate("text", x = lr_stats$median_lr + 0.3, y = Inf, vjust = 4,
+           label = paste("Median:", round(lr_stats$median_lr, 2)), colour = "blue", size = 3) +
+  labs(title = "Distribution of Loss Ratio",
+       subtitle = "Policies with loss ratio between 0 and 10",
+       x = "Loss ratio", y = "Count") +
+  theme_minimal()
+```
+
+- Most claiming policies record a loss ratio between 1.0 and 2.5, incurred costs regularly exceed premiums
+- The average loss ratio (2.58) is noticeably higher than the typical value (2.0), a small number of very costly policies are pulling it up
+- The long right tail signals that **catastrophic losses**, have a significant impact on overall profitability
+
+::: notes
+Among policies that have made a claim, the loss ratio is concentrated between 1 and 2.5 meaning the insurer typically pays out one to two and a half times what it collected in premiums. The average is higher than the typical value because a small number of policies with extreme losses skew the result upward. These catastrophic cases are relatively rare but disproportionately affect portfolio performance.
+:::
+
+## Volatility Patterns: Claim Frequency
+
+```{r}
+#| fig-width: 8.5
+#| fig-height: 3.5
+insurance_cf %>%
+  ggplot(aes(x = claim_frequency)) +
+  geom_histogram(binwidth = 0.1, fill = "#4a7c6f", colour = "white") +
+  geom_vline(xintercept = cf_stats$mean_cf, colour = "red", linetype = "dashed") +
+  geom_vline(xintercept = cf_stats$median_cf, colour = "blue", linetype = "dashed") +
+  annotate("text", x = cf_stats$mean_cf + 0.3, y = Inf, vjust = 2,
+           label = paste("Mean:", round(cf_stats$mean_cf, 2)), colour = "red", size = 3) +
+  annotate("text", x = cf_stats$median_cf + 0.3, y = Inf, vjust = 4,
+           label = paste("Median:", round(cf_stats$median_cf, 2)), colour = "blue", size = 3) +
+  labs(title = "Distribution of Claim Frequency",
+       subtitle = "Policies with claim frequency between 0 and 10",
+       x = "Claim frequency", y = "Count") +
+  theme_minimal()
+```
+
+- Most claiming policies make around **1 claim per year** but a small group claims far more often
+- The average claim frequency (1.95) is higher than the typical value (1.28) frequent claimants distort the picture
+- Portfolio volatility is driven by this **small group of repeat claimants**, not the majority
+
+::: notes
+Among claiming policies, most make one claim per year. However a small group of policyholders claims much more frequently, pulling the average well above the typical value. This means that portfolio volatility is not spread evenly, it is concentrated in a minority of high-frequency claimants. Identifying and managing this group is key to stabilising the portfolio.
+:::
+
+## Portfolio Loss Ratio Trend
+
+```{r}
+#| fig-width: 8.5
+#| fig-height: 3.5
+insurance %>%
+  group_by(year) %>%
+  summarise(loss_ratio = sum(total_incurred) / sum(total_premium)) %>%
+  mutate(year = as.numeric(as.character(year))) %>%
+  ggplot(aes(x = year, y = loss_ratio)) +
+  geom_line(colour = "#4a7c6f", linewidth = 1.2) +
+  geom_point(colour = "#4a7c6f", size = 3) +
+  geom_hline(yintercept = 1, linetype = "dashed", colour = "red") +
+  geom_text(aes(label = round(loss_ratio, 3)),
+            vjust = -0.8, size = 3) +
+  scale_x_continuous(breaks = c(2022, 2023, 2024)) +
+  labs(title = "Portfolio Loss Ratio by Year",
+       subtitle = "Red dashed line = break-even (loss ratio = 1.0)",
+       x = "Year", y = "Loss Ratio") +
+  theme_minimal()
+```
+
+- Loss ratio has been rising steadily, **0.657 (2022) → 0.665 (2023) → 0.747 (2024)**
+- The portfolio is still profitable, but the gap to break-even is narrowing
+- Claims costs are growing faster than premiums, action is needed before the trend continues
+
+::: notes
+The portfolio remains profitable across all three years, but the direction of travel is concerning. The loss ratio barely moved between 2022 and 2023 but jumped noticeably in 2024. If this pace of deterioration continues, the portfolio could reach break-even within a few years. This trend is what motivates the deeper analysis into which segments and risk factors are driving the losses.
+:::
+
+## Key Loss Drivers: Profitability
+
+```{r}
+#| warning: false
+#| fig-width: 8.5
+#| fig-height: 3.8
+ggbetweenstats(
+  data = insurance_lr,
+  x    = policy_type,
+  y    = loss_ratio,
+  type = "nonparametric",
+  mean.ci = TRUE,
+  pairwise.comparisons = TRUE,
+  pairwise.display = "significant",
+  p.adjust.method = "fdr",
+  messages = FALSE,
+  title = "Loss Ratio by Policy Type",
+  xlab = "Policy Type",
+  ylab = "Loss Ratio",
+  palette = "Set2"
+)
+```
+
+- **Policy type** is the strongest driver of portfolio profitability
+- **Basic Third-Party** policies are the least profitable — claims cost over 4 times the premium collected
+- **Comprehensive with Excess** is the most stable — policyholders absorb minor costs before claiming, keeping losses predictable
+
+::: notes
+Policy type is the clearest differentiator of profitability. Basic Third-Party has the highest typical loss ratio, meaning claims far exceed premiums for this group. However its small size in the portfolio means the overall impact is limited. Comprehensive with Excess performs best because the excess structure discourages policyholders from filing small claims, so only more significant losses get reported. This keeps the loss ratio lower and more predictable.
+:::
+
+## Key Loss Drivers: Volatility
+
+```{r}
+#| warning: false
+#| fig-width: 8.5
+#| fig-height: 3.8
+ggbetweenstats(
+  data = insurance_cf,
+  x    = bonus_score,
+  y    = claim_frequency,
+  type = "nonparametric",
+  mean.ci = TRUE,
+  pairwise.comparisons = TRUE,
+  pairwise.display = "significant",
+  p.adjust.method = "fdr",
+  messages = FALSE,
+  title = "Claim Frequency by Bonus Score",
+  xlab = "Bonus Score",
+  ylab = "Claim Frequency",
+  palette = "Set2"
+)
+```
+
+- **Bonus score** is the strongest driver of portfolio volatility
+- Policyholders with a **Bad bonus score** claim nearly twice as often as those with a Good score
+- Past claims history is a **reliable signal** of future claim behaviour
+
+::: notes
+Bonus score reflects a policyholder's claims history and is the clearest indicator of future volatility. Those with a Bad score claim nearly twice as frequently as Good score policyholders. This confirms that past behaviour is a strong predictor of future behaviour in motor insurance. The portfolio appears low risk overall because 96.5% of policyholders have a Good score, but the Bad and Neutral groups contribute disproportionately to overall claim frequency.
+:::
+
+## Risk Concentration: Severity vs Frequency
+
+```{r}
+#| fig-width: 8.5
+#| fig-height: 3.8
+insurance %>%
+  filter(has_claim == 1) %>%
+  group_by(policy_type) %>%
+  summarise(
+    avg_severity  = mean(total_incurred),
+    avg_frequency = mean(claim_frequency),
+    total_premium = sum(total_premium)
+  ) %>%
+  ggplot(aes(x = avg_frequency,
+             y = avg_severity,
+             size = total_premium,
+             colour = policy_type,
+             label = policy_type)) +
+  geom_point(alpha = 0.7) +
+  geom_text_repel(size = 3, box.padding = 0.5) +
+  scale_size_continuous(range = c(3, 15), labels = comma) +
+  scale_x_continuous(expand = expansion(mult = 0.2)) +
+  scale_y_continuous(expand = expansion(mult = 0.2)) +
+  scale_colour_manual(values = c(
+    "Comprehensive with Excess"    = "#4a7c6f",
+    "Comprehensive without Excess" = "#7aadab",
+    "Third-Party"                  = "#d4e8e1",
+    "Third-Party Combined"         = "#2d5a51",
+    "Third-Party with Glass"       = "#a8d5c2")) +
+  labs(title = "Severity vs Frequency by Policy Type",
+       subtitle = "Bubble size = total premium volume",
+       x = "Average Claim Frequency",
+       y = "Average Claim Severity (€)") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+- **Comprehensive without Excess** — claims often and claims expensively, but generates little premium, this is the most loss-making segment
+- **Third-Party Combined** — claims very often and carries the largest premium volume anD the biggest frequency risk in the portfolio
+- **Comprehensive with Excess** — claims less often, generates strong premium and the healthiest segment
+
+::: notes
+The bubble chart puts three dimensions together. How often a segment claims, how expensive those claims are, and how much premium it generates. Comprehensive without Excess is the most financially exposed as it sits in the worst position on both dimensions while contributing relatively little premium. Third-Party Combined dominates by size but its risk is driven by frequency rather than severity. Comprehensive with Excess is the most sustainable segment.
+:::
+
+## Executive Implications
+
+- The **14.3%** of policies that claim are responsible for all portfolio losses, while the majority generate no cost at all. The loss ratio has risen **13.7% in three years** and is steadily approaching break-even.
+- **Policy type** is the clearest driver of profitability. Third-Party products consistently pay out more than they collect. 
+- **Bonus score** is the clearest driver of volatility. Policyholders with a poor claims history claim nearly twice as often as those with a good one. - **Comprehensive without Excess** is the most exposed segment, combining frequent and expensive claims with insufficient premium to cover them.
+
+::: notes
+The overall portfolio looks calm but the underlying dynamics are moving in the wrong direction. The year-on-year deterioration in loss ratio is driven by a small number of high-risk segments, particularly Comprehensive without Excess and Third-Party based products. Bonus score is the strongest signal for future volatility. Addressing these segments through pricing, underwriting and product design should be the immediate priority.
+:::
+
+## Recommendations and Next Steps
+
+1. Review **pricing adequacy** for Third-Party based policies
+2. Monitor **Bad and Neutral bonus score** groups more closely
+3. Investigate **Comprehensive without Excess** for small claim filing behaviour
+4. Apply **regression modelling** to confirm and quantify exploratory findings
+5. Enrich portfolio with **traffic density, weather and regional accident data**
+
+::: notes
+The recommendations translate the visual findings into action. Pricing needs to be reviewed for Third-Party products given their poor loss ratios. Bad and Neutral bonus score policyholders should be monitored more closely as they claim more frequently. Comprehensive without Excess needs investigation as removing the excess removes the financial disincentive to file small claims. Future analysis should move beyond exploration into confirmatory modelling and incorporate richer external data.
+:::

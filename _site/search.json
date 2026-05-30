@@ -182,6 +182,76 @@
     "text": "Dashboard\nThe interactive dashboard can be viewed on Tableau Public at the link below:\n👉 View Dashboard on Tableau Public\n\n\n\nSuperstore Sales and Profit Report 2022-2025"
   },
   {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07a.html",
+    "href": "Hands-on_Ex/Hands-on_Ex07a.html",
+    "title": "7a. Modelling, Visualising and Analysing Network Data with R",
+    "section": "",
+    "text": "Network data consists of two key components — nodes (entities) and edges (relationships between entities). In this exercise, email correspondence data from GAStech, an oil exploration company, is used to explore and visualise communication patterns between 55 employees over two weeks."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07a.html#overview",
+    "href": "Hands-on_Ex/Hands-on_Ex07a.html#overview",
+    "title": "7a. Modelling, Visualising and Analysing Network Data with R",
+    "section": "",
+    "text": "Network data consists of two key components — nodes (entities) and edges (relationships between entities). In this exercise, email correspondence data from GAStech, an oil exploration company, is used to explore and visualise communication patterns between 55 employees over two weeks."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07a.html#reflections",
+    "href": "Hands-on_Ex/Hands-on_Ex07a.html#reflections",
+    "title": "7a. Modelling, Visualising and Analysing Network Data with R",
+    "section": "Reflections",
+    "text": "Reflections\nNetwork visualisation uses nodes(data points) and edges (links) to visually map connected data, it reveals patterns that tabular data cannot such as which employees are central connectors, which departments communicate most, and whether communication clusters form around certain groups. The key takeaway is that tidygraph makes network data manipulation feel familiar using dplyr verbs, while ggraph extends ggplot2 grammar to network graphs. The interactive visNetwork output added practical value by allowing exploration of individual nodes and edges dynamically."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07a.html#getting-started",
+    "href": "Hands-on_Ex/Hands-on_Ex07a.html#getting-started",
+    "title": "7a. Modelling, Visualising and Analysing Network Data with R",
+    "section": "Getting Started",
+    "text": "Getting Started\n\nLoading packages\n\npacman::p_load(igraph, tidygraph, ggraph,\n               visNetwork, lubridate, clock,\n               tidyverse, graphlayouts,\n               concaveman, ggforce)\n\n\n\nImporting data\n\nGAStech_nodes &lt;- read_csv(\"GAStech_email_node.csv\")\nGAStech_edges &lt;- read_csv(\"GAStech_email_edge-v2.csv\")\n\n\n\nReviewing the data\n\nglimpse(GAStech_edges)\n\nRows: 9,063\nColumns: 8\n$ source      &lt;dbl&gt; 43, 43, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 26, 26, 26…\n$ target      &lt;dbl&gt; 41, 40, 51, 52, 53, 45, 44, 46, 48, 49, 47, 54, 27, 28, 29…\n$ SentDate    &lt;chr&gt; \"6/1/2014\", \"6/1/2014\", \"6/1/2014\", \"6/1/2014\", \"6/1/2014\"…\n$ SentTime    &lt;time&gt; 08:39:00, 08:39:00, 08:58:00, 08:58:00, 08:58:00, 08:58:0…\n$ Subject     &lt;chr&gt; \"GT-SeismicProcessorPro Bug Report\", \"GT-SeismicProcessorP…\n$ MainSubject &lt;chr&gt; \"Work related\", \"Work related\", \"Work related\", \"Work rela…\n$ sourceLabel &lt;chr&gt; \"Sven.Flecha\", \"Sven.Flecha\", \"Kanon.Herrero\", \"Kanon.Herr…\n$ targetLabel &lt;chr&gt; \"Isak.Baza\", \"Lucas.Alcazar\", \"Felix.Resumir\", \"Hideki.Coc…"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07a.html#data-wrangling",
+    "href": "Hands-on_Ex/Hands-on_Ex07a.html#data-wrangling",
+    "title": "7a. Modelling, Visualising and Analysing Network Data with R",
+    "section": "Data Wrangling",
+    "text": "Data Wrangling\n\nWrangling time\nSentDate is imported as a character data type and needs to be converted to a proper date format. dmy() converts the date string and wday() extracts the day of the week — both from the lubridate package.\n\nGAStech_edges &lt;- GAStech_edges %&gt;%\n  mutate(SendDate = dmy(SentDate)) %&gt;%\n  mutate(Weekday = wday(SentDate,\n                        label = TRUE,\n                        abbr = FALSE))\n\n\n\nWrangling attributes\nWe filter to keep only work-related emails and aggregate by source, target and weekday to count the number of emails sent.\n\nGAStech_edges_aggregated &lt;- GAStech_edges %&gt;%\n  filter(MainSubject == \"Work related\") %&gt;%\n  group_by(source, target, Weekday) %&gt;%\n  summarise(Weight = n()) %&gt;%\n  filter(source != target) %&gt;%\n  filter(Weight &gt; 1) %&gt;%\n  ungroup()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07a.html#creating-network-objects-with-tidygraph",
+    "href": "Hands-on_Ex/Hands-on_Ex07a.html#creating-network-objects-with-tidygraph",
+    "title": "7a. Modelling, Visualising and Analysing Network Data with R",
+    "section": "Creating Network Objects with tidygraph",
+    "text": "Creating Network Objects with tidygraph\n\nBuilding the tidygraph object\ntbl_graph() creates a network object from the nodes and edges dataframes.\n\nGAStech_graph &lt;- tbl_graph(nodes = GAStech_nodes,\n                            edges = GAStech_edges_aggregated,\n                            directed = TRUE)\nGAStech_graph\n\n# A tbl_graph: 54 nodes and 1372 edges\n#\n# A directed multigraph with 1 component\n#\n# Node Data: 54 × 4 (active)\n      id label               Department     Title                               \n   &lt;dbl&gt; &lt;chr&gt;               &lt;chr&gt;          &lt;chr&gt;                               \n 1     1 Mat.Bramar          Administration Assistant to CEO                    \n 2     2 Anda.Ribera         Administration Assistant to CFO                    \n 3     3 Rachel.Pantanal     Administration Assistant to CIO                    \n 4     4 Linda.Lagos         Administration Assistant to COO                    \n 5     5 Ruscella.Mies.Haber Administration Assistant to Engineering Group Mana…\n 6     6 Carla.Forluniau     Administration Assistant to IT Group Manager       \n 7     7 Cornelia.Lais       Administration Assistant to Security Group Manager \n 8    44 Kanon.Herrero       Security       Badging Office                      \n 9    45 Varja.Lagos         Security       Badging Office                      \n10    46 Stenig.Fusil        Security       Building Control                    \n# ℹ 44 more rows\n#\n# Edge Data: 1,372 × 4\n   from    to Weekday Weight\n  &lt;int&gt; &lt;int&gt; &lt;ord&gt;    &lt;int&gt;\n1     1     2 Sunday       5\n2     1     2 Monday       2\n3     1     2 Tuesday      3\n# ℹ 1,369 more rows\n\n\n\n\nChanging the active object\ntidygraph allows switching between nodes and edges using activate().\n\nGAStech_graph %&gt;%\n  activate(edges) %&gt;%\n  arrange(desc(Weight))\n\n# A tbl_graph: 54 nodes and 1372 edges\n#\n# A directed multigraph with 1 component\n#\n# Edge Data: 1,372 × 4 (active)\n    from    to Weekday   Weight\n   &lt;int&gt; &lt;int&gt; &lt;ord&gt;      &lt;int&gt;\n 1    40    41 Saturday      13\n 2    41    43 Monday        11\n 3    35    31 Tuesday       10\n 4    40    41 Monday        10\n 5    40    43 Monday        10\n 6    36    32 Sunday         9\n 7    40    43 Saturday       9\n 8    41    40 Monday         9\n 9    19    15 Wednesday      8\n10    35    38 Tuesday        8\n# ℹ 1,362 more rows\n#\n# Node Data: 54 × 4\n     id label           Department     Title           \n  &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;          &lt;chr&gt;           \n1     1 Mat.Bramar      Administration Assistant to CEO\n2     2 Anda.Ribera     Administration Assistant to CFO\n3     3 Rachel.Pantanal Administration Assistant to CIO\n# ℹ 51 more rows"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07a.html#plotting-static-network-graphs-with-ggraph",
+    "href": "Hands-on_Ex/Hands-on_Ex07a.html#plotting-static-network-graphs-with-ggraph",
+    "title": "7a. Modelling, Visualising and Analysing Network Data with R",
+    "section": "Plotting Static Network Graphs with ggraph",
+    "text": "Plotting Static Network Graphs with ggraph\n\nBasic network graph\n\nThe plotThe code chunk\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggraph(GAStech_graph) +\n  geom_edge_link() +\n  geom_node_point()\n\n\n\n\n\n\nWith theme and colour\n\nThe plotThe code chunk\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ng &lt;- ggraph(GAStech_graph,\n            layout = \"fr\") +\n  geom_edge_link(aes(colour = Weekday)) +\n  geom_node_point(aes(colour = Department),\n                  size = 3) +\n  theme_graph()\ng\n\n\n\n\n\n\nModifying edges by weight\n\nThe plotThe code chunk\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ng &lt;- ggraph(GAStech_graph,\n            layout = \"nicely\") +\n  geom_edge_link(aes(width = Weight),\n                 alpha = 0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department),\n                  size = 3) +\n  theme_graph()\ng"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07a.html#creating-facet-graphs",
+    "href": "Hands-on_Ex/Hands-on_Ex07a.html#creating-facet-graphs",
+    "title": "7a. Modelling, Visualising and Analysing Network Data with R",
+    "section": "Creating Facet Graphs",
+    "text": "Creating Facet Graphs\n\nFacet by edges\n\nThe plotThe code chunk\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nset_graph_style()\ng &lt;- ggraph(GAStech_graph,\n            layout = \"nicely\") +\n  geom_edge_link(aes(width = Weight),\n                 alpha = 0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department),\n                  size = 2)\ng + facet_edges(~Weekday)\n\n\n\n\n\n\nFacet by nodes\n\nThe plotThe code chunk\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nset_graph_style()\ng &lt;- ggraph(GAStech_graph,\n            layout = \"nicely\") +\n  geom_edge_link(aes(width = Weight),\n                 alpha = 0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department),\n                  size = 2)\ng + facet_nodes(~Department) +\n  th_foreground(foreground = \"grey80\",\n                border = TRUE)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07a.html#network-metrics-analysis",
+    "href": "Hands-on_Ex/Hands-on_Ex07a.html#network-metrics-analysis",
+    "title": "7a. Modelling, Visualising and Analysing Network Data with R",
+    "section": "Network Metrics Analysis",
+    "text": "Network Metrics Analysis\n\nComputing centrality indices\ncentrality_betweenness() measures how often a node lies on the shortest path between other nodes — a key measure of influence.\n\nThe plotThe code chunk\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ng &lt;- GAStech_graph %&gt;%\n  mutate(betweenness_centrality = centrality_betweenness()) %&gt;%\n  ggraph(layout = \"fr\") +\n  geom_edge_link(aes(width = Weight),\n                 alpha = 0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department,\n                      size = betweenness_centrality)) +\n  theme_graph()\ng\n\n\n\n\n\n\nVisualising community\ngroup_edge_betweenness() detects communities — groups of nodes that are more connected to each other than to the rest of the network.\n\nThe plotThe code chunk\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ng &lt;- GAStech_graph %&gt;%\n  mutate(community = as.factor(\n    group_edge_betweenness(weights = Weight,\n                           directed = TRUE))) %&gt;%\n  ggraph(layout = \"fr\") +\n  geom_edge_link(aes(width = Weight),\n                 alpha = 0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = community),\n                  size = 3) +\n  theme_graph()\ng"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07a.html#building-interactive-network-graph-with-visnetwork",
+    "href": "Hands-on_Ex/Hands-on_Ex07a.html#building-interactive-network-graph-with-visnetwork",
+    "title": "7a. Modelling, Visualising and Analysing Network Data with R",
+    "section": "Building Interactive Network Graph with visNetwork",
+    "text": "Building Interactive Network Graph with visNetwork\n\nData preparation\nvisNetwork requires nodes to have an id column and edges to have from and to columns.\n\nGAStech_edges_aggregated &lt;- GAStech_edges_aggregated %&gt;%\n  rename(from = source,\n         to = target)\n\nGAStech_nodes &lt;- GAStech_nodes %&gt;%\n  rename(id = id,\n         label = label)\n\n\n\nBasic interactive graph\n\nThe plotThe code chunk\n\n\n\n\n\n\n\n\n\n\n\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\")\n\n\n\n\n\n\nWith visual attributes and interactivity\n\nThe plotThe code chunk\n\n\n\n\n\n\n\n\n\n\n\nGAStech_nodes &lt;- GAStech_nodes %&gt;%\n  rename(group = Department)\n\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\") %&gt;%\n  visLegend() %&gt;%\n  visLayout(randomSeed = 123)"
+  },
+  {
     "objectID": "Hands-on_Ex/Hands-on_Ex05d.html",
     "href": "Hands-on_Ex/Hands-on_Ex05d.html",
     "title": "5d. Visual Multivariate Analysis with Parallel Coordinates Plot",
@@ -480,7 +550,7 @@
     "href": "index.html",
     "title": "Exploring Visual Analytics",
     "section": "",
-    "text": "Welcome to my\n  \n  \n\n\nWelcome\nHi, I am Carina and welcome to my course portfolio for ISSS608 Visual Analytics and Applications.\n\n\n\n\n\n\n\n\n\n\n5a. Building Ternary Plot with R\n\n\n\n\n\n\nMay 13, 2026\n\n\n\n\n\n\n\n\n\n\n\n5b. Visual Correlation Analysis\n\n\n\n\n\n\nMay 13, 2026\n\n\n\n\n\n\n\n\n\n\n\n5c. Visual Multivariate Analysis with Heatmap\n\n\n\n\n\n\nMay 13, 2026\n\n\n\n\n\n\nNo matching items\n\n\n\n\n\n\n\n\n\n\n\nIn-Class Exercise 6: Designing Web-enabled Visual Analytics Application with Shiny\n\n\nBuilding interactive web-enabled visual analytics applications using R Shiny, covering UI layout, server logic, and reactivity.\n\n\n\nMay 23, 2026\n\n\n\n\n\n\n\n\n\n\n\nIn-Class Exercise 5: Treemap Visualisation with Tableau\n\n\n\n\n\n\nMay 13, 2026\n\n\n\n\n\n\n\n\n\n\n\nIn-Class Exercise 4: Visual Statistical Analysis with Tableau\n\n\n\n\n\n\nMay 3, 2026\n\n\n\n\n\n\nNo matching items\n\n\n\n\n\n\n\n\n\n\n\nExecutive Summary: Motor Vehicle Insurance Loss Drivers\n\n\n\n\n\n\nMay 24, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nTake-home Exercise 1: Uncovering Loss Drivers in Motor Vehicle Insurance Portfolio using Data Visualisation\n\n\nApplying univariate and bivariate visual analytics techniques to explore key factors influencing profitability and volatility in a motor vehicle insurance portfolio.\n\n\n\nMay 17, 2026\n\n\n\n\n\n\nNo matching items"
+    "text": "Welcome to my\n  \n  \n\n\nWelcome\nHi, I am Carina and welcome to my course portfolio for ISSS608 Visual Analytics and Applications.\n\n\n\n\n\n\n\n\n\n\n7a. Modelling, Visualising and Analysing Network Data with R\n\n\n\n\n\n\nMay 30, 2026\n\n\n\n\n\n\n\n\n\n\n\n7b. Visualising and Analysing Text Data with R\n\n\n\n\n\n\nMay 30, 2026\n\n\n\n\n\n\n\n\n\n\n\n5a. Building Ternary Plot with R\n\n\n\n\n\n\nMay 13, 2026\n\n\n\n\n\n\nNo matching items\n\n\n\n\n\n\n\n\n\n\n\nIn-Class Exercise 6: Designing Web-enabled Visual Analytics Application with Shiny\n\n\nBuilding interactive web-enabled visual analytics applications using R Shiny, covering UI layout, server logic, and reactivity.\n\n\n\nMay 23, 2026\n\n\n\n\n\n\n\n\n\n\n\nIn-Class Exercise 5: Treemap Visualisation with Tableau\n\n\n\n\n\n\nMay 13, 2026\n\n\n\n\n\n\n\n\n\n\n\nIn-Class Exercise 4: Visual Statistical Analysis with Tableau\n\n\n\n\n\n\nMay 3, 2026\n\n\n\n\n\n\nNo matching items\n\n\n\n\n\n\n\n\n\n\n\nExecutive Summary: Motor Vehicle Insurance Loss Drivers\n\n\n\n\n\n\nMay 24, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nTake-home Exercise 1: Uncovering Loss Drivers in Motor Vehicle Insurance Portfolio using Data Visualisation\n\n\nApplying univariate and bivariate visual analytics techniques to explore key factors influencing profitability and volatility in a motor vehicle insurance portfolio.\n\n\n\nMay 17, 2026\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html",
@@ -1006,6 +1076,76 @@
     "title": "5e. Treemap Visualisation with R",
     "section": "Designing Interactive Treemap using d3treeR",
     "text": "Designing Interactive Treemap using d3treeR\n\nInstalling d3treeR\n\ninstall.packages(\"devtools\")\ninstall.packages(\"treemap\")\n\nlibrary(devtools)\ninstall_github(\"timelyportfolio/d3treeR\")\n\n\n\nLoading packages\n\nlibrary(treemap)\nlibrary(d3treeR)\n\n\n\nDesigning an interactive treemap\n\ntm &lt;- treemap(\n  realis2018_summarised,\n  index = c(\"Planning Region\", \"Planning Area\"),\n  vSize = \"Total Unit Sold\",\n  vColor = \"Median Unit Price ($ psm)\",\n  type = \"value\",\n  title = \"Private Residential Property Sold, 2017\",\n  title.legend = \"Median Unit Price (S$ per sq. m)\"\n)\n\n\n\n\n\n\n\n\n\nd3tree(tm, rootname = \"Singapore\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07b.html",
+    "href": "Hands-on_Ex/Hands-on_Ex07b.html",
+    "title": "7b. Visualising and Analysing Text Data with R",
+    "section": "",
+    "text": "Text visualisation transforms unstructured text data into visual representations to support understanding, grouping, comparison and correlation of textual content. In this exercise, the tidytext framework is used to process and visualise newsgroup messages from the 20 Newsgroups dataset, covering techniques such as word clouds, TF-IDF analysis and bigram network graphs."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07b.html#overview",
+    "href": "Hands-on_Ex/Hands-on_Ex07b.html#overview",
+    "title": "7b. Visualising and Analysing Text Data with R",
+    "section": "",
+    "text": "Text visualisation transforms unstructured text data into visual representations to support understanding, grouping, comparison and correlation of textual content. In this exercise, the tidytext framework is used to process and visualise newsgroup messages from the 20 Newsgroups dataset, covering techniques such as word clouds, TF-IDF analysis and bigram network graphs."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07b.html#reflections",
+    "href": "Hands-on_Ex/Hands-on_Ex07b.html#reflections",
+    "title": "7b. Visualising and Analysing Text Data with R",
+    "section": "Reflections",
+    "text": "Reflections\nThe key takeaway from this exercise is that text data requires significant preprocessing before meaningful visualisation is possible — removing headers, signatures and stop words is just as important as the visualisation itself. TF-IDF is particularly useful because it surfaces words that are distinctive to a newsgroup rather than just frequent across all documents. Visualising bigrams as a network graph was an effective way to reveal common two-word phrases and their relationships."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07b.html#getting-started",
+    "href": "Hands-on_Ex/Hands-on_Ex07b.html#getting-started",
+    "title": "7b. Visualising and Analysing Text Data with R",
+    "section": "Getting Started",
+    "text": "Getting Started\n\nLoading packages\n\npacman::p_load(tidytext, widyr, wordcloud, DT, \n               ggwordcloud, textplot, lubridate, hms,\n               tidyverse, tidygraph, ggraph, igraph)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07b.html#importing-multiple-text-files-from-multiple-folders",
+    "href": "Hands-on_Ex/Hands-on_Ex07b.html#importing-multiple-text-files-from-multiple-folders",
+    "title": "7b. Visualising and Analysing Text Data with R",
+    "section": "Importing Multiple Text Files from Multiple Folders",
+    "text": "Importing Multiple Text Files from Multiple Folders\n\nCreating a folder list\n\nnews20 &lt;- \"20news/\"\n\n\n\nDefining a function to read files\nA custom function read_folder() is written to read all text files from a folder into a single data frame. map() of the purrr package is used to apply the function to each file, while unnest() flattens the resulting list into a data frame.\n\nread_folder &lt;- function(infolder) {\n  tibble(file = dir(infolder,\n                    full.names = TRUE)) %&gt;%\n    mutate(text = map(file,\n                      read_lines)) %&gt;%\n    transmute(id = basename(file),\n              text) %&gt;%\n    unnest(text)\n}\n\n\n\nReading in all messages from the 20news folder\n\nraw_text &lt;- tibble(folder =\n                     dir(news20,\n                         full.names = TRUE)) %&gt;%\n  mutate(folder_out = map(folder,\n                          read_folder)) %&gt;%\n  unnest(cols = c(folder_out)) %&gt;%\n  mutate(newsgroup = basename(folder)) %&gt;%\n  select(newsgroup, id, text)\n\nwrite_rds(raw_text, \"20news.rds\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07b.html#initial-eda",
+    "href": "Hands-on_Ex/Hands-on_Ex07b.html#initial-eda",
+    "title": "7b. Visualising and Analysing Text Data with R",
+    "section": "Initial EDA",
+    "text": "Initial EDA\nThe bar chart below shows the frequency of messages by newsgroup.\n\nThe plotThe code chunk\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nraw_text %&gt;%\n  group_by(newsgroup) %&gt;%\n  summarize(messages = n_distinct(id)) %&gt;%\n  ggplot(aes(messages, newsgroup)) +\n  geom_col(fill = \"lightblue\") +\n  labs(y = NULL)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07b.html#introducing-tidytext",
+    "href": "Hands-on_Ex/Hands-on_Ex07b.html#introducing-tidytext",
+    "title": "7b. Visualising and Analysing Text Data with R",
+    "section": "Introducing tidytext",
+    "text": "Introducing tidytext\n\nRemoving headers and automated email signatures\nEach message contains a header and automated email signature that are not useful for analysis. cumsum() of base R is used to return a cumulative sum, while str_detect() of stringr detects the presence of a pattern in a string.\n\ncleaned_text &lt;- raw_text %&gt;%\n  group_by(newsgroup, id) %&gt;%\n  filter(cumsum(text == \"\") &gt; 0,\n         cumsum(str_detect(\n           text, \"^--\")) == 0) %&gt;%\n  ungroup()\n\n\n\nRemoving lines with nested quotes\nRegular expressions are used to remove lines with nested text representing quotes from other users.\n\ncleaned_text &lt;- cleaned_text %&gt;%\n  filter(str_detect(text, \"^[^&gt;]+[A-Za-z\\\\d]\")\n         | text == \"\",\n         !str_detect(text,\n                     \"writes(:|\\\\.\\\\.\\\\.)$\"),\n         !str_detect(text,\n                     \"^In article &lt;\")\n  )\n\n\n\nText data processing\nunnest_tokens() of tidytext splits each message into individual words (tokens). Stop words — common words like “the” and “and” — are then removed using stop_words.\n\nusenet_words &lt;- cleaned_text %&gt;%\n  unnest_tokens(word, text) %&gt;%\n  filter(str_detect(word, \"[a-z']$\"),\n         !word %in% stop_words$word)\n\nCounting individual words across the entire dataset:\n\nusenet_words %&gt;%\n  count(word, sort = TRUE)\n\n# A tibble: 5,542 × 2\n   word           n\n   &lt;chr&gt;      &lt;int&gt;\n 1 people        57\n 2 time          50\n 3 jesus         47\n 4 god           44\n 5 message       40\n 6 br            27\n 7 bible         23\n 8 drive         23\n 9 homosexual    23\n10 read          22\n# ℹ 5,532 more rows\n\n\nCounting words within each newsgroup:\n\nwords_by_newsgroup &lt;- usenet_words %&gt;%\n  count(newsgroup, word, sort = TRUE) %&gt;%\n  ungroup()\n\n\n\nVisualising words in newsgroups — wordcloud\nwordcloud() of the wordcloud package is used to plot a static wordcloud.\n\nThe plotThe code chunk\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nwordcloud(words_by_newsgroup$word,\n          words_by_newsgroup$n,\n          max.words = 300)\n\n\n\n\n\n\nVisualising words in newsgroups — ggwordcloud\ngeom_text_wordcloud() of ggwordcloud is used to plot a wordcloud faceted by newsgroup.\n\nThe plotThe code chunk"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07b.html#tf-idf-analysis",
+    "href": "Hands-on_Ex/Hands-on_Ex07b.html#tf-idf-analysis",
+    "title": "7b. Visualising and Analysing Text Data with R",
+    "section": "TF-IDF Analysis",
+    "text": "TF-IDF Analysis\n\nComputing TF-IDF within newsgroups\nbind_tf_idf() of tidytext computes and binds the term frequency, inverse document frequency and TF-IDF of a tidy text dataset.\n\ntf_idf &lt;- words_by_newsgroup %&gt;%\n  bind_tf_idf(word, newsgroup, n) %&gt;%\n  arrange(desc(tf_idf))\n\n\n\nVisualising TF-IDF as interactive table\ndatatable() of DT creates an interactive table with pagination and filtering. formatRound() customises the decimal places and formatStyle() adjusts the row height.\n\nThe plotThe code chunk\n\n\n\n\n\n\n\n\n\n\n\nDT::datatable(tf_idf, filter = 'top') %&gt;%\n  formatRound(columns = c('tf', 'idf',\n                          'tf_idf'),\n              digits = 3) %&gt;%\n  formatStyle(0,\n              target = 'row',\n              lineHeight='25%')\n\n\n\n\n\n\nVisualising TF-IDF within newsgroups\n\nThe plotThe code chunk\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ntf_idf %&gt;%\n  filter(str_detect(newsgroup, \"^sci\\\\.\")) %&gt;%\n  group_by(newsgroup) %&gt;%\n  slice_max(tf_idf, n = 12) %&gt;%\n  ungroup() %&gt;%\n  mutate(word = reorder(word, tf_idf)) %&gt;%\n  ggplot(aes(tf_idf, word, fill = newsgroup)) +\n  geom_col(show.legend = FALSE) +\n  facet_wrap(~ newsgroup, scales = \"free\") +\n  labs(x = \"tf-idf\", y = NULL)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07b.html#word-correlation-analysis",
+    "href": "Hands-on_Ex/Hands-on_Ex07b.html#word-correlation-analysis",
+    "title": "7b. Visualising and Analysing Text Data with R",
+    "section": "Word Correlation Analysis",
+    "text": "Word Correlation Analysis\n\nCounting and correlating pairs of words\npairwise_cor() of widyr is used to find words that are correlated with each other within the same newsgroup.\n\nnewsgroup_cors &lt;- words_by_newsgroup %&gt;%\n  pairwise_cor(newsgroup,\n               word,\n               n,\n               sort = TRUE)\n\n\n\nVisualising correlation as a network\n\nThe plotThe code chunk\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nset.seed(2017)\n\nnewsgroup_cors %&gt;%\n  filter(correlation &gt; .025) %&gt;%\n  graph_from_data_frame() %&gt;%\n  ggraph(layout = \"fr\") +\n  geom_edge_link(aes(alpha = correlation,\n                     width = correlation)) +\n  geom_node_point(size = 6,\n                  color = \"lightblue\") +\n  geom_node_text(aes(label = name),\n                 repel = TRUE) +\n  theme_graph()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07b.html#bigram-analysis",
+    "href": "Hands-on_Ex/Hands-on_Ex07b.html#bigram-analysis",
+    "title": "7b. Visualising and Analysing Text Data with R",
+    "section": "Bigram Analysis",
+    "text": "Bigram Analysis\n\nCounting bigrams\nA bigram is a pair of consecutive words. unnest_tokens() with token = \"ngrams\" and n = 2 extracts all bigrams from the text.\n\nbigrams &lt;- cleaned_text %&gt;%\n  unnest_tokens(bigram,\n                text,\n                token = \"ngrams\",\n                n = 2)\n\nbigrams_count &lt;- bigrams %&gt;%\n  count(bigram, sort = TRUE)\n\n\n\nCleaning bigrams\nBigrams containing stop words are removed by separating each bigram into two words and filtering out those containing stop words.\n\nbigrams_separated &lt;- bigrams_count %&gt;%\n  separate(bigram, c(\"word1\", \"word2\"),\n           sep = \" \")\n\nbigrams_filtered &lt;- bigrams_separated %&gt;%\n  filter(!word1 %in% stop_words$word) %&gt;%\n  filter(!word2 %in% stop_words$word)\n\n\n\nCounting bigrams again\nunite() of tidyr is used to combine the two word columns back into a single bigram column.\n\nbigrams_united &lt;- bigrams_filtered %&gt;%\n  unite(bigram, word1, word2, sep = \" \")\n\nbigrams_united\n\n# A tibble: 4,136 × 2\n   bigram          n\n   &lt;chr&gt;       &lt;int&gt;\n 1 NA NA        1297\n 2 1 2            12\n 3 1 3            12\n 4 static void    10\n 5 time pad       10\n 6 1 4             8\n 7 infield fly     7\n 8 mat 28          6\n 9 vv vv           6\n10 1 5             5\n# ℹ 4,126 more rows\n\n\n\n\nCreating a network graph from bigram data\ngraph_from_data_frame() of igraph converts the bigram data into a network object.\n\nbigram_graph &lt;- bigrams_filtered %&gt;%\n  filter(n &gt; 3) %&gt;%\n  filter(!is.na(word1), !is.na(word2)) %&gt;%\n  graph_from_data_frame()\n\nbigram_graph\n\nIGRAPH 286b083 DN-- 40 24 -- \n+ attr: name (v/c), n (e/n)\n+ edges from 286b083 (vertex names):\n [1] 1          -&gt;2           1          -&gt;3           static     -&gt;void       \n [4] time       -&gt;pad         1          -&gt;4           infield    -&gt;fly        \n [7] mat        -&gt;28          vv         -&gt;vv          1          -&gt;5          \n[10] cock       -&gt;crow        noticeshell-&gt;widget      27         -&gt;1993       \n[13] 3          -&gt;4           child      -&gt;molestation cock       -&gt;crew       \n[16] gun        -&gt;violence    heat       -&gt;sink        homosexual -&gt;male       \n[19] homosexual -&gt;women       include    -&gt;xol         mary       -&gt;magdalene  \n[22] read       -&gt;write       rev        -&gt;20          tt         -&gt;ee         \n\n\n\n\nVisualising bigrams with ggraph\n\nThe plotThe code chunk\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nset.seed(1234)\n\nggraph(bigram_graph, layout = \"fr\") +\n  geom_edge_link() +\n  geom_node_point() +\n  geom_node_text(aes(label = name),\n                 vjust = 1,\n                 hjust = 1)\n\n\n\n\n\n\nRevised bigram network graph\n\nThe plotThe code chunk\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nset.seed(1234)\n\na &lt;- grid::arrow(type = \"closed\",\n                 length = unit(.15, \"inches\"))\n\nggraph(bigram_graph, layout = \"fr\") +\n  geom_edge_link(aes(edge_alpha = n),\n                 show.legend = FALSE,\n                 arrow = a,\n                 end_cap = circle(.07, 'inches')) +\n  geom_node_point(color = \"lightblue\",\n                  size = 5) +\n  geom_node_text(aes(label = name),\n                 vjust = 1,\n                 hjust = 1) +\n  theme_void()"
   },
   {
     "objectID": "In Class Exercise/In-class_Ex03.html",

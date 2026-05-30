@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="carina peh">
+<meta name="dcterms.date" content="2026-05-30">
+
+<title>7a. Modelling, Visualising and Analysing Network Data with R – Exploring Visual Analytics</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-4397f41838bf6696a92fdfbed53ac40c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="../site_libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+<script src="../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="../site_libs/vis-9.1.0/vis-network.min.css" rel="stylesheet">
+<script src="../site_libs/vis-9.1.0/vis-network.min.js"></script>
+<script src="../site_libs/visNetwork-binding-2.1.4/visNetwork.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../images/VisualAnalyticsJourney.png" alt="" class="navbar-logo light-content">
+    <img src="../images/VisualAnalyticsJourney.png" alt="" class="navbar-logo dark-content">
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hands-on-exercises" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Hands-on Exercises</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-hands-on-exercises">    
+        <li>
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex01.html">
+ <span class="dropdown-text">1. A Layered Grammar of Graphics</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex02.html">
+ <span class="dropdown-text">2. Beyond ggplot2 Fundamentals</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex03a.html">
+ <span class="dropdown-text">3a. Programming Interactive Data Visualisation</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex03b.html">
+ <span class="dropdown-text">3b. Programming Animated Statistical Graphics</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex04a.html">
+ <span class="dropdown-text">4a. Visualising Distribution</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex04b.html">
+ <span class="dropdown-text">4b. Visual Statistical Analysis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex04c.html">
+ <span class="dropdown-text">4c. Visualising Uncertainty</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex04d.html">
+ <span class="dropdown-text">4d. Building Funnel Plot with R</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex05a.html">
+ <span class="dropdown-text">5a. Building Ternary Plot with R</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex05b.html">
+ <span class="dropdown-text">5b. Visual Correlation Analysis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex05c.html">
+ <span class="dropdown-text">5c. Visual Multivariate Analysis with Heatmap</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex05d.html">
+ <span class="dropdown-text">5d. Visual Multivariate Analysis with Parallel Coordinates Plot</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex05e.html">
+ <span class="dropdown-text">5e. Treemap Visualisation</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex07a.html">
+ <span class="dropdown-text">7a. Modelling, Visualising and Analysing Network Data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex07b.html">
+ <span class="dropdown-text">7b. Visualising and Analysing Text Data</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-in-class-exercises" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">In-Class Exercises</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-in-class-exercises">    
+        <li>
+    <a class="dropdown-item" href="../In Class Exercise/In-class_Ex02.html">
+ <span class="dropdown-text">In-Class Exercise 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../In Class Exercise/In-class_Ex03.html">
+ <span class="dropdown-text">In-Class Exercise 3</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../In Class Exercise/In-class_Ex04.html">
+ <span class="dropdown-text">In-Class Exercise 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../In Class Exercise/In-class_Ex05.html">
+ <span class="dropdown-text">In-Class Exercise 5</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../In Class Exercise/In-class_Ex06.html">
+ <span class="dropdown-text">In-Class Exercise 6</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-take-home-exercises" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Take-Home Exercises</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-take-home-exercises">    
+        <li class="dropdown-header">Take-Home Exercise 1</li>
+        <li>
+    <a class="dropdown-item" href="../Take Home Exercise 1/Take_Home_Ex01.html">
+ <span class="dropdown-text">Technical Report</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Take Home Exercise 1/Take_Home_Ex01_slides.html">
+ <span class="dropdown-text">Executive Summary</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> <i class="bi bi-heart-fill" role="img">
+</i> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#reflections" id="toc-reflections" class="nav-link" data-scroll-target="#reflections">Reflections</a></li>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">Getting Started</a>
+  <ul class="collapse">
+  <li><a href="#loading-packages" id="toc-loading-packages" class="nav-link" data-scroll-target="#loading-packages">Loading packages</a></li>
+  <li><a href="#importing-data" id="toc-importing-data" class="nav-link" data-scroll-target="#importing-data">Importing data</a></li>
+  <li><a href="#reviewing-the-data" id="toc-reviewing-the-data" class="nav-link" data-scroll-target="#reviewing-the-data">Reviewing the data</a></li>
+  </ul></li>
+  <li><a href="#data-wrangling" id="toc-data-wrangling" class="nav-link" data-scroll-target="#data-wrangling">Data Wrangling</a>
+  <ul class="collapse">
+  <li><a href="#wrangling-time" id="toc-wrangling-time" class="nav-link" data-scroll-target="#wrangling-time">Wrangling time</a></li>
+  <li><a href="#wrangling-attributes" id="toc-wrangling-attributes" class="nav-link" data-scroll-target="#wrangling-attributes">Wrangling attributes</a></li>
+  </ul></li>
+  <li><a href="#creating-network-objects-with-tidygraph" id="toc-creating-network-objects-with-tidygraph" class="nav-link" data-scroll-target="#creating-network-objects-with-tidygraph">Creating Network Objects with tidygraph</a>
+  <ul class="collapse">
+  <li><a href="#building-the-tidygraph-object" id="toc-building-the-tidygraph-object" class="nav-link" data-scroll-target="#building-the-tidygraph-object">Building the tidygraph object</a></li>
+  <li><a href="#changing-the-active-object" id="toc-changing-the-active-object" class="nav-link" data-scroll-target="#changing-the-active-object">Changing the active object</a></li>
+  </ul></li>
+  <li><a href="#plotting-static-network-graphs-with-ggraph" id="toc-plotting-static-network-graphs-with-ggraph" class="nav-link" data-scroll-target="#plotting-static-network-graphs-with-ggraph">Plotting Static Network Graphs with ggraph</a>
+  <ul class="collapse">
+  <li><a href="#basic-network-graph" id="toc-basic-network-graph" class="nav-link" data-scroll-target="#basic-network-graph">Basic network graph</a></li>
+  <li><a href="#with-theme-and-colour" id="toc-with-theme-and-colour" class="nav-link" data-scroll-target="#with-theme-and-colour">With theme and colour</a></li>
+  <li><a href="#modifying-edges-by-weight" id="toc-modifying-edges-by-weight" class="nav-link" data-scroll-target="#modifying-edges-by-weight">Modifying edges by weight</a></li>
+  </ul></li>
+  <li><a href="#creating-facet-graphs" id="toc-creating-facet-graphs" class="nav-link" data-scroll-target="#creating-facet-graphs">Creating Facet Graphs</a>
+  <ul class="collapse">
+  <li><a href="#facet-by-edges" id="toc-facet-by-edges" class="nav-link" data-scroll-target="#facet-by-edges">Facet by edges</a></li>
+  <li><a href="#facet-by-nodes" id="toc-facet-by-nodes" class="nav-link" data-scroll-target="#facet-by-nodes">Facet by nodes</a></li>
+  </ul></li>
+  <li><a href="#network-metrics-analysis" id="toc-network-metrics-analysis" class="nav-link" data-scroll-target="#network-metrics-analysis">Network Metrics Analysis</a>
+  <ul class="collapse">
+  <li><a href="#computing-centrality-indices" id="toc-computing-centrality-indices" class="nav-link" data-scroll-target="#computing-centrality-indices">Computing centrality indices</a></li>
+  <li><a href="#visualising-community" id="toc-visualising-community" class="nav-link" data-scroll-target="#visualising-community">Visualising community</a></li>
+  </ul></li>
+  <li><a href="#building-interactive-network-graph-with-visnetwork" id="toc-building-interactive-network-graph-with-visnetwork" class="nav-link" data-scroll-target="#building-interactive-network-graph-with-visnetwork">Building Interactive Network Graph with visNetwork</a>
+  <ul class="collapse">
+  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation">Data preparation</a></li>
+  <li><a href="#basic-interactive-graph" id="toc-basic-interactive-graph" class="nav-link" data-scroll-target="#basic-interactive-graph">Basic interactive graph</a></li>
+  <li><a href="#with-visual-attributes-and-interactivity" id="toc-with-visual-attributes-and-interactivity" class="nav-link" data-scroll-target="#with-visual-attributes-and-interactivity">With visual attributes and interactivity</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">7a. Modelling, Visualising and Analysing Network Data with R</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>carina peh </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 30, 2026</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">May 30, 2026</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>Network data consists of two key components — <strong>nodes</strong> (entities) and <strong>edges</strong> (relationships between entities). In this exercise, email correspondence data from GAStech, an oil exploration company, is used to explore and visualise communication patterns between 55 employees over two weeks.</p>
+</section>
+<section id="reflections" class="level2">
+<h2 class="anchored" data-anchor-id="reflections">Reflections</h2>
+<p>Network visualisation uses nodes(data points) and edges (links) to visually map connected data, it reveals patterns that tabular data cannot such as which employees are central connectors, which departments communicate most, and whether communication clusters form around certain groups. The key takeaway is that <code>tidygraph</code> makes network data manipulation feel familiar using <code>dplyr</code> verbs, while <code>ggraph</code> extends <code>ggplot2</code> grammar to network graphs. The interactive <code>visNetwork</code> output added practical value by allowing exploration of individual nodes and edges dynamically.</p>
+</section>
+<section id="getting-started" class="level2">
+<h2 class="anchored" data-anchor-id="getting-started">Getting Started</h2>
+<section id="loading-packages" class="level3">
+<h3 class="anchored" data-anchor-id="loading-packages">Loading packages</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(igraph, tidygraph, ggraph,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>               visNetwork, lubridate, clock,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>               tidyverse, graphlayouts,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>               concaveman, ggforce)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="importing-data" class="level3">
+<h3 class="anchored" data-anchor-id="importing-data">Importing data</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>GAStech_nodes <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"GAStech_email_node.csv"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>GAStech_edges <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"GAStech_email_edge-v2.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="reviewing-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="reviewing-the-data">Reviewing the data</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(GAStech_edges)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 9,063
+Columns: 8
+$ source      &lt;dbl&gt; 43, 43, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 26, 26, 26…
+$ target      &lt;dbl&gt; 41, 40, 51, 52, 53, 45, 44, 46, 48, 49, 47, 54, 27, 28, 29…
+$ SentDate    &lt;chr&gt; "6/1/2014", "6/1/2014", "6/1/2014", "6/1/2014", "6/1/2014"…
+$ SentTime    &lt;time&gt; 08:39:00, 08:39:00, 08:58:00, 08:58:00, 08:58:00, 08:58:0…
+$ Subject     &lt;chr&gt; "GT-SeismicProcessorPro Bug Report", "GT-SeismicProcessorP…
+$ MainSubject &lt;chr&gt; "Work related", "Work related", "Work related", "Work rela…
+$ sourceLabel &lt;chr&gt; "Sven.Flecha", "Sven.Flecha", "Kanon.Herrero", "Kanon.Herr…
+$ targetLabel &lt;chr&gt; "Isak.Baza", "Lucas.Alcazar", "Felix.Resumir", "Hideki.Coc…</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="data-wrangling" class="level2">
+<h2 class="anchored" data-anchor-id="data-wrangling">Data Wrangling</h2>
+<section id="wrangling-time" class="level3">
+<h3 class="anchored" data-anchor-id="wrangling-time">Wrangling time</h3>
+<p><code>SentDate</code> is imported as a character data type and needs to be converted to a proper date format. <code>dmy()</code> converts the date string and <code>wday()</code> extracts the day of the week — both from the <strong>lubridate</strong> package.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>GAStech_edges <span class="ot">&lt;-</span> GAStech_edges <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">SendDate =</span> <span class="fu">dmy</span>(SentDate)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Weekday =</span> <span class="fu">wday</span>(SentDate,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">label =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                        <span class="at">abbr =</span> <span class="cn">FALSE</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="wrangling-attributes" class="level3">
+<h3 class="anchored" data-anchor-id="wrangling-attributes">Wrangling attributes</h3>
+<p>We filter to keep only work-related emails and aggregate by source, target and weekday to count the number of emails sent.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>GAStech_edges_aggregated <span class="ot">&lt;-</span> GAStech_edges <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(MainSubject <span class="sc">==</span> <span class="st">"Work related"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(source, target, Weekday) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Weight =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(source <span class="sc">!=</span> target) <span class="sc">%&gt;%</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Weight <span class="sc">&gt;</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="creating-network-objects-with-tidygraph" class="level2">
+<h2 class="anchored" data-anchor-id="creating-network-objects-with-tidygraph">Creating Network Objects with tidygraph</h2>
+<section id="building-the-tidygraph-object" class="level3">
+<h3 class="anchored" data-anchor-id="building-the-tidygraph-object">Building the tidygraph object</h3>
+<p><code>tbl_graph()</code> creates a network object from the nodes and edges dataframes.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>GAStech_graph <span class="ot">&lt;-</span> <span class="fu">tbl_graph</span>(<span class="at">nodes =</span> GAStech_nodes,</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">edges =</span> GAStech_edges_aggregated,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">directed =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>GAStech_graph</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tbl_graph: 54 nodes and 1372 edges
+#
+# A directed multigraph with 1 component
+#
+# Node Data: 54 × 4 (active)
+      id label               Department     Title                               
+   &lt;dbl&gt; &lt;chr&gt;               &lt;chr&gt;          &lt;chr&gt;                               
+ 1     1 Mat.Bramar          Administration Assistant to CEO                    
+ 2     2 Anda.Ribera         Administration Assistant to CFO                    
+ 3     3 Rachel.Pantanal     Administration Assistant to CIO                    
+ 4     4 Linda.Lagos         Administration Assistant to COO                    
+ 5     5 Ruscella.Mies.Haber Administration Assistant to Engineering Group Mana…
+ 6     6 Carla.Forluniau     Administration Assistant to IT Group Manager       
+ 7     7 Cornelia.Lais       Administration Assistant to Security Group Manager 
+ 8    44 Kanon.Herrero       Security       Badging Office                      
+ 9    45 Varja.Lagos         Security       Badging Office                      
+10    46 Stenig.Fusil        Security       Building Control                    
+# ℹ 44 more rows
+#
+# Edge Data: 1,372 × 4
+   from    to Weekday Weight
+  &lt;int&gt; &lt;int&gt; &lt;ord&gt;    &lt;int&gt;
+1     1     2 Sunday       5
+2     1     2 Monday       2
+3     1     2 Tuesday      3
+# ℹ 1,369 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="changing-the-active-object" class="level3">
+<h3 class="anchored" data-anchor-id="changing-the-active-object">Changing the active object</h3>
+<p><code>tidygraph</code> allows switching between nodes and edges using <code>activate()</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>GAStech_graph <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">activate</span>(edges) <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Weight))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tbl_graph: 54 nodes and 1372 edges
+#
+# A directed multigraph with 1 component
+#
+# Edge Data: 1,372 × 4 (active)
+    from    to Weekday   Weight
+   &lt;int&gt; &lt;int&gt; &lt;ord&gt;      &lt;int&gt;
+ 1    40    41 Saturday      13
+ 2    41    43 Monday        11
+ 3    35    31 Tuesday       10
+ 4    40    41 Monday        10
+ 5    40    43 Monday        10
+ 6    36    32 Sunday         9
+ 7    40    43 Saturday       9
+ 8    41    40 Monday         9
+ 9    19    15 Wednesday      8
+10    35    38 Tuesday        8
+# ℹ 1,362 more rows
+#
+# Node Data: 54 × 4
+     id label           Department     Title           
+  &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;          &lt;chr&gt;           
+1     1 Mat.Bramar      Administration Assistant to CEO
+2     2 Anda.Ribera     Administration Assistant to CFO
+3     3 Rachel.Pantanal Administration Assistant to CIO
+# ℹ 51 more rows</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="plotting-static-network-graphs-with-ggraph" class="level2">
+<h2 class="anchored" data-anchor-id="plotting-static-network-graphs-with-ggraph">Plotting Static Network Graphs with ggraph</h2>
+<section id="basic-network-graph" class="level3">
+<h3 class="anchored" data-anchor-id="basic-network-graph">Basic network graph</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">The code chunk</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex07a_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(GAStech_graph) <span class="sc">+</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>() <span class="sc">+</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="with-theme-and-colour" class="level3">
+<h3 class="anchored" data-anchor-id="with-theme-and-colour">With theme and colour</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">The code chunk</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex07a_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">ggraph</span>(GAStech_graph,</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">layout =</span> <span class="st">"fr"</span>) <span class="sc">+</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="fu">aes</span>(<span class="at">colour =</span> Weekday)) <span class="sc">+</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> Department),</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_graph</span>()</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>g</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="modifying-edges-by-weight" class="level3">
+<h3 class="anchored" data-anchor-id="modifying-edges-by-weight">Modifying edges by weight</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">The code chunk</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex07a_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">ggraph</span>(GAStech_graph,</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">layout =</span> <span class="st">"nicely"</span>) <span class="sc">+</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="fu">aes</span>(<span class="at">width =</span> Weight),</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_edge_width</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="dv">5</span>)) <span class="sc">+</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> Department),</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_graph</span>()</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>g</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="creating-facet-graphs" class="level2">
+<h2 class="anchored" data-anchor-id="creating-facet-graphs">Creating Facet Graphs</h2>
+<section id="facet-by-edges" class="level3">
+<h3 class="anchored" data-anchor-id="facet-by-edges">Facet by edges</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false" href="">The code chunk</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex07a_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set_graph_style</span>()</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">ggraph</span>(GAStech_graph,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">layout =</span> <span class="st">"nicely"</span>) <span class="sc">+</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="fu">aes</span>(<span class="at">width =</span> Weight),</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_edge_width</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="dv">5</span>)) <span class="sc">+</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> Department),</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">size =</span> <span class="dv">2</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>g <span class="sc">+</span> <span class="fu">facet_edges</span>(<span class="sc">~</span>Weekday)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="facet-by-nodes" class="level3">
+<h3 class="anchored" data-anchor-id="facet-by-nodes">Facet by nodes</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false" href="">The code chunk</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex07a_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set_graph_style</span>()</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">ggraph</span>(GAStech_graph,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">layout =</span> <span class="st">"nicely"</span>) <span class="sc">+</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="fu">aes</span>(<span class="at">width =</span> Weight),</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_edge_width</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="dv">5</span>)) <span class="sc">+</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> Department),</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">size =</span> <span class="dv">2</span>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>g <span class="sc">+</span> <span class="fu">facet_nodes</span>(<span class="sc">~</span>Department) <span class="sc">+</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">th_foreground</span>(<span class="at">foreground =</span> <span class="st">"grey80"</span>,</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>                <span class="at">border =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="network-metrics-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="network-metrics-analysis">Network Metrics Analysis</h2>
+<section id="computing-centrality-indices" class="level3">
+<h3 class="anchored" data-anchor-id="computing-centrality-indices">Computing centrality indices</h3>
+<p><code>centrality_betweenness()</code> measures how often a node lies on the shortest path between other nodes — a key measure of influence.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false" href="">The code chunk</a></li></ul>
+<div class="tab-content">
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex07a_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> GAStech_graph <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">betweenness_centrality =</span> <span class="fu">centrality_betweenness</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggraph</span>(<span class="at">layout =</span> <span class="st">"fr"</span>) <span class="sc">+</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="fu">aes</span>(<span class="at">width =</span> Weight),</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_edge_width</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="dv">5</span>)) <span class="sc">+</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> Department,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">size =</span> betweenness_centrality)) <span class="sc">+</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_graph</span>()</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>g</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="visualising-community" class="level3">
+<h3 class="anchored" data-anchor-id="visualising-community">Visualising community</h3>
+<p><code>group_edge_betweenness()</code> detects communities — groups of nodes that are more connected to each other than to the rest of the network.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-2" role="tab" aria-controls="tabset-7-2" aria-selected="false" href="">The code chunk</a></li></ul>
+<div class="tab-content">
+<div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex07a_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-7-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> GAStech_graph <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">community =</span> <span class="fu">as.factor</span>(</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_edge_betweenness</span>(<span class="at">weights =</span> Weight,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">directed =</span> <span class="cn">TRUE</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggraph</span>(<span class="at">layout =</span> <span class="st">"fr"</span>) <span class="sc">+</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="fu">aes</span>(<span class="at">width =</span> Weight),</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_edge_width</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="dv">5</span>)) <span class="sc">+</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> community),</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_graph</span>()</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>g</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="building-interactive-network-graph-with-visnetwork" class="level2">
+<h2 class="anchored" data-anchor-id="building-interactive-network-graph-with-visnetwork">Building Interactive Network Graph with visNetwork</h2>
+<section id="data-preparation" class="level3">
+<h3 class="anchored" data-anchor-id="data-preparation">Data preparation</h3>
+<p><code>visNetwork</code> requires nodes to have an <code>id</code> column and edges to have <code>from</code> and <code>to</code> columns.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>GAStech_edges_aggregated <span class="ot">&lt;-</span> GAStech_edges_aggregated <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">from =</span> source,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">to =</span> target)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>GAStech_nodes <span class="ot">&lt;-</span> GAStech_nodes <span class="sc">%&gt;%</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">id =</span> id,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">label =</span> label)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="basic-interactive-graph" class="level3">
+<h3 class="anchored" data-anchor-id="basic-interactive-graph">Basic interactive graph</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-8-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-1" role="tab" aria-controls="tabset-8-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-2" role="tab" aria-controls="tabset-8-2" aria-selected="false" href="">The code chunk</a></li></ul>
+<div class="tab-content">
+<div id="tabset-8-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-8-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div class="visNetwork html-widget html-fill-item" id="htmlwidget-b14ac017fd245ffaf471" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-b14ac017fd245ffaf471">{"x":{"nodes":{"id":[1,2,3,4,5,6,7,44,45,46,8,9,10,11,12,13,14,15,16,21,26,17,18,19,20,39,40,41,42,43,27,28,29,47,48,49,50,22,51,52,53,54,23,24,25,30,31,32,33,34,35,36,37,38],"label":["Mat.Bramar","Anda.Ribera","Rachel.Pantanal","Linda.Lagos","Ruscella.Mies.Haber","Carla.Forluniau","Cornelia.Lais","Kanon.Herrero","Varja.Lagos","Stenig.Fusil","Marin.Onda","Axel.Calzas","Brand.Tempestad","Elsa.Orilla","Isande.Borrasca","Kare.Orilla","Felix.Balas","Lars.Azada","Lidelse.Dedos","Willem.Vasco-Pais","Bertrand.Ovan","Adra.Nubarron","Birgitta.Frente","Gustav.Cazar","Vira.Frente","Linnea.Bergen","Lucas.Alcazar","Isak.Baza","Nils.Calixto","Sven.Flecha","Emile.Arpa","Varro.Awelon","Dante.Coginian","Edvard.Vann","Hennie.Osvaldo","Isia.Vann","Minke.Mies","Sten.Sanjorge.Jr","Felix.Resumir","Hideki.Cocinaro","Inga.Ferro","Loreto.Bodrogi","Ingrid.Barranco","Ada.Campo-Corrente","Orhan.Strum","Adan.Morlun","Albina.Hafon","Benito.Hawelon","Cecilia.Morluniau","Claudio.Hawelon","Dylan.Scozzese","Henk.Mies","Irene.Nant","Valeria.Morlun"],"Department":["Administration","Administration","Administration","Administration","Administration","Administration","Administration","Security","Security","Security","Engineering","Engineering","Engineering","Engineering","Engineering","Engineering","Engineering","Engineering","Engineering","Executive","Facilities","Engineering","Engineering","Engineering","Engineering","Information Technology","Information Technology","Information Technology","Information Technology","Information Technology","Facilities","Facilities","Facilities","Security","Security","Security","Security","Executive","Security","Security","Security","Security","Executive","Executive","Executive","Facilities","Facilities","Facilities","Facilities","Facilities","Facilities","Facilities","Facilities","Facilities"],"Title":["Assistant to CEO","Assistant to CFO","Assistant to CIO","Assistant to COO","Assistant to Engineering Group Manager","Assistant to IT Group Manager","Assistant to Security Group Manager","Badging Office","Badging Office","Building Control","Drill Site Manager","Drill Technician","Drill Technician","Drill Technician","Drill Technician","Drill Technician","Engineer","Engineer","Engineering Group Manager","Environmental Safety Advisor","Facilities Group Manager","Geologist","Geologist","Hydraulic Technician","Hydraulic Technician","IT Group Manager","IT Helpdesk","IT Technician","IT Technician","IT Technician","Janitor","Janitor","Lead Janitor","Perimeter Control","Perimeter Control","Perimeter Control","Perimeter Control","President/CEO","Security Group Manager","Site Control","Site Control","Site Control","SVP/CFO","SVP/CIO","SVP/COO","Truck Driver","Truck Driver","Truck Driver","Truck Driver","Truck Driver","Truck Driver","Truck Driver","Truck Driver","Truck Driver"],"x":[0.06800416851681779,-0.2091901753101657,-0.008943602586588439,-0.1624392566884063,0.09397832756384328,-0.4540841821361103,-0.2350492005295015,0.7552712654944951,0.981269007557745,0.8068038887859137,0.3598313167980625,0.8311608669287389,0.943112996157234,0.5193825677476731,0.7208651244204418,0.6452217975594297,0.7114718070721679,0.5248426284743379,0.9192706540104911,-0.06777120852953389,-0.8762636945285003,0.7884265460488233,0.6122020837216837,0.4784240648101963,1,-0.8085595015774824,-0.275000907349695,-0.0340065983071548,-0.02006153800478216,-0.2381602947850482,-0.5117023027684686,-0.8861297869135832,-0.4733745384550296,0.9539980505414674,0.6872941906470882,0.602198409886771,0.9938703040588792,-0.4844301803756594,0.459261189757683,0.518255762613683,0.3415908003687114,0.6524399740960962,-0.2361014380083705,-0.3043695998635929,0.1260618159380462,-0.711028065511777,-0.8245826844720952,-0.523838678897328,-0.8055681939313053,-0.9377773379731089,-0.748942283032225,-0.6223190504245427,-1,-0.7188454589368762],"y":[0.02404687518046877,-0.1172248875844835,-0.4820136230916205,-0.3287230453280547,-0.01902041528374965,-0.3593221375264601,-0.4828276672836491,-0.1307738659224912,-0.3880901463250834,-0.6410896884088793,0.6284229370751664,0.3872105196299185,0.5052606928706689,0.5962962707020891,0.4937202761734212,0.287823361868734,0.6368844205244006,0.4288598722475327,0.6402069559540851,-1,0.2410511520004504,0.7824731141119661,0.8739063569908014,0.8066179799477176,0.2775422174568298,-0.6235116825658688,0.8140551314343007,1,0.7626061792617462,0.9906711386432119,0.508232590494782,0.4061274916805211,0.1020784528983321,-0.5741481683301196,-0.4041287161063689,-0.8598532264020664,-0.1968452073117148,-0.8171445351738624,-0.700361832134497,-0.3164328565209119,-0.5353401260773509,-0.6720699095960372,-0.7523459269421386,-0.9779135301582941,-0.9625394294259887,0.1730627909992895,0.02836462197330425,0.3000928331188817,-0.1725437908533221,-0.02992412581208903,0.3166181796234286,-0.01736254146357519,0.1358929301128902,0.5236812284154113]},"edges":{"from":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,13,13,13,13,13,13,13,13,13,13,13,13,13,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,18,18,18,18,18,18,18,18,18,18,18,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,20,20,20,20,20,20,20,20,20,20,21,21,21,21,21,21,22,22,22,22,22,22,22,22,22,22,23,23,23,23,23,23,23,23,23,23,23,23,23,24,24,24,24,24,24,24,25,25,25,25,25,25,25,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,27,27,27,27,27,27,27,27,28,28,28,28,28,28,28,28,28,28,28,28,28,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,38,38,38,38,38,39,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,41,41,41,41,41,41,41,41,41,41,41,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,43,43,43,43,43,43,43,43,43,43,43,43,43,44,44,44,44,44,44,44,44,44,44,44,44,45,45,45,45,45,45,45,45,45,46,46,46,46,46,46,46,46,46,46,46,46,46,46,46,46,46,46,47,47,47,47,47,47,47,47,47,47,47,47,47,47,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,49,49,49,49,49,49,50,50,51,51,51,51,51,51,51,52,52,52,52,52,52,52,52,53,53,53,53,53,53,53,54,54,54,54,54,54,54,54,54,54],"to":[2,2,2,2,2,3,3,3,3,3,4,4,4,4,4,5,5,5,5,5,6,6,6,6,6,7,7,7,7,7,8,8,8,8,8,9,9,9,9,9,10,10,10,10,10,11,11,11,11,11,12,12,12,12,12,13,13,13,13,13,14,14,14,14,14,15,15,15,15,15,16,16,16,16,16,17,17,17,17,17,18,18,18,18,18,19,19,19,19,19,20,20,20,20,20,21,21,21,21,21,22,22,22,22,22,23,23,23,23,23,24,24,24,24,24,25,25,25,25,25,26,26,26,26,26,27,27,27,27,27,28,28,28,28,28,29,29,29,29,29,29,30,30,30,30,30,31,31,31,31,31,32,32,32,32,32,33,33,33,33,33,34,34,34,34,34,35,35,35,35,35,36,36,36,36,36,37,37,37,37,37,38,38,38,38,38,39,39,39,39,39,40,40,40,40,40,41,41,41,41,41,42,42,42,42,42,43,43,43,43,43,44,44,44,44,44,45,45,45,45,45,46,46,46,46,46,47,47,47,47,47,48,48,48,48,48,49,49,49,49,49,50,50,50,50,50,51,51,51,51,51,52,52,52,52,52,53,53,53,53,53,54,54,54,54,54,1,1,3,3,4,4,5,5,6,6,7,7,15,36,38,1,1,2,2,4,4,5,5,6,6,7,7,48,1,1,1,1,2,2,2,2,3,3,3,3,5,5,5,5,6,6,6,6,7,7,7,7,1,1,1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,4,4,6,6,6,6,6,7,7,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,11,11,11,11,12,12,12,12,13,13,13,13,14,14,14,14,15,15,15,15,16,16,16,16,17,17,17,17,18,18,18,18,19,19,19,19,20,20,20,20,21,21,21,21,22,22,22,22,23,23,23,23,24,24,24,24,25,25,25,25,26,26,26,26,27,27,27,27,28,28,28,28,29,29,29,29,30,30,30,30,31,31,31,31,32,32,32,32,33,33,33,33,34,34,34,34,35,35,35,35,36,36,36,36,37,37,37,37,38,38,38,38,39,39,39,39,40,40,40,40,41,41,41,41,42,42,42,42,43,43,43,43,44,44,44,44,45,45,45,45,46,46,46,46,47,47,47,47,48,48,48,48,48,49,49,49,49,49,50,50,50,50,50,51,51,51,51,52,52,52,52,53,53,53,53,53,54,54,54,54,54,1,1,2,2,3,3,4,4,5,5,7,7,28,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,9,10,11,12,13,14,16,17,18,19,20,27,8,8,10,10,11,11,12,13,13,13,14,14,14,15,15,15,16,16,17,17,18,18,19,19,19,20,20,20,45,8,8,9,9,11,11,12,12,12,13,13,14,14,15,15,16,16,16,17,17,17,18,18,19,20,20,8,8,8,9,9,10,10,10,12,13,13,13,14,14,15,15,16,16,16,17,17,17,18,18,19,19,20,20,20,32,8,8,8,9,9,10,10,10,11,11,13,13,13,14,15,15,16,16,17,18,18,19,19,20,52,8,8,9,10,10,11,11,12,14,14,16,17,19,8,8,9,10,10,11,12,12,13,13,15,15,15,16,16,17,17,17,18,18,19,20,2,8,8,9,9,9,10,10,11,11,11,12,12,13,13,14,14,16,17,18,18,20,20,8,8,9,9,9,10,10,11,12,12,13,13,13,14,14,15,15,15,17,17,18,19,20,20,20,8,8,9,10,10,11,11,12,12,13,13,14,14,15,15,16,18,19,20,8,9,10,11,12,13,14,15,15,19,20,8,9,9,10,11,11,12,12,13,13,14,15,16,16,17,18,20,8,9,9,10,11,12,13,15,16,50,22,24,25,25,25,53,21,21,21,23,23,24,24,24,25,36,13,21,22,22,22,24,24,24,24,24,25,25,33,21,21,22,22,22,23,25,21,21,22,23,24,24,46,27,27,27,27,27,27,28,28,28,28,28,28,29,29,29,29,29,29,30,30,30,30,30,30,31,31,31,31,31,31,32,32,32,32,32,32,33,33,33,33,33,33,34,34,34,34,34,34,35,35,35,35,35,35,36,36,36,36,36,36,37,37,37,37,37,37,38,38,38,38,38,38,8,30,30,34,34,35,38,40,6,30,31,31,32,33,34,35,36,36,37,38,38,27,27,28,28,30,30,30,31,32,32,33,33,34,34,34,35,35,35,36,36,37,37,38,40,52,26,27,27,28,28,29,29,29,31,31,31,32,32,33,33,33,34,35,35,35,35,36,36,36,37,37,37,38,38,38,3,27,29,30,32,33,34,35,35,35,36,36,37,37,38,11,27,27,28,28,29,29,30,30,30,31,31,33,33,33,34,34,34,35,35,36,36,36,37,37,38,38,23,26,28,29,30,30,31,32,34,34,35,36,36,37,38,27,27,28,29,29,30,30,31,31,31,32,33,33,33,35,36,37,37,38,27,27,27,28,28,29,30,30,31,31,32,32,33,33,34,34,34,36,36,37,37,37,38,38,38,2,22,26,27,27,28,28,29,29,29,30,30,30,31,31,31,31,32,32,32,32,32,33,33,33,34,34,34,35,35,35,35,35,37,37,37,38,38,38,38,53,26,27,28,28,29,29,30,30,30,31,31,31,32,32,33,33,33,34,34,34,35,35,36,38,28,28,29,34,35,34,27,41,41,41,41,41,41,42,42,42,42,42,42,43,43,43,43,43,43,40,40,40,40,42,42,42,42,43,43,43,40,40,40,40,40,40,41,41,41,41,43,43,43,43,43,43,44,40,40,40,40,41,41,41,41,42,42,42,42,42,42,45,45,47,48,48,50,51,52,53,53,54,44,44,48,49,50,52,52,53,54,44,44,45,47,48,48,48,49,50,50,51,51,51,52,52,53,54,54,44,44,45,48,48,49,50,50,51,51,52,53,53,54,3,5,14,44,45,46,49,49,49,50,50,51,52,53,54,54,45,46,47,48,52,54,20,53,29,45,46,47,48,52,54,29,45,46,47,48,49,50,53,5,21,36,48,49,50,54,5,45,45,48,48,49,50,52,53,53],"Weekday":["Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Friday","Sunday","Friday","Sunday","Friday","Sunday","Friday","Sunday","Friday","Sunday","Friday","Monday","Sunday","Friday","Sunday","Wednesday","Sunday","Wednesday","Sunday","Wednesday","Sunday","Wednesday","Sunday","Wednesday","Sunday","Wednesday","Tuesday","Sunday","Monday","Friday","Saturday","Sunday","Monday","Friday","Saturday","Sunday","Monday","Friday","Saturday","Sunday","Monday","Friday","Saturday","Sunday","Monday","Friday","Saturday","Sunday","Monday","Friday","Saturday","Sunday","Tuesday","Wednesday","Friday","Saturday","Sunday","Tuesday","Wednesday","Friday","Saturday","Sunday","Tuesday","Wednesday","Friday","Saturday","Sunday","Tuesday","Wednesday","Friday","Saturday","Sunday","Tuesday","Wednesday","Friday","Saturday","Sunday","Tuesday","Wednesday","Friday","Saturday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Friday","Sunday","Friday","Sunday","Friday","Sunday","Friday","Sunday","Friday","Sunday","Friday","Wednesday","Sunday","Wednesday","Friday","Saturday","Sunday","Wednesday","Friday","Saturday","Sunday","Wednesday","Friday","Saturday","Sunday","Wednesday","Friday","Saturday","Sunday","Wednesday","Friday","Saturday","Sunday","Wednesday","Friday","Saturday","Sunday","Sunday","Sunday","Sunday","Sunday","Sunday","Sunday","Sunday","Sunday","Sunday","Sunday","Tuesday","Tuesday","Wednesday","Tuesday","Wednesday","Tuesday","Friday","Friday","Tuesday","Wednesday","Friday","Monday","Tuesday","Friday","Tuesday","Wednesday","Friday","Tuesday","Wednesday","Tuesday","Wednesday","Wednesday","Friday","Tuesday","Wednesday","Friday","Monday","Tuesday","Friday","Wednesday","Wednesday","Friday","Tuesday","Wednesday","Wednesday","Friday","Tuesday","Wednesday","Friday","Wednesday","Friday","Wednesday","Friday","Sunday","Wednesday","Sunday","Tuesday","Wednesday","Tuesday","Wednesday","Friday","Wednesday","Friday","Wednesday","Tuesday","Wednesday","Sunday","Tuesday","Wednesday","Tuesday","Wednesday","Sunday","Tuesday","Wednesday","Sunday","Sunday","Tuesday","Wednesday","Sunday","Tuesday","Tuesday","Wednesday","Tuesday","Wednesday","Saturday","Sunday","Tuesday","Wednesday","Sunday","Wednesday","Tuesday","Wednesday","Sunday","Tuesday","Wednesday","Sunday","Tuesday","Friday","Saturday","Tuesday","Saturday","Tuesday","Friday","Saturday","Tuesday","Saturday","Tuesday","Friday","Saturday","Friday","Wednesday","Saturday","Wednesday","Friday","Friday","Tuesday","Saturday","Wednesday","Saturday","Saturday","Tuesday","Tuesday","Friday","Tuesday","Tuesday","Friday","Tuesday","Friday","Friday","Tuesday","Friday","Friday","Friday","Tuesday","Wednesday","Friday","Wednesday","Wednesday","Friday","Wednesday","Sunday","Friday","Wednesday","Friday","Sunday","Wednesday","Friday","Sunday","Friday","Sunday","Wednesday","Friday","Wednesday","Friday","Wednesday","Wednesday","Monday","Sunday","Saturday","Sunday","Tuesday","Saturday","Sunday","Saturday","Sunday","Tuesday","Saturday","Sunday","Saturday","Sunday","Saturday","Sunday","Friday","Sunday","Sunday","Sunday","Friday","Sunday","Saturday","Tuesday","Friday","Monday","Tuesday","Saturday","Tuesday","Friday","Saturday","Sunday","Friday","Tuesday","Wednesday","Friday","Tuesday","Friday","Sunday","Tuesday","Wednesday","Tuesday","Friday","Tuesday","Tuesday","Tuesday","Wednesday","Saturday","Sunday","Friday","Sunday","Sunday","Friday","Sunday","Friday","Sunday","Friday","Sunday","Friday","Sunday","Friday","Sunday","Wednesday","Sunday","Sunday","Sunday","Sunday","Saturday","Saturday","Saturday","Saturday","Saturday","Saturday","Friday","Wednesday","Saturday","Saturday","Saturday","Tuesday","Tuesday","Wednesday","Tuesday","Tuesday","Wednesday","Tuesday","Wednesday","Tuesday","Wednesday","Wednesday","Wednesday","Tuesday","Wednesday","Tuesday","Wednesday","Tuesday","Saturday","Sunday","Saturday","Saturday","Saturday","Saturday","Saturday","Saturday","Saturday","Friday","Tuesday","Tuesday","Monday","Tuesday","Friday","Saturday","Sunday","Monday","Tuesday","Sunday","Friday","Sunday","Tuesday","Friday","Tuesday","Friday","Sunday","Tuesday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Saturday","Tuesday","Saturday","Friday","Sunday","Tuesday","Sunday","Tuesday","Friday","Sunday","Tuesday","Sunday","Monday","Sunday","Saturday","Sunday","Saturday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Tuesday","Sunday","Tuesday","Sunday","Monday","Tuesday","Sunday","Wednesday","Wednesday","Sunday","Sunday","Wednesday","Sunday","Sunday","Sunday","Sunday","Sunday","Wednesday","Wednesday","Sunday","Wednesday","Monday","Friday","Monday","Friday","Monday","Tuesday","Friday","Friday","Monday","Friday","Monday","Friday","Monday","Tuesday","Friday","Monday","Tuesday","Friday","Monday","Friday","Monday","Friday","Friday","Friday","Tuesday","Sunday","Sunday","Friday","Sunday","Friday","Sunday","Tuesday","Friday","Sunday","Tuesday","Saturday","Sunday","Friday","Sunday","Tuesday","Friday","Friday","Sunday","Tuesday","Friday","Saturday","Sunday","Friday","Saturday","Sunday","Tuesday","Friday","Sunday","Friday","Saturday","Wednesday","Friday","Friday","Friday","Friday","Friday","Monday","Monday","Tuesday","Friday","Friday","Saturday","Monday","Friday","Friday","Sunday","Sunday","Friday","Sunday","Friday","Sunday","Friday","Sunday","Wednesday","Friday","Sunday","Friday","Sunday","Wednesday","Friday","Sunday","Wednesday","Friday","Sunday","Friday","Sunday","Wednesday","Friday","Sunday","Wednesday","Sunday","Friday","Friday","Saturday","Saturday","Saturday","Friday","Saturday","Saturday","Sunday","Friday","Saturday","Friday","Friday","Saturday","Saturday","Friday","Monday","Friday","Friday","Tuesday","Friday","Tuesday","Friday","Monday","Tuesday","Friday","Friday","Monday","Tuesday","Friday","Friday","Friday","Tuesday","Friday","Friday","Sunday","Monday","Tuesday","Tuesday","Saturday","Tuesday","Tuesday","Wednesday","Tuesday","Friday","Tuesday","Friday","Tuesday","Friday","Monday","Tuesday","Saturday","Tuesday","Friday","Monday","Tuesday","Friday","Tuesday","Friday","Saturday","Sunday","Friday","Sunday","Sunday","Saturday","Sunday","Monday","Sunday","Tuesday","Wednesday","Sunday","Wednesday","Saturday","Sunday","Wednesday","Friday","Saturday","Sunday","Monday","Wednesday","Friday","Saturday","Sunday","Wednesday","Friday","Sunday","Wednesday","Saturday","Sunday","Monday","Wednesday","Friday","Saturday","Sunday","Wednesday","Saturday","Sunday","Wednesday","Friday","Saturday","Wednesday","Saturday","Monday","Monday","Saturday","Monday","Saturday","Monday","Tuesday","Saturday","Monday","Tuesday","Saturday","Monday","Tuesday","Monday","Friday","Saturday","Monday","Tuesday","Saturday","Monday","Friday","Saturday","Tuesday","Wednesday","Saturday","Saturday","Saturday","Saturday","Tuesday","Wednesday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Monday","Wednesday","Friday","Saturday","Monday","Tuesday","Wednesday","Saturday","Monday","Wednesday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Wednesday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Friday","Sunday","Monday","Friday","Saturday","Monday","Tuesday","Wednesday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Friday","Wednesday","Friday","Tuesday","Tuesday","Friday","Tuesday","Tuesday","Friday","Tuesday","Friday","Friday","Wednesday","Friday","Friday","Monday","Friday","Monday","Friday","Friday","Friday","Sunday","Saturday","Friday","Friday","Sunday","Friday","Saturday","Saturday","Sunday","Friday","Sunday","Friday","Saturday","Friday","Saturday","Saturday","Sunday","Friday","Tuesday","Wednesday","Wednesday","Tuesday","Wednesday","Wednesday","Tuesday","Wednesday","Tuesday","Wednesday","Wednesday","Tuesday","Wednesday","Wednesday","Tuesday","Monday","Sunday","Sunday","Sunday","Sunday","Sunday","Monday","Wednesday","Sunday","Monday","Sunday","Sunday","Monday","Sunday","Monday","Wednesday","Wednesday","Tuesday","Wednesday","Tuesday","Tuesday","Friday","Monday","Tuesday","Friday","Friday","Friday","Friday","Friday","Friday","Tuesday","Wednesday","Wednesday","Wednesday","Wednesday","Wednesday","Wednesday","Wednesday","Monday","Saturday","Wednesday","Monday","Monday","Monday","Monday","Monday","Monday","Friday","Monday","Friday","Monday","Monday","Monday","Monday","Friday"],"Weight":[5,2,3,4,6,5,2,3,4,6,5,2,3,4,6,5,2,3,4,6,5,2,3,4,6,5,2,3,4,6,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,2,2,2,2,2,2,2,2,2,2,2,5,2,2,2,3,4,3,4,3,4,3,4,3,4,3,4,2,4,2,2,2,4,2,2,2,4,2,2,2,4,2,2,2,4,2,2,2,4,2,2,2,3,3,2,7,4,3,3,2,7,4,3,3,2,7,4,3,3,2,7,4,3,3,2,7,4,3,3,2,7,4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,5,2,5,2,5,2,5,2,5,2,5,2,3,4,3,2,2,4,3,5,2,4,3,2,2,4,3,2,2,4,3,2,2,4,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,5,3,2,2,2,3,2,2,2,5,2,4,2,2,2,2,2,2,2,2,2,2,2,2,2,4,2,2,4,2,3,2,3,2,5,2,3,2,2,5,3,2,4,2,4,3,4,2,4,2,3,2,4,3,5,3,2,4,3,2,2,4,3,2,3,4,5,3,3,2,2,3,3,2,3,3,5,2,3,2,2,3,2,4,3,4,3,2,3,3,3,3,3,4,2,2,4,2,2,2,3,2,2,2,4,2,2,5,3,3,5,2,3,5,2,2,2,5,2,2,3,2,2,3,2,2,3,2,3,2,2,3,2,2,2,2,3,2,3,2,2,2,2,2,5,3,3,4,2,2,2,3,2,2,2,2,2,2,7,7,2,2,2,3,2,2,2,2,2,2,3,3,2,2,2,2,2,2,3,2,2,2,2,3,2,2,2,2,2,3,2,3,3,3,3,3,3,2,3,2,3,2,3,2,3,3,2,3,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,2,6,2,3,2,2,2,8,2,4,2,2,2,2,4,4,2,4,2,2,2,2,3,2,2,2,2,3,2,2,2,2,2,2,2,2,5,2,2,2,2,2,3,2,3,2,4,2,5,2,5,2,2,2,2,2,4,4,2,4,3,2,2,2,2,2,6,2,6,4,4,4,6,2,5,4,4,4,6,2,6,4,4,3,6,2,5,4,4,4,6,2,6,4,4,3,6,2,5,4,4,4,6,2,5,4,4,3,5,2,6,4,4,4,6,2,6,4,4,3,6,2,6,4,4,4,6,2,5,4,4,4,6,2,6,4,4,4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,2,2,2,3,2,2,2,3,2,3,2,2,2,2,2,2,2,2,2,2,2,2,3,2,2,2,2,2,2,2,2,2,2,2,3,4,3,3,2,3,2,2,2,2,3,4,3,3,4,2,3,2,2,2,4,2,2,3,2,5,3,3,2,3,4,4,2,2,2,4,3,4,2,2,2,3,3,2,2,3,3,4,3,2,2,3,2,2,2,2,4,2,3,2,2,3,3,2,3,3,3,2,3,3,2,2,3,2,2,3,3,2,2,2,2,2,2,3,2,3,2,2,2,2,2,3,3,2,3,3,2,2,2,4,2,2,5,5,3,10,2,3,2,6,5,2,5,2,3,2,2,4,4,8,2,2,2,2,2,6,2,5,2,5,2,2,7,2,4,4,2,3,4,9,2,2,3,2,6,2,2,3,3,2,4,2,2,3,3,5,2,2,4,2,3,3,3,2,3,3,2,3,2,2,2,2,3,2,2,3,2,3,2,2,5,2,2,4,2,2,2,2,2,2,2,2,2,2,8,10,2,2,5,13,3,6,3,5,2,3,3,10,2,4,2,9,9,7,5,5,6,4,5,3,11,7,4,2,8,7,2,2,4,2,8,4,5,2,8,3,5,7,3,2,5,5,3,2,6,2,4,2,6,5,5,3,5,3,2,2,3,3,2,3,3,2,3,2,2,2,2,4,2,3,2,3,3,4,3,3,2,2,3,2,3,3,3,2,3,2,3,2,3,3,3,2,2,2,2,2,3,3,2,2,2,2,2,2,2,2,2,3,2,2,2,2,2,3,2,2,3,2,2,3,2,3,2,2,2,3,2,2,3,4,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,2,2,3,2,2,5,2,2,2,2,2,2,3,2,2,2,2]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":false},"physics":{"stabilization":false}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","igraphlayout":{"type":"square"}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</div>
+<div id="tabset-8-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">visNetwork</span>(GAStech_nodes,</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>           GAStech_edges_aggregated) <span class="sc">%&gt;%</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visIgraphLayout</span>(<span class="at">layout =</span> <span class="st">"layout_with_fr"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="with-visual-attributes-and-interactivity" class="level3">
+<h3 class="anchored" data-anchor-id="with-visual-attributes-and-interactivity">With visual attributes and interactivity</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-9-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-1" role="tab" aria-controls="tabset-9-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-2" role="tab" aria-controls="tabset-9-2" aria-selected="false" href="">The code chunk</a></li></ul>
+<div class="tab-content">
+<div id="tabset-9-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-9-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div class="visNetwork html-widget html-fill-item" id="htmlwidget-be7ca9e9b3760f0d3e18" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-be7ca9e9b3760f0d3e18">{"x":{"nodes":{"id":[1,2,3,4,5,6,7,44,45,46,8,9,10,11,12,13,14,15,16,21,26,17,18,19,20,39,40,41,42,43,27,28,29,47,48,49,50,22,51,52,53,54,23,24,25,30,31,32,33,34,35,36,37,38],"label":["Mat.Bramar","Anda.Ribera","Rachel.Pantanal","Linda.Lagos","Ruscella.Mies.Haber","Carla.Forluniau","Cornelia.Lais","Kanon.Herrero","Varja.Lagos","Stenig.Fusil","Marin.Onda","Axel.Calzas","Brand.Tempestad","Elsa.Orilla","Isande.Borrasca","Kare.Orilla","Felix.Balas","Lars.Azada","Lidelse.Dedos","Willem.Vasco-Pais","Bertrand.Ovan","Adra.Nubarron","Birgitta.Frente","Gustav.Cazar","Vira.Frente","Linnea.Bergen","Lucas.Alcazar","Isak.Baza","Nils.Calixto","Sven.Flecha","Emile.Arpa","Varro.Awelon","Dante.Coginian","Edvard.Vann","Hennie.Osvaldo","Isia.Vann","Minke.Mies","Sten.Sanjorge.Jr","Felix.Resumir","Hideki.Cocinaro","Inga.Ferro","Loreto.Bodrogi","Ingrid.Barranco","Ada.Campo-Corrente","Orhan.Strum","Adan.Morlun","Albina.Hafon","Benito.Hawelon","Cecilia.Morluniau","Claudio.Hawelon","Dylan.Scozzese","Henk.Mies","Irene.Nant","Valeria.Morlun"],"group":["Administration","Administration","Administration","Administration","Administration","Administration","Administration","Security","Security","Security","Engineering","Engineering","Engineering","Engineering","Engineering","Engineering","Engineering","Engineering","Engineering","Executive","Facilities","Engineering","Engineering","Engineering","Engineering","Information Technology","Information Technology","Information Technology","Information Technology","Information Technology","Facilities","Facilities","Facilities","Security","Security","Security","Security","Executive","Security","Security","Security","Security","Executive","Executive","Executive","Facilities","Facilities","Facilities","Facilities","Facilities","Facilities","Facilities","Facilities","Facilities"],"Title":["Assistant to CEO","Assistant to CFO","Assistant to CIO","Assistant to COO","Assistant to Engineering Group Manager","Assistant to IT Group Manager","Assistant to Security Group Manager","Badging Office","Badging Office","Building Control","Drill Site Manager","Drill Technician","Drill Technician","Drill Technician","Drill Technician","Drill Technician","Engineer","Engineer","Engineering Group Manager","Environmental Safety Advisor","Facilities Group Manager","Geologist","Geologist","Hydraulic Technician","Hydraulic Technician","IT Group Manager","IT Helpdesk","IT Technician","IT Technician","IT Technician","Janitor","Janitor","Lead Janitor","Perimeter Control","Perimeter Control","Perimeter Control","Perimeter Control","President/CEO","Security Group Manager","Site Control","Site Control","Site Control","SVP/CFO","SVP/CIO","SVP/COO","Truck Driver","Truck Driver","Truck Driver","Truck Driver","Truck Driver","Truck Driver","Truck Driver","Truck Driver","Truck Driver"],"x":[-0.01554841321081435,-0.3402576510805596,-0.4257812896048634,-0.4670662770107886,-0.03199975803660138,-0.6039074938983854,-0.287609455634808,0.3954532994596973,0.4053425426546184,-0.04163429629423565,0.6302868980186531,0.9228314336850452,0.8329920413175644,0.6547754759292579,0.6792011788943981,0.4996711865566752,0.7883489513737654,0.6221892977188475,1,-0.7997429003509169,-0.576091965685492,0.935722138797594,0.5235099832835775,0.8407307568795375,0.9066268534850108,0.06656146503224747,0.1462212672593337,0.305308296795568,0.3553655198362207,0.454460215613784,-0.2228394775873969,-0.856394978518235,-0.3813432818051485,0.5459208551283186,0.2263600958987686,0.2361479863359504,0.5561009842823788,-1,0.1653139818987059,-0.04312126145182904,-0.09678105703789108,0.06889547532879359,-0.8501321821544958,-0.9533063808189994,-0.6985026412762689,-0.5078679249211009,-0.8179627384807788,-0.3365547277876411,-0.8363911897637618,-0.4837467705769938,-0.6713683088202455,-0.5641412081998873,-0.6768049132624222,-0.7162449989597033],"y":[-0.01287210131628458,-0.1477517800559408,-0.5528521099472703,-0.3689965886671587,0.01893233974811359,-0.2255657442392904,-0.3757827399930411,-0.4455006198876214,-0.8403133046159824,-0.9731519202571774,0.4515239667741675,-0.01258670115158855,0.1696360554537386,0.2879603274616587,0.08771817777515012,0.2444876691804883,-0.08636872159250597,-0.1202440784085703,0.1310355315342908,-0.6099835183380617,0.518567455962361,0.3099207881681558,0.0355594686058065,0.4324506910146317,-0.212499079516321,0.7916394070023718,0.9383048684042183,1,0.6997130546396497,0.8925692786407806,0.7642171199385832,0.2764878724085056,0.3574723624979848,-0.800416622435142,-0.7242992167435438,-1,-0.6107465017544291,-0.2645628599116692,-0.576767071362004,-0.7060069415007122,-0.5700287978119833,-0.8638292714253277,-0.1453448222588499,-0.4620879202133948,-0.7536858533895946,0.6524469931510726,0.4452541915186157,0.5656244335290903,0.583236516548296,0.7910783559466674,0.6155959002136322,0.305703165524267,0.7681754875312308,0.3113919164969803]},"edges":{"from":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,13,13,13,13,13,13,13,13,13,13,13,13,13,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,18,18,18,18,18,18,18,18,18,18,18,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,20,20,20,20,20,20,20,20,20,20,21,21,21,21,21,21,22,22,22,22,22,22,22,22,22,22,23,23,23,23,23,23,23,23,23,23,23,23,23,24,24,24,24,24,24,24,25,25,25,25,25,25,25,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,27,27,27,27,27,27,27,27,28,28,28,28,28,28,28,28,28,28,28,28,28,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,38,38,38,38,38,39,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,41,41,41,41,41,41,41,41,41,41,41,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,43,43,43,43,43,43,43,43,43,43,43,43,43,44,44,44,44,44,44,44,44,44,44,44,44,45,45,45,45,45,45,45,45,45,46,46,46,46,46,46,46,46,46,46,46,46,46,46,46,46,46,46,47,47,47,47,47,47,47,47,47,47,47,47,47,47,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,49,49,49,49,49,49,50,50,51,51,51,51,51,51,51,52,52,52,52,52,52,52,52,53,53,53,53,53,53,53,54,54,54,54,54,54,54,54,54,54],"to":[2,2,2,2,2,3,3,3,3,3,4,4,4,4,4,5,5,5,5,5,6,6,6,6,6,7,7,7,7,7,8,8,8,8,8,9,9,9,9,9,10,10,10,10,10,11,11,11,11,11,12,12,12,12,12,13,13,13,13,13,14,14,14,14,14,15,15,15,15,15,16,16,16,16,16,17,17,17,17,17,18,18,18,18,18,19,19,19,19,19,20,20,20,20,20,21,21,21,21,21,22,22,22,22,22,23,23,23,23,23,24,24,24,24,24,25,25,25,25,25,26,26,26,26,26,27,27,27,27,27,28,28,28,28,28,29,29,29,29,29,29,30,30,30,30,30,31,31,31,31,31,32,32,32,32,32,33,33,33,33,33,34,34,34,34,34,35,35,35,35,35,36,36,36,36,36,37,37,37,37,37,38,38,38,38,38,39,39,39,39,39,40,40,40,40,40,41,41,41,41,41,42,42,42,42,42,43,43,43,43,43,44,44,44,44,44,45,45,45,45,45,46,46,46,46,46,47,47,47,47,47,48,48,48,48,48,49,49,49,49,49,50,50,50,50,50,51,51,51,51,51,52,52,52,52,52,53,53,53,53,53,54,54,54,54,54,1,1,3,3,4,4,5,5,6,6,7,7,15,36,38,1,1,2,2,4,4,5,5,6,6,7,7,48,1,1,1,1,2,2,2,2,3,3,3,3,5,5,5,5,6,6,6,6,7,7,7,7,1,1,1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,4,4,6,6,6,6,6,7,7,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,11,11,11,11,12,12,12,12,13,13,13,13,14,14,14,14,15,15,15,15,16,16,16,16,17,17,17,17,18,18,18,18,19,19,19,19,20,20,20,20,21,21,21,21,22,22,22,22,23,23,23,23,24,24,24,24,25,25,25,25,26,26,26,26,27,27,27,27,28,28,28,28,29,29,29,29,30,30,30,30,31,31,31,31,32,32,32,32,33,33,33,33,34,34,34,34,35,35,35,35,36,36,36,36,37,37,37,37,38,38,38,38,39,39,39,39,40,40,40,40,41,41,41,41,42,42,42,42,43,43,43,43,44,44,44,44,45,45,45,45,46,46,46,46,47,47,47,47,48,48,48,48,48,49,49,49,49,49,50,50,50,50,50,51,51,51,51,52,52,52,52,53,53,53,53,53,54,54,54,54,54,1,1,2,2,3,3,4,4,5,5,7,7,28,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,9,10,11,12,13,14,16,17,18,19,20,27,8,8,10,10,11,11,12,13,13,13,14,14,14,15,15,15,16,16,17,17,18,18,19,19,19,20,20,20,45,8,8,9,9,11,11,12,12,12,13,13,14,14,15,15,16,16,16,17,17,17,18,18,19,20,20,8,8,8,9,9,10,10,10,12,13,13,13,14,14,15,15,16,16,16,17,17,17,18,18,19,19,20,20,20,32,8,8,8,9,9,10,10,10,11,11,13,13,13,14,15,15,16,16,17,18,18,19,19,20,52,8,8,9,10,10,11,11,12,14,14,16,17,19,8,8,9,10,10,11,12,12,13,13,15,15,15,16,16,17,17,17,18,18,19,20,2,8,8,9,9,9,10,10,11,11,11,12,12,13,13,14,14,16,17,18,18,20,20,8,8,9,9,9,10,10,11,12,12,13,13,13,14,14,15,15,15,17,17,18,19,20,20,20,8,8,9,10,10,11,11,12,12,13,13,14,14,15,15,16,18,19,20,8,9,10,11,12,13,14,15,15,19,20,8,9,9,10,11,11,12,12,13,13,14,15,16,16,17,18,20,8,9,9,10,11,12,13,15,16,50,22,24,25,25,25,53,21,21,21,23,23,24,24,24,25,36,13,21,22,22,22,24,24,24,24,24,25,25,33,21,21,22,22,22,23,25,21,21,22,23,24,24,46,27,27,27,27,27,27,28,28,28,28,28,28,29,29,29,29,29,29,30,30,30,30,30,30,31,31,31,31,31,31,32,32,32,32,32,32,33,33,33,33,33,33,34,34,34,34,34,34,35,35,35,35,35,35,36,36,36,36,36,36,37,37,37,37,37,37,38,38,38,38,38,38,8,30,30,34,34,35,38,40,6,30,31,31,32,33,34,35,36,36,37,38,38,27,27,28,28,30,30,30,31,32,32,33,33,34,34,34,35,35,35,36,36,37,37,38,40,52,26,27,27,28,28,29,29,29,31,31,31,32,32,33,33,33,34,35,35,35,35,36,36,36,37,37,37,38,38,38,3,27,29,30,32,33,34,35,35,35,36,36,37,37,38,11,27,27,28,28,29,29,30,30,30,31,31,33,33,33,34,34,34,35,35,36,36,36,37,37,38,38,23,26,28,29,30,30,31,32,34,34,35,36,36,37,38,27,27,28,29,29,30,30,31,31,31,32,33,33,33,35,36,37,37,38,27,27,27,28,28,29,30,30,31,31,32,32,33,33,34,34,34,36,36,37,37,37,38,38,38,2,22,26,27,27,28,28,29,29,29,30,30,30,31,31,31,31,32,32,32,32,32,33,33,33,34,34,34,35,35,35,35,35,37,37,37,38,38,38,38,53,26,27,28,28,29,29,30,30,30,31,31,31,32,32,33,33,33,34,34,34,35,35,36,38,28,28,29,34,35,34,27,41,41,41,41,41,41,42,42,42,42,42,42,43,43,43,43,43,43,40,40,40,40,42,42,42,42,43,43,43,40,40,40,40,40,40,41,41,41,41,43,43,43,43,43,43,44,40,40,40,40,41,41,41,41,42,42,42,42,42,42,45,45,47,48,48,50,51,52,53,53,54,44,44,48,49,50,52,52,53,54,44,44,45,47,48,48,48,49,50,50,51,51,51,52,52,53,54,54,44,44,45,48,48,49,50,50,51,51,52,53,53,54,3,5,14,44,45,46,49,49,49,50,50,51,52,53,54,54,45,46,47,48,52,54,20,53,29,45,46,47,48,52,54,29,45,46,47,48,49,50,53,5,21,36,48,49,50,54,5,45,45,48,48,49,50,52,53,53],"Weekday":["Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Friday","Sunday","Friday","Sunday","Friday","Sunday","Friday","Sunday","Friday","Sunday","Friday","Monday","Sunday","Friday","Sunday","Wednesday","Sunday","Wednesday","Sunday","Wednesday","Sunday","Wednesday","Sunday","Wednesday","Sunday","Wednesday","Tuesday","Sunday","Monday","Friday","Saturday","Sunday","Monday","Friday","Saturday","Sunday","Monday","Friday","Saturday","Sunday","Monday","Friday","Saturday","Sunday","Monday","Friday","Saturday","Sunday","Monday","Friday","Saturday","Sunday","Tuesday","Wednesday","Friday","Saturday","Sunday","Tuesday","Wednesday","Friday","Saturday","Sunday","Tuesday","Wednesday","Friday","Saturday","Sunday","Tuesday","Wednesday","Friday","Saturday","Sunday","Tuesday","Wednesday","Friday","Saturday","Sunday","Tuesday","Wednesday","Friday","Saturday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Sunday","Friday","Sunday","Friday","Sunday","Friday","Sunday","Friday","Sunday","Friday","Sunday","Friday","Wednesday","Sunday","Wednesday","Friday","Saturday","Sunday","Wednesday","Friday","Saturday","Sunday","Wednesday","Friday","Saturday","Sunday","Wednesday","Friday","Saturday","Sunday","Wednesday","Friday","Saturday","Sunday","Wednesday","Friday","Saturday","Sunday","Sunday","Sunday","Sunday","Sunday","Sunday","Sunday","Sunday","Sunday","Sunday","Sunday","Tuesday","Tuesday","Wednesday","Tuesday","Wednesday","Tuesday","Friday","Friday","Tuesday","Wednesday","Friday","Monday","Tuesday","Friday","Tuesday","Wednesday","Friday","Tuesday","Wednesday","Tuesday","Wednesday","Wednesday","Friday","Tuesday","Wednesday","Friday","Monday","Tuesday","Friday","Wednesday","Wednesday","Friday","Tuesday","Wednesday","Wednesday","Friday","Tuesday","Wednesday","Friday","Wednesday","Friday","Wednesday","Friday","Sunday","Wednesday","Sunday","Tuesday","Wednesday","Tuesday","Wednesday","Friday","Wednesday","Friday","Wednesday","Tuesday","Wednesday","Sunday","Tuesday","Wednesday","Tuesday","Wednesday","Sunday","Tuesday","Wednesday","Sunday","Sunday","Tuesday","Wednesday","Sunday","Tuesday","Tuesday","Wednesday","Tuesday","Wednesday","Saturday","Sunday","Tuesday","Wednesday","Sunday","Wednesday","Tuesday","Wednesday","Sunday","Tuesday","Wednesday","Sunday","Tuesday","Friday","Saturday","Tuesday","Saturday","Tuesday","Friday","Saturday","Tuesday","Saturday","Tuesday","Friday","Saturday","Friday","Wednesday","Saturday","Wednesday","Friday","Friday","Tuesday","Saturday","Wednesday","Saturday","Saturday","Tuesday","Tuesday","Friday","Tuesday","Tuesday","Friday","Tuesday","Friday","Friday","Tuesday","Friday","Friday","Friday","Tuesday","Wednesday","Friday","Wednesday","Wednesday","Friday","Wednesday","Sunday","Friday","Wednesday","Friday","Sunday","Wednesday","Friday","Sunday","Friday","Sunday","Wednesday","Friday","Wednesday","Friday","Wednesday","Wednesday","Monday","Sunday","Saturday","Sunday","Tuesday","Saturday","Sunday","Saturday","Sunday","Tuesday","Saturday","Sunday","Saturday","Sunday","Saturday","Sunday","Friday","Sunday","Sunday","Sunday","Friday","Sunday","Saturday","Tuesday","Friday","Monday","Tuesday","Saturday","Tuesday","Friday","Saturday","Sunday","Friday","Tuesday","Wednesday","Friday","Tuesday","Friday","Sunday","Tuesday","Wednesday","Tuesday","Friday","Tuesday","Tuesday","Tuesday","Wednesday","Saturday","Sunday","Friday","Sunday","Sunday","Friday","Sunday","Friday","Sunday","Friday","Sunday","Friday","Sunday","Friday","Sunday","Wednesday","Sunday","Sunday","Sunday","Sunday","Saturday","Saturday","Saturday","Saturday","Saturday","Saturday","Friday","Wednesday","Saturday","Saturday","Saturday","Tuesday","Tuesday","Wednesday","Tuesday","Tuesday","Wednesday","Tuesday","Wednesday","Tuesday","Wednesday","Wednesday","Wednesday","Tuesday","Wednesday","Tuesday","Wednesday","Tuesday","Saturday","Sunday","Saturday","Saturday","Saturday","Saturday","Saturday","Saturday","Saturday","Friday","Tuesday","Tuesday","Monday","Tuesday","Friday","Saturday","Sunday","Monday","Tuesday","Sunday","Friday","Sunday","Tuesday","Friday","Tuesday","Friday","Sunday","Tuesday","Tuesday","Wednesday","Friday","Sunday","Tuesday","Wednesday","Friday","Saturday","Tuesday","Saturday","Friday","Sunday","Tuesday","Sunday","Tuesday","Friday","Sunday","Tuesday","Sunday","Monday","Sunday","Saturday","Sunday","Saturday","Friday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Tuesday","Sunday","Tuesday","Sunday","Monday","Tuesday","Sunday","Wednesday","Wednesday","Sunday","Sunday","Wednesday","Sunday","Sunday","Sunday","Sunday","Sunday","Wednesday","Wednesday","Sunday","Wednesday","Monday","Friday","Monday","Friday","Monday","Tuesday","Friday","Friday","Monday","Friday","Monday","Friday","Monday","Tuesday","Friday","Monday","Tuesday","Friday","Monday","Friday","Monday","Friday","Friday","Friday","Tuesday","Sunday","Sunday","Friday","Sunday","Friday","Sunday","Tuesday","Friday","Sunday","Tuesday","Saturday","Sunday","Friday","Sunday","Tuesday","Friday","Friday","Sunday","Tuesday","Friday","Saturday","Sunday","Friday","Saturday","Sunday","Tuesday","Friday","Sunday","Friday","Saturday","Wednesday","Friday","Friday","Friday","Friday","Friday","Monday","Monday","Tuesday","Friday","Friday","Saturday","Monday","Friday","Friday","Sunday","Sunday","Friday","Sunday","Friday","Sunday","Friday","Sunday","Wednesday","Friday","Sunday","Friday","Sunday","Wednesday","Friday","Sunday","Wednesday","Friday","Sunday","Friday","Sunday","Wednesday","Friday","Sunday","Wednesday","Sunday","Friday","Friday","Saturday","Saturday","Saturday","Friday","Saturday","Saturday","Sunday","Friday","Saturday","Friday","Friday","Saturday","Saturday","Friday","Monday","Friday","Friday","Tuesday","Friday","Tuesday","Friday","Monday","Tuesday","Friday","Friday","Monday","Tuesday","Friday","Friday","Friday","Tuesday","Friday","Friday","Sunday","Monday","Tuesday","Tuesday","Saturday","Tuesday","Tuesday","Wednesday","Tuesday","Friday","Tuesday","Friday","Tuesday","Friday","Monday","Tuesday","Saturday","Tuesday","Friday","Monday","Tuesday","Friday","Tuesday","Friday","Saturday","Sunday","Friday","Sunday","Sunday","Saturday","Sunday","Monday","Sunday","Tuesday","Wednesday","Sunday","Wednesday","Saturday","Sunday","Wednesday","Friday","Saturday","Sunday","Monday","Wednesday","Friday","Saturday","Sunday","Wednesday","Friday","Sunday","Wednesday","Saturday","Sunday","Monday","Wednesday","Friday","Saturday","Sunday","Wednesday","Saturday","Sunday","Wednesday","Friday","Saturday","Wednesday","Saturday","Monday","Monday","Saturday","Monday","Saturday","Monday","Tuesday","Saturday","Monday","Tuesday","Saturday","Monday","Tuesday","Monday","Friday","Saturday","Monday","Tuesday","Saturday","Monday","Friday","Saturday","Tuesday","Wednesday","Saturday","Saturday","Saturday","Saturday","Tuesday","Wednesday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Monday","Wednesday","Friday","Saturday","Monday","Tuesday","Wednesday","Saturday","Monday","Wednesday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Sunday","Monday","Wednesday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Saturday","Friday","Sunday","Monday","Friday","Saturday","Monday","Tuesday","Wednesday","Saturday","Sunday","Monday","Tuesday","Wednesday","Friday","Friday","Wednesday","Friday","Tuesday","Tuesday","Friday","Tuesday","Tuesday","Friday","Tuesday","Friday","Friday","Wednesday","Friday","Friday","Monday","Friday","Monday","Friday","Friday","Friday","Sunday","Saturday","Friday","Friday","Sunday","Friday","Saturday","Saturday","Sunday","Friday","Sunday","Friday","Saturday","Friday","Saturday","Saturday","Sunday","Friday","Tuesday","Wednesday","Wednesday","Tuesday","Wednesday","Wednesday","Tuesday","Wednesday","Tuesday","Wednesday","Wednesday","Tuesday","Wednesday","Wednesday","Tuesday","Monday","Sunday","Sunday","Sunday","Sunday","Sunday","Monday","Wednesday","Sunday","Monday","Sunday","Sunday","Monday","Sunday","Monday","Wednesday","Wednesday","Tuesday","Wednesday","Tuesday","Tuesday","Friday","Monday","Tuesday","Friday","Friday","Friday","Friday","Friday","Friday","Tuesday","Wednesday","Wednesday","Wednesday","Wednesday","Wednesday","Wednesday","Wednesday","Monday","Saturday","Wednesday","Monday","Monday","Monday","Monday","Monday","Monday","Friday","Monday","Friday","Monday","Monday","Monday","Monday","Friday"],"Weight":[5,2,3,4,6,5,2,3,4,6,5,2,3,4,6,5,2,3,4,6,5,2,3,4,6,5,2,3,4,6,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,4,2,3,3,2,2,2,2,2,2,2,2,2,2,2,2,5,2,2,2,3,4,3,4,3,4,3,4,3,4,3,4,2,4,2,2,2,4,2,2,2,4,2,2,2,4,2,2,2,4,2,2,2,4,2,2,2,3,3,2,7,4,3,3,2,7,4,3,3,2,7,4,3,3,2,7,4,3,3,2,7,4,3,3,2,7,4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,5,2,5,2,5,2,5,2,5,2,5,2,3,4,3,2,2,4,3,5,2,4,3,2,2,4,3,2,2,4,3,2,2,4,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,5,3,2,2,2,3,2,2,2,5,2,4,2,2,2,2,2,2,2,2,2,2,2,2,2,4,2,2,4,2,3,2,3,2,5,2,3,2,2,5,3,2,4,2,4,3,4,2,4,2,3,2,4,3,5,3,2,4,3,2,2,4,3,2,3,4,5,3,3,2,2,3,3,2,3,3,5,2,3,2,2,3,2,4,3,4,3,2,3,3,3,3,3,4,2,2,4,2,2,2,3,2,2,2,4,2,2,5,3,3,5,2,3,5,2,2,2,5,2,2,3,2,2,3,2,2,3,2,3,2,2,3,2,2,2,2,3,2,3,2,2,2,2,2,5,3,3,4,2,2,2,3,2,2,2,2,2,2,7,7,2,2,2,3,2,2,2,2,2,2,3,3,2,2,2,2,2,2,3,2,2,2,2,3,2,2,2,2,2,3,2,3,3,3,3,3,3,2,3,2,3,2,3,2,3,3,2,3,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,2,6,2,3,2,2,2,8,2,4,2,2,2,2,4,4,2,4,2,2,2,2,3,2,2,2,2,3,2,2,2,2,2,2,2,2,5,2,2,2,2,2,3,2,3,2,4,2,5,2,5,2,2,2,2,2,4,4,2,4,3,2,2,2,2,2,6,2,6,4,4,4,6,2,5,4,4,4,6,2,6,4,4,3,6,2,5,4,4,4,6,2,6,4,4,3,6,2,5,4,4,4,6,2,5,4,4,3,5,2,6,4,4,4,6,2,6,4,4,3,6,2,6,4,4,4,6,2,5,4,4,4,6,2,6,4,4,4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,2,2,2,3,2,2,2,3,2,3,2,2,2,2,2,2,2,2,2,2,2,2,3,2,2,2,2,2,2,2,2,2,2,2,3,4,3,3,2,3,2,2,2,2,3,4,3,3,4,2,3,2,2,2,4,2,2,3,2,5,3,3,2,3,4,4,2,2,2,4,3,4,2,2,2,3,3,2,2,3,3,4,3,2,2,3,2,2,2,2,4,2,3,2,2,3,3,2,3,3,3,2,3,3,2,2,3,2,2,3,3,2,2,2,2,2,2,3,2,3,2,2,2,2,2,3,3,2,3,3,2,2,2,4,2,2,5,5,3,10,2,3,2,6,5,2,5,2,3,2,2,4,4,8,2,2,2,2,2,6,2,5,2,5,2,2,7,2,4,4,2,3,4,9,2,2,3,2,6,2,2,3,3,2,4,2,2,3,3,5,2,2,4,2,3,3,3,2,3,3,2,3,2,2,2,2,3,2,2,3,2,3,2,2,5,2,2,4,2,2,2,2,2,2,2,2,2,2,8,10,2,2,5,13,3,6,3,5,2,3,3,10,2,4,2,9,9,7,5,5,6,4,5,3,11,7,4,2,8,7,2,2,4,2,8,4,5,2,8,3,5,7,3,2,5,5,3,2,6,2,4,2,6,5,5,3,5,3,2,2,3,3,2,3,3,2,3,2,2,2,2,4,2,3,2,3,3,4,3,3,2,2,3,2,3,3,3,2,3,2,3,2,3,3,3,2,2,2,2,2,3,3,2,2,2,2,2,2,2,2,2,3,2,2,2,2,2,3,2,2,3,2,2,3,2,3,2,2,2,3,2,2,3,4,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,2,2,3,2,2,5,2,2,2,2,2,2,3,2,2,2,2]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":false},"physics":{"stabilization":false},"layout":{"randomSeed":123}},"groups":["Administration","Security","Engineering","Executive","Facilities","Information Technology"],"width":null,"height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","igraphlayout":{"type":"square"},"legend":{"width":0.2,"useGroups":true,"position":"left","ncol":1,"stepX":100,"stepY":100,"zoom":true}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</div>
+<div id="tabset-9-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>GAStech_nodes <span class="ot">&lt;-</span> GAStech_nodes <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">group =</span> Department)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">visNetwork</span>(GAStech_nodes,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>           GAStech_edges_aggregated) <span class="sc">%&gt;%</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visIgraphLayout</span>(<span class="at">layout =</span> <span class="st">"layout_with_fr"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visLegend</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visLayout</span>(<span class="at">randomSeed =</span> <span class="dv">123</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
