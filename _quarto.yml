@@ -6,6 +6,7 @@ project:
     - "Hands-on_Ex/*.qmd"
     - "In Class Exercise/*.qmd"
     - "Take Home Exercise 1/*.qmd"
+    - "Take Home Exercise 2/*.qmd"
 
 website:
   title: "Exploring Visual Analytics"
