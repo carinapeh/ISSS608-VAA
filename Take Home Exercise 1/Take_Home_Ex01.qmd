@@ -4,8 +4,8 @@ author: "Carina Peh"
 date: "May 17, 2026"
 date-modified: "last-modified"
 description: "Applying univariate and bivariate visual analytics techniques to explore key factors influencing profitability and volatility in a motor vehicle insurance portfolio."
-image: "Take_Home_Ex01_slides_files/figure-html/unnamed-chunk-1-1.png"
-  execute:
+image: takehomeex1_photo.png
+execute:
   eval: true
   echo: true
   warning: false

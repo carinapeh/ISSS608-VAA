@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Carina Peh">
+<meta name="dcterms.date" content="2026-05-23">
+<meta name="description" content="Building interactive web-enabled visual analytics applications using R Shiny, covering UI layout, server logic, and reactivity.">
 
-<title>Exploring Visual Analytics</title>
+<title>In-Class Exercise 6: Designing Web-enabled Visual Analytics Application with Shiny – Exploring Visual Analytics</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -23,28 +26,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-4397f41838bf6696a92fdfbed53ac40c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-4397f41838bf6696a92fdfbed53ac40c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -72,151 +108,9 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-handson .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-image','listing-date','listing-title','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-handson'] = new List('listing-handson', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-inclass .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-image','listing-date','listing-title','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-inclass'] = new List('listing-inclass', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-takehome1 .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-image','listing-date','listing-title','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-takehome1'] = new List('listing-takehome1', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-takehome2 .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-image','listing-date','listing-title','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-takehome2'] = new List('listing-takehome2', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -226,9 +120,9 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    <img src="./images/VisualAnalyticsJourney.png" alt="" class="navbar-logo light-content">
-    <img src="./images/VisualAnalyticsJourney.png" alt="" class="navbar-logo dark-content">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../images/VisualAnalyticsJourney.png" alt="" class="navbar-logo light-content">
+    <img src="../images/VisualAnalyticsJourney.png" alt="" class="navbar-logo dark-content">
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -243,63 +137,63 @@ window.Quarto = {
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-hands-on-exercises">    
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex01.html">
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex01.html">
  <span class="dropdown-text">1. A Layered Grammar of Graphics</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex02.html">
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex02.html">
  <span class="dropdown-text">2. Beyond ggplot2 Fundamentals</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex03a.html">
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex03a.html">
  <span class="dropdown-text">3a. Programming Interactive Data Visualisation</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex03b.html">
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex03b.html">
  <span class="dropdown-text">3b. Programming Animated Statistical Graphics</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex04a.html">
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex04a.html">
  <span class="dropdown-text">4a. Visualising Distribution</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex04b.html">
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex04b.html">
  <span class="dropdown-text">4b. Visual Statistical Analysis</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex04c.html">
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex04c.html">
  <span class="dropdown-text">4c. Visualising Uncertainty</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex04d.html">
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex04d.html">
  <span class="dropdown-text">4d. Building Funnel Plot with R</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex05a.html">
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex05a.html">
  <span class="dropdown-text">5a. Building Ternary Plot with R</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex05b.html">
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex05b.html">
  <span class="dropdown-text">5b. Visual Correlation Analysis</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex05c.html">
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex05c.html">
  <span class="dropdown-text">5c. Visual Multivariate Analysis with Heatmap</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex05d.html">
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex05d.html">
  <span class="dropdown-text">5d. Visual Multivariate Analysis with Parallel Coordinates Plot</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex05e.html">
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex05e.html">
  <span class="dropdown-text">5e. Treemap Visualisation</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex07a.html">
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex07a.html">
  <span class="dropdown-text">7a. Modelling, Visualising and Analysing Network Data</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex07b.html">
+    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex07b.html">
  <span class="dropdown-text">7b. Visualising and Analysing Text Data</span></a>
   </li>  
     </ul>
@@ -310,23 +204,23 @@ window.Quarto = {
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-in-class-exercises">    
         <li>
-    <a class="dropdown-item" href="./In Class Exercise/In-class_Ex02.html">
+    <a class="dropdown-item" href="../In Class Exercise/In-class_Ex02.html">
  <span class="dropdown-text">In-Class Exercise 2</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./In Class Exercise/In-class_Ex03.html">
+    <a class="dropdown-item" href="../In Class Exercise/In-class_Ex03.html">
  <span class="dropdown-text">In-Class Exercise 3</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./In Class Exercise/In-class_Ex04.html">
+    <a class="dropdown-item" href="../In Class Exercise/In-class_Ex04.html">
  <span class="dropdown-text">In-Class Exercise 4</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./In Class Exercise/In-class_Ex05.html">
+    <a class="dropdown-item" href="../In Class Exercise/In-class_Ex05.html">
  <span class="dropdown-text">In-Class Exercise 5</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./In Class Exercise/In-class_Ex06.html">
+    <a class="dropdown-item" href="../In Class Exercise/In-class_Ex06.html">
  <span class="dropdown-text">In-Class Exercise 6</span></a>
   </li>  
     </ul>
@@ -338,16 +232,16 @@ window.Quarto = {
     <ul class="dropdown-menu" aria-labelledby="nav-menu-take-home-exercises">    
         <li class="dropdown-header">Take-Home Exercise 1</li>
         <li>
-    <a class="dropdown-item" href="./Take Home Exercise 1/Take_Home_Ex01.html">
+    <a class="dropdown-item" href="../Take Home Exercise 1/Take_Home_Ex01.html">
  <span class="dropdown-text">Technical Report</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Take Home Exercise 1/Take_Home_Ex01_slides.html">
+    <a class="dropdown-item" href="../Take Home Exercise 1/Take_Home_Ex01_slides.html">
  <span class="dropdown-text">Executive Summary</span></a>
   </li>  
         <li class="dropdown-header">Take-Home Exercise 2</li>
         <li>
-    <a class="dropdown-item" href="./Take Home Exercise 2/Take_Home_Ex02.html">
+    <a class="dropdown-item" href="../Take Home Exercise 2/Take_Home_Ex02.html">
  <span class="dropdown-text">Technical Report</span></a>
   </li>  
     </ul>
@@ -355,7 +249,7 @@ window.Quarto = {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./about.html"> <i class="bi bi-heart-fill" role="img">
+    <a class="nav-link" href="../about.html"> <i class="bi bi-heart-fill" role="img">
 </i> 
 <span class="menu-text">About</span></a>
   </li>  
@@ -375,223 +269,186 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">Welcome</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#reflections" id="toc-reflections" class="nav-link" data-scroll-target="#reflections">Reflections</a></li>
+  <li><a href="#key-concepts" id="toc-key-concepts" class="nav-link" data-scroll-target="#key-concepts">Key Concepts</a>
+  <ul class="collapse">
+  <li><a href="#shiny-building-blocks" id="toc-shiny-building-blocks" class="nav-link" data-scroll-target="#shiny-building-blocks">Shiny Building Blocks</a></li>
+  <li><a href="#reactivity" id="toc-reactivity" class="nav-link" data-scroll-target="#reactivity">Reactivity</a></li>
+  </ul></li>
+  <li><a href="#pupils-exam-results-dashboard" id="toc-pupils-exam-results-dashboard" class="nav-link" data-scroll-target="#pupils-exam-results-dashboard">Pupils Exam Results Dashboard</a>
+  <ul class="collapse">
+  <li><a href="#loading-packages-and-data" id="toc-loading-packages-and-data" class="nav-link" data-scroll-target="#loading-packages-and-data">Loading Packages and Data</a></li>
+  <li><a href="#ui" id="toc-ui" class="nav-link" data-scroll-target="#ui">UI</a></li>
+  <li><a href="#server" id="toc-server" class="nav-link" data-scroll-target="#server">Server</a></li>
+  <li><a href="#running-the-app" id="toc-running-the-app" class="nav-link" data-scroll-target="#running-the-app">Running the App</a></li>
+  </ul></li>
+  <li><a href="#live-app" id="toc-live-app" class="nav-link" data-scroll-target="#live-app">Live App</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
 
-
-
-
-<section id="welcome" class="level3">
-<h3 class="anchored" data-anchor-id="welcome">Welcome</h3>
-<p>Hi, I am <strong>Carina</strong> and welcome to my course portfolio for <strong>ISSS608 Visual Analytics and Applications</strong>.</p>
-<hr>
-<p><img src="images/handson-exercise-label.jpeg" class="img-fluid" style="width:30.0%"></p>
-<div id="listing-handson" class="quarto-listing quarto-listing-container-grid">
-<div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-listing-date-sort="1780070400000" data-listing-file-modified-sort="1780145937425" data-listing-date-modified-sort="1780145937000" data-listing-reading-time-sort="9" data-listing-word-count-sort="1719">
-<a href="./Hands-on_Ex/Hands-on_Ex07a.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img loading='lazy' src="Hands-on_Ex/Hands-on_Ex07a_files/figure-html/unnamed-chunk-8-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-7a. Modelling, Visualising and Analysing Network Data with R
-</h5>
-<div class="card-text listing-description delink">
-Network data consists of two key components — <strong>nodes</strong> (entities) and <strong>edges</strong> (relationships between entities). In this exercise, email correspondence data from GAStech, an oil…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-May 30, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="1" data-listing-date-sort="1780070400000" data-listing-file-modified-sort="1780157964288" data-listing-date-modified-sort="1780157964000" data-listing-reading-time-sort="12" data-listing-word-count-sort="2206">
-<a href="./Hands-on_Ex/Hands-on_Ex07b.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img loading='lazy' src="Hands-on_Ex/Hands-on_Ex07b_files/figure-html/unnamed-chunk-5-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-7b. Visualising and Analysing Text Data with R
-</h5>
-<div class="card-text listing-description delink">
-Text visualisation transforms unstructured text data into visual representations to support understanding, grouping, comparison and correlation of textual content. In this…<strong></strong>
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-May 30, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="2" data-listing-date-sort="1778601600000" data-listing-file-modified-sort="1780155108742" data-listing-date-modified-sort="1780155108000" data-listing-reading-time-sort="3" data-listing-word-count-sort="582">
-<a href="./Hands-on_Ex/Hands-on_Ex05a.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img loading='lazy' src="Hands-on_Ex/Hands-on_Ex05a_files/figure-html/unnamed-chunk-4-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-5a. Building Ternary Plot with R
-</h5>
-<div class="card-text listing-description delink">
-Ternary plots display the distribution of three-part compositional data. Each side of the triangle represents one of three components. In this exercise I used Singapore…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-May 13, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div>
-<hr>
-<p><img src="images/inclass-exercise-label.jpeg" class="img-fluid" style="width:30.0%"></p>
-<div id="listing-inclass" class="quarto-listing quarto-listing-container-grid">
-<div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-listing-date-sort="1779465600000" data-listing-file-modified-sort="1779546747263" data-listing-date-modified-sort="1779546747000" data-listing-reading-time-sort="4" data-listing-word-count-sort="695">
-<a href="./In Class Exercise/In-class_Ex06.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="listing-item-img-placeholder card-img-top" style="height: 150px;">&nbsp;</div>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-In-Class Exercise 6: Designing Web-enabled Visual Analytics Application with Shiny
-</h5>
-<div class="card-text listing-description delink">
-<p>Building interactive web-enabled visual analytics applications using R Shiny, covering UI layout, server logic, and reactivity.</p>
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-May 23, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="1" data-listing-date-sort="1778601600000" data-listing-file-modified-sort="1778934918220" data-listing-date-modified-sort="1778934918000" data-listing-reading-time-sort="2" data-listing-word-count-sort="260">
-<a href="./In Class Exercise/In-class_Ex05.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img loading='lazy' src="images/Treemap of number of units sold and unit price by geography.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-In-Class Exercise 5: Treemap Visualisation with Tableau
-</h5>
-<div class="card-text listing-description delink">
-These Tableau treemap dashboards used Superstore and Singapore private property datasets. Treemaps display hierarchical data using nested rectangles where the size of each…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-May 13, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="2" data-listing-date-sort="1777737600000" data-listing-file-modified-sort="1778335434637" data-listing-date-modified-sort="1778335434000" data-listing-reading-time-sort="2" data-listing-word-count-sort="331">
-<a href="./In Class Exercise/In-class_Ex04.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img loading='lazy' src="images/In Class Exercise 4.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-In-Class Exercise 4: Visual Statistical Analysis with Tableau
-</h5>
-<div class="card-text listing-description delink">
-In-Class Exercise 4 consists of two Tableau dashboards. One exploring English score distributions by class, and another analysing Food Service KPI ratings using diverging…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-May 3, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div>
-<hr>
-<p><img src="images/takehome-exercise-label.jpeg" class="img-fluid" style="width:30.0%"></p>
-<div id="listing-takehome1" class="quarto-listing quarto-listing-container-grid">
-<div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-listing-date-sort="1779552000000" data-listing-file-modified-sort="1780672842057" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2817">
-<a href="./Take Home Exercise 1/Take_Home_Ex01_slides.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./Take Home Exercise 1/preview.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Executive Summary: Motor Vehicle Insurance Loss Drivers
-</h5>
-<div class="card-text listing-description delink">
-
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-May 24, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="1" data-listing-date-sort="1778947200000" data-listing-file-modified-sort="1780672824096" data-listing-date-modified-sort="1780672824000" data-listing-reading-time-sort="66" data-listing-word-count-sort="13100">
-<a href="./Take Home Exercise 1/Take_Home_Ex01.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./Take Home Exercise 1/takehomeex1_photo.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Take-home Exercise 1: Uncovering Loss Drivers in Motor Vehicle Insurance Portfolio using Data Visualisation
-</h5>
-<div class="card-text listing-description delink">
-<p>Applying univariate and bivariate visual analytics techniques to explore key factors influencing profitability and volatility in a motor vehicle insurance portfolio.</p>
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-May 17, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div>
-<div id="listing-takehome2" class="quarto-listing quarto-listing-container-grid">
-<div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-listing-date-sort="1780156800000" data-listing-file-modified-sort="1780672134438" data-listing-date-modified-sort="1780672134000" data-listing-reading-time-sort="58" data-listing-word-count-sort="11418">
-<a href="./Take Home Exercise 2/Take_Home_Ex02.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./Take Home Exercise 2/photo.jpg" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Take Home Ex2: VAST Challenge 2026 Mini-Challenge 2
-</h5>
-<div class="card-text listing-description delink">
-<p>Forensic visual analytics investigation of an anomalous AI agent post on SaidIT, tracing a worm propagation chain across 19 agents over 8 days.</p>
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-May 31, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">In-Class Exercise 6: Designing Web-enabled Visual Analytics Application with Shiny</h1>
 </div>
 
+<div>
+  <div class="description">
+    Building interactive web-enabled visual analytics applications using R Shiny, covering UI layout, server logic, and reactivity.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Carina Peh </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 23, 2026</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">May 23, 2026</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>In this in-class exercise, we explored <strong>Shiny</strong>, R’s framework for building interactive, web-enabled visual analytics applications. Unlike static ggplot2 visualisations, Shiny allows users to interact with data dynamically through widgets such as sliders and dropdowns — without needing to write any JavaScript or HTML.</p>
+</section>
+<section id="reflections" class="level2">
+<h2 class="anchored" data-anchor-id="reflections">Reflections</h2>
+<p>Building the Shiny app helped me understand the clear separation between the <strong>UI</strong> (what the user sees) and the <strong>server</strong> (the logic behind what gets displayed). What clicked for me was how reactivity works — outputs don’t just run once, they automatically re-execute whenever a relevant input changes. This is a fundamentally different mental model from writing a standard R script top to bottom.</p>
+<p>I also noticed a practical difference between <code>aes()</code> and <code>aes_string()</code> — when the variable name comes from a reactive input (a string), <code>aes_string()</code> is needed so ggplot2 can interpret it correctly. Small details like this matter a lot when inputs are dynamic.</p>
+</section>
+<section id="key-concepts" class="level2">
+<h2 class="anchored" data-anchor-id="key-concepts">Key Concepts</h2>
+<section id="shiny-building-blocks" class="level3">
+<h3 class="anchored" data-anchor-id="shiny-building-blocks">Shiny Building Blocks</h3>
+<p>Every Shiny app has two components:</p>
+<ul>
+<li><strong>UI (User Interface)</strong> — defines the layout and widgets the user interacts with</li>
+<li><strong>Server</strong> — contains the R logic that generates outputs in response to inputs</li>
+</ul>
+</section>
+<section id="reactivity" class="level3">
+<h3 class="anchored" data-anchor-id="reactivity">Reactivity</h3>
+<p>Shiny’s reactivity system ensures outputs update automatically when inputs change. The key reactive functions are:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>reactive()</code></td>
+<td>Creates a reactive expression that caches its result</td>
+</tr>
+<tr class="even">
+<td><code>observe()</code></td>
+<td>Runs code for side effects when inputs change</td>
+</tr>
+<tr class="odd">
+<td><code>eventReactive()</code></td>
+<td>Only reacts when a specific event occurs (e.g.&nbsp;button click)</td>
+</tr>
+<tr class="even">
+<td><code>isolate()</code></td>
+<td>Reads a reactive value without triggering re-execution</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="pupils-exam-results-dashboard" class="level2">
+<h2 class="anchored" data-anchor-id="pupils-exam-results-dashboard">Pupils Exam Results Dashboard</h2>
+<section id="loading-packages-and-data" class="level3">
+<h3 class="anchored" data-anchor-id="loading-packages-and-data">Loading Packages and Data</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(shiny, tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>exam <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Exam_data.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="ui" class="level3">
+<h3 class="anchored" data-anchor-id="ui">UI</h3>
+<p>The UI uses <code>sidebarLayout()</code> with two widgets — a <code>selectInput()</code> for subject selection and a <code>sliderInput()</code> for controlling the number of histogram bins.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">titlePanel</span>(<span class="st">"Pupils Exam Results Dashboard"</span>),</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sidebarLayout</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sidebarPanel</span>(</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">selectInput</span>(<span class="at">inputId =</span> <span class="st">"variable"</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">label =</span> <span class="st">"Subject:"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">"English"</span> <span class="ot">=</span> <span class="st">"ENGLISH"</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"Maths"</span>   <span class="ot">=</span> <span class="st">"MATHS"</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"Science"</span> <span class="ot">=</span> <span class="st">"SCIENCE"</span>),</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">selected =</span> <span class="st">"ENGLISH"</span>),</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sliderInput</span>(<span class="at">inputId =</span> <span class="st">"bins"</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>                  <span class="at">label =</span> <span class="st">"Number of Bins"</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                  <span class="at">min   =</span> <span class="dv">5</span>,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                  <span class="at">max   =</span> <span class="dv">20</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>                  <span class="at">value =</span> <span class="dv">10</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mainPanel</span>(</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">plotOutput</span>(<span class="st">"distPlot"</span>)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="server" class="level3">
+<h3 class="anchored" data-anchor-id="server">Server</h3>
+<p>The server uses <code>aes_string()</code> to pass the reactive <code>input$variable</code> (a string) into ggplot2.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  output<span class="sc">$</span>distPlot <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(exam,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>           <span class="fu">aes_string</span>(<span class="at">x =</span> input<span class="sc">$</span>variable)) <span class="sc">+</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_histogram</span>(<span class="at">bins  =</span> input<span class="sc">$</span>bins,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">fill  =</span> <span class="st">"light blue"</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="running-the-app" class="level3">
+<h3 class="anchored" data-anchor-id="running-the-app">Running the App</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shinyApp</span>(<span class="at">ui =</span> ui, <span class="at">server =</span> server)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="live-app" class="level2">
+<h2 class="anchored" data-anchor-id="live-app">Live App</h2>
+<p>The deployed app is embedded below — try changing the subject and number of bins:</p>
+<iframe src="https://carinapeh.shinyapps.io/shiny_demo/" width="100%" height="600px" frameborder="0">
+</iframe>
 
 
 </section>
