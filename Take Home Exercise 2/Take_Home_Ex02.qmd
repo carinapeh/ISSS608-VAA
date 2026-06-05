@@ -7,30 +7,21 @@ description: "Forensic visual analytics investigation of an anomalous AI agent p
 image: photo.jpg
 format:
   html:
-    theme: flatly
+    theme: minty
     toc: true
     toc-depth: 4
-    toc-location: left
+    toc-location: right
     number-sections: false
     code-fold: true
     code-summary: "Show code"
     code-tools: true
     smooth-scroll: true
     self-contained: true
-    css: |
-      .panel-tabset .nav-link { font-size: 0.9rem; }
-      .badge-blue   { background:#457b9d; color:white; padding:2px 8px; border-radius:4px; font-size:0.8rem; }
-      .badge-red    { background:#e63946; color:white; padding:2px 8px; border-radius:4px; font-size:0.8rem; }
-      .badge-orange { background:#f4a261; color:white; padding:2px 8px; border-radius:4px; font-size:0.8rem; }
-      .badge-green  { background:#2a9d8f; color:white; padding:2px 8px; border-radius:4px; font-size:0.8rem; }
-      .key-stat { text-align:center; padding:12px; background:#f8f9fa; border-radius:8px; border-left:4px solid #457b9d; }
-      .key-stat-danger { border-left-color:#e63946; }
-      .key-stat .number { font-size:2rem; font-weight:bold; color:#457b9d; }
-      .key-stat-danger .number { color:#e63946; }
+    css: styles.css
 execute:
   echo: true
+  eval: true
   warning: false
-  message: false
   freeze: true
 ---
 
