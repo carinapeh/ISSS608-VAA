@@ -3,6 +3,7 @@ title: "Executive Summary: Motor Vehicle Insurance Loss Drivers"
 subtitle: "Take-home Exercise 1"
 author: "Carina Peh"
 date: "May 24, 2026"
+image: preview.png
 format:
   revealjs:
     theme: simple

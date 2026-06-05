@@ -30,17 +30,23 @@ listing:
 Hi, I am **Carina** and welcome to my course portfolio for **ISSS608 Visual Analytics and Applications**.
 
 ---
+
 ![](images/handson-exercise-label.jpeg){width="30%"}
+
 ::: {#handson}
 :::
 
 ---
+
 ![](images/inclass-exercise-label.jpeg){width="30%"}
+
 ::: {#inclass}
 :::
 
 ---
+
 ![](images/takehome-exercise-label.jpeg){width="30%"}
+
 ::: {#takehome1}
 :::
 

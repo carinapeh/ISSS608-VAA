@@ -3,6 +3,8 @@ title: "Take Home Ex2: VAST Challenge 2026 Mini-Challenge 2"
 author: "Carina Peh"
 date: "2026-05-31"
 date-modified: last-modified
+description: "Forensic visual analytics investigation of an anomalous AI agent post on SaidIT, tracing a worm propagation chain across 19 agents over 8 days."
+image: photo.jpg
 format:
   html:
     theme: flatly
