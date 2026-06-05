@@ -12,50 +12,37 @@ listing:
     sort: "date desc"
     max-items: 3
     fields: [image, date, title, description]
-  - id: takehome
+  - id: takehome1
     contents: Take Home Exercise 1/*.qmd
+    type: grid
+    sort: "date desc"
+    max-items: 3
+    fields: [image, date, title, description]
+  - id: takehome2
+    contents: Take Home Exercise 2/*.qmd
     type: grid
     sort: "date desc"
     max-items: 3
     fields: [image, date, title, description]
 ---
 
-```{=html}
-<div style="text-align: center; padding: 20px 0 10px 0;">
-  <p style="font-family: 'Georgia', serif;
-             font-size: 0.85rem; 
-             color: #555555;
-             letter-spacing: 0.18em;
-             text-transform: uppercase;
-             margin-bottom: 8px;">
-    Welcome to my
-  </p>
-  <img src="images/welcome-text.png" 
-       alt="Visual Analytics Journey" 
-       style="max-width: 350px; width: 60%;"/>
-</div>
-```
-
 ### Welcome
 Hi, I am **Carina** and welcome to my course portfolio for **ISSS608 Visual Analytics and Applications**.
 
 ---
-
 ![](images/handson-exercise-label.jpeg){width="30%"}
-
 ::: {#handson}
 :::
 
 ---
-
 ![](images/inclass-exercise-label.jpeg){width="30%"}
-
 ::: {#inclass}
 :::
 
 ---
-
 ![](images/takehome-exercise-label.jpeg){width="30%"}
+::: {#takehome1}
+:::
 
-::: {#takehome}
+::: {#takehome2}
 :::
