@@ -3,6 +3,8 @@ title: "8. Visualising and Analysing Time-oriented Data"
 author: "carina peh"
 date: "June 11, 2026"
 date-modified: "last-modified"
+image: images/ex08-preview.png
+description: "In this exercise, calendar heatmaps, cycle plots and slopegraphs are explored to visualise and analyse time-oriented data."
 execute:
   eval: true
   echo: true
