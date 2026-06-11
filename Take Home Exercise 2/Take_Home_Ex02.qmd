@@ -1358,6 +1358,7 @@ This was not a one-off event. Two earlier attacks followed the exact same patter
 A checkpoint already exists in the system immediately before any SaidIT post goes live. Upgrading it to flag three observable signals — file-sourced content, a preceding agent task chain, and immediate post-deletion. It would hold suspicious posts for human review before they are published. No new infrastructure is needed. Based on historical data, this single change would have stopped all three attacks while leaving all 105 normal posts completely unaffected.
 :::
 
+
 # 13 References
 
 VAST Challenge 2026 Mini-Challenge 2. <https://vast-challenge.github.io/2026/MC2.html>

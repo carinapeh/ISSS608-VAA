@@ -7,7 +7,6 @@ project:
     - "In Class Exercise/*.qmd"
     - "Take Home Exercise 1/*.qmd"
     - "Take Home Exercise 2/*.qmd"
-
 website:
   title: "Exploring Visual Analytics"
   navbar:
@@ -46,7 +45,8 @@ website:
             href: "Hands-on_Ex/Hands-on_Ex07a.qmd"
           - text: "7b. Visualising and Analysing Text Data"
             href: "Hands-on_Ex/Hands-on_Ex07b.qmd"
-
+          - text: "8. Visualising and Analysing Time-oriented Data"
+            href: "Hands-on_Ex/Hands-on_Ex08.qmd"
       - text: "In-Class Exercises"
         menu:
           - text: "In-Class Exercise 2"
@@ -59,7 +59,6 @@ website:
             href: "In Class Exercise/In-class_Ex05.qmd"
           - text: "In-Class Exercise 6"
             href: "In Class Exercise/In-class_Ex06.qmd"
-
       - text: "Take-Home Exercises"
         menu:
           - text: "Take-Home Exercise 1"
@@ -70,11 +69,9 @@ website:
           - text: "Take-Home Exercise 2"
           - text: "Technical Report"
             href: "Take Home Exercise 2/Take_Home_Ex02.qmd"
-
     right:
       - icon: heart-fill
         href: about.qmd
-
 format:
   html:
     theme: minty
