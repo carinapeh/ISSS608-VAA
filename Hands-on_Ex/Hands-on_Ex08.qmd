@@ -1,5 +1,7 @@
 ---
-title: "8. Visualising and Analysing Time-oriented Data"
+title: '8\. Visualising and Analysing Time-oriented Data'
+description: "Time-oriented data captures how things change over time. In this exercise, three key visualisations for time-series analysis are explored: calendar heatmaps, cycle plots, and slopegraphs."
+image: "../images/ex08-preview.png"
 author: "carina peh"
 date: "June 11, 2026"
 date-modified: "last-modified"
@@ -118,7 +120,7 @@ kable(head(attacks))
 
 ### Building the Calendar Heatmap
 
-::: panel-tabset
+<div class="panel-tabset">
 ## The plot
 
 ```{r}
@@ -176,7 +178,7 @@ theme(axis.ticks = element_blank(),
       legend.title = element_text(size = 8),
       legend.text = element_text(size = 6))
 ```
-:::
+</div>
 
 **What to notice:**
 
@@ -213,7 +215,7 @@ top4_attacks <- attacks %>%
 
 #### Step 3: Plotting the multiple calendar heatmaps
 
-::: panel-tabset
+<div class="panel-tabset">
 ## The plot
 
 ```{r}
@@ -263,7 +265,7 @@ ggplot(top4_attacks,
         legend.title = element_text(size = 8),
         legend.text = element_text(size = 6))
 ```
-:::
+</div>
 
 `facet_wrap(~source_country, ncol = 2)` splits the plot into a 2×2 grid, one panel per country. This makes it easy to compare attack patterns side-by-side.
 
@@ -315,7 +317,7 @@ This creates a small summary table with one average value per month — used to 
 
 ### Step 5: Plotting the cycle plot
 
-::: panel-tabset
+<div class="panel-tabset">
 ## The plot
 
 ```{r}
@@ -361,7 +363,7 @@ ggplot() +
   ylab("No. of Visitors") +
   theme_tufte(base_family = "Helvetica")
 ```
-:::
+</div>
 
 **What to notice:**
 
@@ -381,7 +383,7 @@ rice <- read_csv("rice.csv")
 
 ### Step 2: Plotting the slopegraph
 
-::: panel-tabset
+<div class="panel-tabset">
 ## The plot
 
 ```{r}
@@ -427,7 +429,7 @@ rice %>%
   theme(plot.title = element_text(hjust = 0.5),
         plot.subtitle = element_text(hjust = 0.5))
 ```
-:::
+</div>
 
 **What to notice:**
 
