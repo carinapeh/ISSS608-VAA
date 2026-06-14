@@ -1,0 +1,38 @@
+---
+title: "In-Class Exercise 7: Visualising and Analysing Network Data with Tableau"
+author: "carina peh"
+date: "June 6, 2026"
+date-modified: "last-modified"
+description: "Exploring network relationships and communication patterns using Tableau, visualising nodes and edges to uncover hidden connections."
+execute:
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+## Overview
+
+In this in-class exercise, network data was explored using Tableau. This in class exercise was a mock timed assessment exercise that I did in class.
+
+## Reflections
+
+Working with network data made me realise how much information is hidden in plain tabular data. By mapping senders and recipients as nodes and their interactions as edges, patterns that would be invisible in a spreadsheet become immediately apparent such as which entities communicate most frequently, who acts as a bridge between groups, and where communication breaks down entirely.
+
+What stood out to me was how **node size** and **edge thickness** can encode two different quantitative dimensions simultaneously, making it possible to communicate complex multi-variable relationships in a single view.
+
+## Key Concepts
+
+| Term | Meaning |
+|----|----|
+| **Node** | An entity in the network (e.g. a person, agent, or organisation) |
+| **Edge** | A connection or relationship between two nodes |
+| **Degree** | The number of edges connected to a node — higher degree = more connected |
+| **Bridge node** | A node that connects otherwise separate clusters |
+| **Directed graph** | A network where edges have a direction (sender → receiver) |
+
+## Dashboard — Network Visualisation
+
+The dashboard below visualises the communication network, showing the relationships and message flow between different entities. Node size reflects the volume of activity while edge thickness represents the frequency of communication between two nodes. Red representing female and blue representing male.
+
+![In-Class Exercise 7: Network Visualisation](../images/In%20Class%20Exercise%207.png)

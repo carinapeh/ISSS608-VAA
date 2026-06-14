@@ -1,0 +1,55 @@
+---
+title: "In-Class Exercise 8: Time-Oriented Data Visualisation with Tableau"
+author: "carina peh"
+date: "June 13, 2026"
+date-modified: "last-modified"
+description: "Exploring time-series patterns using control charts, cycle plots, and slope graphs in Tableau to reveal trends, seasonality, and change over time."
+execute:
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+## Overview
+
+In this in-class exercise, three time-oriented visualisation techniques were explored using Tableau: **control charts** to detect statistical anomalies, **cycle plots** to reveal seasonal patterns, and **slope graphs** to compare change between two time points. Each technique answers a different question about how data changes over time.
+
+## Reflections
+
+This exercise changed the way I think about time-series data. A simple line chart often hides more than it reveals adding statistical control limits to a chart transforms it into a decision-making tool, making it clear which fluctuations are genuine anomalies and which are just normal variation.
+
+The cycle plot was particularly interesting because it shows seasonality in a way that a standard time series cannot. By grouping data into month panels and overlaying multiple years, recurring patterns become unmistakeable. The slope graph also impressed me — it is deceptively simple but extremely effective for showing which categories improved or declined the most between two time points without cluttering the view with intermediate data.
+
+## Key Concepts
+
+| Chart Type | Best Used For |
+|----|----|
+| **Control Chart** | Detecting statistically unusual values (outside ±3 standard deviations) |
+| **Time Series** | Showing overall trends across a continuous time period |
+| **Cycle Plot** | Revealing seasonal or recurring patterns by grouping within cycles |
+| **Slope Graph** | Comparing ranked values between exactly two time points |
+
+## Dashboard 1 — Control Chart
+
+A control chart plots values over time alongside a calculated average and upper/lower control limits (typically ±3 standard deviations). Data points that fall outside these limits are flagged as statistically unusual — genuine signals rather than random noise.
+
+![In-Class Exercise 8: Control Chart](../images/In%20Class%20Ex%208_%20Control%20Chart.png)
+
+The control chart makes it easy to identify which time periods fell outside the expected range of variation. Points beyond the control limits indicate genuine anomalies worth investigating further, as opposed to everyday fluctuations that require no action.
+
+## Dashboard 2 — Time Series vs Cycle Plot
+
+A cycle plot overlays multiple years of data within each month panel, making seasonal trends clearly visible. This is compared side by side with a standard time series to illustrate the difference in insight each approach provides.
+
+![In-Class Exercise 8: Time Series vs Cycle Plot](../images/In%20Class%20Ex%208_Time%20Series%20vs%20Cycle%20Plot.png)
+
+The cycle plot makes seasonal patterns immediately apparent,for example, whether a particular month consistently outperforms or underperforms across multiple years. The red reference line in each panel marks the monthly average, making it easy to judge whether recent periods are above or below the long-run norm.
+
+## Dashboard 3 — Slope Graph
+
+A slope graph connects values at two time points for multiple categories using straight lines. The slope and direction of each line immediately communicates whether a category increased, decreased, or stayed the same — without needing to read exact numbers.
+
+![In-Class Exercise 8: Slope Graph](../images/In%20Class%20Ex%208_Slope%20Graph.png)
+
+Lines that cross each other indicate a reversal in ranking between the two periods, while the steepness of each slope shows the magnitude of change. This makes it far easier to spot which categories changed the most compared to a standard bar chart.

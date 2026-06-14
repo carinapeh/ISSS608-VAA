@@ -865,7 +865,7 @@
     "href": "index.html",
     "title": "Exploring Visual Analytics",
     "section": "",
-    "text": "Welcome\nHi, I am Carina and welcome to my course portfolio for ISSS608 Visual Analytics and Applications.\n\n\n\n\n\n\n\n\n\n\n\n\n8. Visualising and Analysing Time-oriented Data\n\n\nTime-oriented data captures how things change over time. In this exercise, three key visualisations for time-series analysis are explored: calendar heatmaps, cycle plots…\n\n\n\nJun 11, 2026\n\n\n\n\n\n\n\n\n\n\n\n7a. Modelling, Visualising and Analysing Network Data with R\n\n\n\n\n\n\nMay 30, 2026\n\n\n\n\n\n\n\n\n\n\n\n7b. Visualising and Analysing Text Data with R\n\n\n\n\n\n\nMay 30, 2026\n\n\n\n\n\n\nNo matching items\n\n\n\n\n\n\n\n\n\n\n\nIn-Class Exercise 6: Designing Web-enabled Visual Analytics Application with Shiny\n\n\nBuilding interactive web-enabled visual analytics applications using R Shiny, covering UI layout, server logic, and reactivity.\n\n\n\nMay 23, 2026\n\n\n\n\n\n\n\n\n\n\n\nIn-Class Exercise 5: Treemap Visualisation with Tableau\n\n\n\n\n\n\nMay 13, 2026\n\n\n\n\n\n\n\n\n\n\n\nIn-Class Exercise 4: Visual Statistical Analysis with Tableau\n\n\n\n\n\n\nMay 3, 2026\n\n\n\n\n\n\nNo matching items\n\n\n\n\n\n\n\n\n\n\n\n\n\nExecutive Summary: Motor Vehicle Insurance Loss Drivers\n\n\n\n\n\n\nMay 24, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nTake-home Exercise 1: Uncovering Loss Drivers in Motor Vehicle Insurance Portfolio using Data Visualisation\n\n\nApplying univariate and bivariate visual analytics techniques to explore key factors influencing profitability and volatility in a motor vehicle insurance portfolio.\n\n\n\nMay 17, 2026\n\n\n\n\n\n\nNo matching items\n\n\n\n\n\n\n\n\n\n\n\nTake Home Ex2: VAST Challenge 2026 Mini-Challenge 2\n\n\nForensic visual analytics investigation of an anomalous AI agent post on SaidIT, tracing a worm propagation chain across 19 agents over 8 days.\n\n\n\nMay 31, 2026\n\n\n\n\n\n\nNo matching items"
+    "text": "Welcome\nHi, I am Carina and welcome to my course portfolio for ISSS608 Visual Analytics and Applications.\n\n\n\n\n\n\n\n\n\n\n\n\n8. Visualising and Analysing Time-oriented Data\n\n\nTime-oriented data captures how things change over time. In this exercise, three key visualisations for time-series analysis are explored: calendar heatmaps, cycle plots…\n\n\n\nJun 11, 2026\n\n\n\n\n\n\n\n\n\n\n\n7a. Modelling, Visualising and Analysing Network Data with R\n\n\n\n\n\n\nMay 30, 2026\n\n\n\n\n\n\n\n\n\n\n\n7b. Visualising and Analysing Text Data with R\n\n\n\n\n\n\nMay 30, 2026\n\n\n\n\n\n\nNo matching items\n\n\n\n\n\n\n\n\n\n\n\nIn-Class Exercise 8: Time-Oriented Data Visualisation with Tableau\n\n\nExploring time-series patterns using control charts, cycle plots, and slope graphs in Tableau to reveal trends, seasonality, and change over time.\n\n\n\nJun 13, 2026\n\n\n\n\n\n\n\n\n\n\n\nIn-Class Exercise 7: Visualising and Analysing Network Data with Tableau\n\n\nExploring network relationships and communication patterns using Tableau, visualising nodes and edges to uncover hidden connections.\n\n\n\nJun 6, 2026\n\n\n\n\n\n\n\n\n\n\n\nIn-Class Exercise 6: Designing Web-enabled Visual Analytics Application with Shiny\n\n\nBuilding interactive web-enabled visual analytics applications using R Shiny, covering UI layout, server logic, and reactivity.\n\n\n\nMay 23, 2026\n\n\n\n\n\n\nNo matching items\n\n\n\n\n\n\n\n\n\n\n\n\n\nExecutive Summary: Motor Vehicle Insurance Loss Drivers\n\n\n\n\n\n\nMay 24, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nTake-home Exercise 1: Uncovering Loss Drivers in Motor Vehicle Insurance Portfolio using Data Visualisation\n\n\nApplying univariate and bivariate visual analytics techniques to explore key factors influencing profitability and volatility in a motor vehicle insurance portfolio.\n\n\n\nMay 17, 2026\n\n\n\n\n\n\nNo matching items\n\n\n\n\n\n\n\n\n\n\n\nTake Home Ex2: VAST Challenge 2026 Mini-Challenge 2\n\n\nForensic visual analytics investigation of an anomalous AI agent post on SaidIT, tracing a worm propagation chain across 19 agents over 8 days.\n\n\n\nMay 31, 2026\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01.html",
@@ -1643,5 +1643,89 @@
     "title": "Executive Summary: Motor Vehicle Insurance Loss Drivers",
     "section": "Recommendations and Next Steps",
     "text": "Recommendations and Next Steps\n\nReview pricing adequacy for Third-Party based policies\nMonitor Bad and Neutral bonus score groups more closely\nInvestigate Comprehensive without Excess for small claim filing behaviour\nApply regression modelling to confirm and quantify exploratory findings\nEnrich portfolio with traffic density, weather and regional accident data\n\n\nThe recommendations translate the visual findings into action. Pricing needs to be reviewed for Third-Party products given their poor loss ratios. Bad and Neutral bonus score policyholders should be monitored more closely as they claim more frequently. Comprehensive without Excess needs investigation as removing the excess removes the financial disincentive to file small claims. Future analysis should move beyond exploration into confirmatory modelling and incorporate richer external data."
+  },
+  {
+    "objectID": "In Class Exercise/In-class_Ex07.html",
+    "href": "In Class Exercise/In-class_Ex07.html",
+    "title": "In-Class Exercise 7: Visualising and Analysing Network Data with Tableau",
+    "section": "",
+    "text": "In this in-class exercise, network data was explored using Tableau. This in class exercise was a mock timed assessment exercise that I did in class."
+  },
+  {
+    "objectID": "In Class Exercise/In-class_Ex07.html#overview",
+    "href": "In Class Exercise/In-class_Ex07.html#overview",
+    "title": "In-Class Exercise 7: Visualising and Analysing Network Data with Tableau",
+    "section": "",
+    "text": "In this in-class exercise, network data was explored using Tableau. This in class exercise was a mock timed assessment exercise that I did in class."
+  },
+  {
+    "objectID": "In Class Exercise/In-class_Ex07.html#reflections",
+    "href": "In Class Exercise/In-class_Ex07.html#reflections",
+    "title": "In-Class Exercise 7: Visualising and Analysing Network Data with Tableau",
+    "section": "Reflections",
+    "text": "Reflections\nWorking with network data made me realise how much information is hidden in plain tabular data. By mapping senders and recipients as nodes and their interactions as edges, patterns that would be invisible in a spreadsheet become immediately apparent such as which entities communicate most frequently, who acts as a bridge between groups, and where communication breaks down entirely.\nWhat stood out to me was how node size and edge thickness can encode two different quantitative dimensions simultaneously, making it possible to communicate complex multi-variable relationships in a single view."
+  },
+  {
+    "objectID": "In Class Exercise/In-class_Ex07.html#key-concepts",
+    "href": "In Class Exercise/In-class_Ex07.html#key-concepts",
+    "title": "In-Class Exercise 7: Visualising and Analysing Network Data with Tableau",
+    "section": "Key Concepts",
+    "text": "Key Concepts\n\n\n\n\n\n\n\nTerm\nMeaning\n\n\n\n\nNode\nAn entity in the network (e.g. a person, agent, or organisation)\n\n\nEdge\nA connection or relationship between two nodes\n\n\nDegree\nThe number of edges connected to a node — higher degree = more connected\n\n\nBridge node\nA node that connects otherwise separate clusters\n\n\nDirected graph\nA network where edges have a direction (sender → receiver)"
+  },
+  {
+    "objectID": "In Class Exercise/In-class_Ex07.html#dashboard-network-visualisation",
+    "href": "In Class Exercise/In-class_Ex07.html#dashboard-network-visualisation",
+    "title": "In-Class Exercise 7: Visualising and Analysing Network Data with Tableau",
+    "section": "Dashboard — Network Visualisation",
+    "text": "Dashboard — Network Visualisation\nThe dashboard below visualises the communication network, showing the relationships and message flow between different entities. Node size reflects the volume of activity while edge thickness represents the frequency of communication between two nodes. Red representing female and blue representing male.\n\n\n\nIn-Class Exercise 7: Network Visualisation"
+  },
+  {
+    "objectID": "In Class Exercise/In-class_Ex08.html",
+    "href": "In Class Exercise/In-class_Ex08.html",
+    "title": "In-Class Exercise 8: Time-Oriented Data Visualisation with Tableau",
+    "section": "",
+    "text": "In this in-class exercise, three time-oriented visualisation techniques were explored using Tableau: control charts to detect statistical anomalies, cycle plots to reveal seasonal patterns, and slope graphs to compare change between two time points. Each technique answers a different question about how data changes over time."
+  },
+  {
+    "objectID": "In Class Exercise/In-class_Ex08.html#overview",
+    "href": "In Class Exercise/In-class_Ex08.html#overview",
+    "title": "In-Class Exercise 8: Time-Oriented Data Visualisation with Tableau",
+    "section": "",
+    "text": "In this in-class exercise, three time-oriented visualisation techniques were explored using Tableau: control charts to detect statistical anomalies, cycle plots to reveal seasonal patterns, and slope graphs to compare change between two time points. Each technique answers a different question about how data changes over time."
+  },
+  {
+    "objectID": "In Class Exercise/In-class_Ex08.html#reflections",
+    "href": "In Class Exercise/In-class_Ex08.html#reflections",
+    "title": "In-Class Exercise 8: Time-Oriented Data Visualisation with Tableau",
+    "section": "Reflections",
+    "text": "Reflections\nThis exercise changed the way I think about time-series data. A simple line chart often hides more than it reveals adding statistical control limits to a chart transforms it into a decision-making tool, making it clear which fluctuations are genuine anomalies and which are just normal variation.\nThe cycle plot was particularly interesting because it shows seasonality in a way that a standard time series cannot. By grouping data into month panels and overlaying multiple years, recurring patterns become unmistakeable. The slope graph also impressed me — it is deceptively simple but extremely effective for showing which categories improved or declined the most between two time points without cluttering the view with intermediate data."
+  },
+  {
+    "objectID": "In Class Exercise/In-class_Ex08.html#key-concepts",
+    "href": "In Class Exercise/In-class_Ex08.html#key-concepts",
+    "title": "In-Class Exercise 8: Time-Oriented Data Visualisation with Tableau",
+    "section": "Key Concepts",
+    "text": "Key Concepts\n\n\n\n\n\n\n\nChart Type\nBest Used For\n\n\n\n\nControl Chart\nDetecting statistically unusual values (outside ±3 standard deviations)\n\n\nTime Series\nShowing overall trends across a continuous time period\n\n\nCycle Plot\nRevealing seasonal or recurring patterns by grouping within cycles\n\n\nSlope Graph\nComparing ranked values between exactly two time points"
+  },
+  {
+    "objectID": "In Class Exercise/In-class_Ex08.html#dashboard-1-control-chart",
+    "href": "In Class Exercise/In-class_Ex08.html#dashboard-1-control-chart",
+    "title": "In-Class Exercise 8: Time-Oriented Data Visualisation with Tableau",
+    "section": "Dashboard 1 — Control Chart",
+    "text": "Dashboard 1 — Control Chart\nA control chart plots values over time alongside a calculated average and upper/lower control limits (typically ±3 standard deviations). Data points that fall outside these limits are flagged as statistically unusual — genuine signals rather than random noise.\n\n\n\nIn-Class Exercise 8: Control Chart\n\n\nThe control chart makes it easy to identify which time periods fell outside the expected range of variation. Points beyond the control limits indicate genuine anomalies worth investigating further, as opposed to everyday fluctuations that require no action."
+  },
+  {
+    "objectID": "In Class Exercise/In-class_Ex08.html#dashboard-2-time-series-vs-cycle-plot",
+    "href": "In Class Exercise/In-class_Ex08.html#dashboard-2-time-series-vs-cycle-plot",
+    "title": "In-Class Exercise 8: Time-Oriented Data Visualisation with Tableau",
+    "section": "Dashboard 2 — Time Series vs Cycle Plot",
+    "text": "Dashboard 2 — Time Series vs Cycle Plot\nA cycle plot overlays multiple years of data within each month panel, making seasonal trends clearly visible. This is compared side by side with a standard time series to illustrate the difference in insight each approach provides.\n\n\n\nIn-Class Exercise 8: Time Series vs Cycle Plot\n\n\nThe cycle plot makes seasonal patterns immediately apparent,for example, whether a particular month consistently outperforms or underperforms across multiple years. The red reference line in each panel marks the monthly average, making it easy to judge whether recent periods are above or below the long-run norm."
+  },
+  {
+    "objectID": "In Class Exercise/In-class_Ex08.html#dashboard-3-slope-graph",
+    "href": "In Class Exercise/In-class_Ex08.html#dashboard-3-slope-graph",
+    "title": "In-Class Exercise 8: Time-Oriented Data Visualisation with Tableau",
+    "section": "Dashboard 3 — Slope Graph",
+    "text": "Dashboard 3 — Slope Graph\nA slope graph connects values at two time points for multiple categories using straight lines. The slope and direction of each line immediately communicates whether a category increased, decreased, or stayed the same — without needing to read exact numbers.\n\n\n\nIn-Class Exercise 8: Slope Graph\n\n\nLines that cross each other indicate a reversal in ranking between the two periods, while the steepness of each slope shows the magnitude of change. This makes it far easier to spot which categories changed the most compared to a standard bar chart."
   }
 ]
