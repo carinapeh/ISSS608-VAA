@@ -4,6 +4,7 @@ description: "Proportional symbol maps use the visual variable of size to repres
 author: "carina peh"
 date: "June 20, 2026"
 date-modified: "last-modified"
+image: "../images/hands on ex 9b.jpg"
 execute:
   eval: false
   echo: true

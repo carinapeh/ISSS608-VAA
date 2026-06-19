@@ -4,6 +4,7 @@ description: "Choropleth mapping visualises spatial distributions using graduate
 author: "carina peh"
 date: "June 20, 2026"
 date-modified: "last-modified"
+image: "../images/hands on ex 9a.jpg"
 execute:
   eval: false
   echo: true
