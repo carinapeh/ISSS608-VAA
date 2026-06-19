@@ -1761,7 +1761,7 @@
     "href": "Hands-on_Ex/Hands-on_Ex09a.html#importing-data-into-r",
     "title": "9a. Choropleth Mapping with R",
     "section": "Importing Data into R",
-    "text": "Importing Data into R\n\nImporting Geospatial Data\n\nmpsz &lt;- st_read(dsn = \"data/geospatial\",\n                layer = \"MP14_SUBZONE_WEB_PL\")\n\n\nst_read() from the sf package imports the ESRI shapefile as a simple feature data frame\nThe dataset contains 323 planning subzones with their boundary geometries in SVY21 coordinate reference system\n\n\n\nImporting Attribute Data\n\npopdata &lt;- read_csv(\"data/aspatial/respopagesextod2011to2020.csv\")\n\n\n\nData Preparation\n\npopdata2020 &lt;- popdata |&gt;\n  filter(Time == 2020) |&gt;\n  group_by(PA, SZ, AG) |&gt;\n  summarise(POP = sum(Pop)) |&gt;\n  ungroup() |&gt;\n  pivot_wider(names_from = AG, values_from = POP) |&gt;\n  mutate(YOUNG          = rowSums(.[3:6]) + rowSums(.[12]),\n         `ECONOMY ACTIVE` = rowSums(.[7:11]) + rowSums(.[13:15]),\n         AGED           = rowSums(.[16:21]),\n         TOTAL          = rowSums(.[3:21]),\n         DEPENDENCY     = (YOUNG + AGED) / `ECONOMY ACTIVE`) |&gt;\n  select(PA, SZ, YOUNG, `ECONOMY ACTIVE`, AGED, TOTAL, DEPENDENCY)\n\n\n\nJoining Geospatial and Attribute Data\n\n# Standardise case before joining\npopdata2020 &lt;- popdata2020 |&gt;\n  mutate(across(c(PA, SZ), toupper)) |&gt;\n  filter(`ECONOMY ACTIVE` &gt; 0)\n\n# Join using mpsz as the left table so the output remains a simple feature\nmpsz_pop2020 &lt;- left_join(mpsz, popdata2020,\n                           by = c(\"SUBZONE_N\" = \"SZ\"))\n\n# Save for reuse\nwrite_rds(mpsz_pop2020, \"data/rds/mpszpop2020.rds\")"
+    "text": "Importing Data into R\n\nImporting Geospatial Data\n\nmpsz &lt;- st_read(dsn = \"MP14_SUBZONE_WEB_PL\",\n                layer = \"MP14_SUBZONE_WEB_PL\")\n\n\nst_read() from the sf package imports the ESRI shapefile as a simple feature data frame\nThe dataset contains 323 planning subzones with their boundary geometries in SVY21 coordinate reference system\n\n\n\nImporting Attribute Data\n\npopdata &lt;- read_csv(\"respopagesextod2011to2020.csv\")\n\n\n\nData Preparation\n\npopdata2020 &lt;- popdata |&gt;\n  filter(Time == 2020) |&gt;\n  group_by(PA, SZ, AG) |&gt;\n  summarise(POP = sum(Pop)) |&gt;\n  ungroup() |&gt;\n  pivot_wider(names_from = AG, values_from = POP) |&gt;\n  mutate(YOUNG          = rowSums(.[3:6]) + rowSums(.[12]),\n         `ECONOMY ACTIVE` = rowSums(.[7:11]) + rowSums(.[13:15]),\n         AGED           = rowSums(.[16:21]),\n         TOTAL          = rowSums(.[3:21]),\n         DEPENDENCY     = (YOUNG + AGED) / `ECONOMY ACTIVE`) |&gt;\n  select(PA, SZ, YOUNG, `ECONOMY ACTIVE`, AGED, TOTAL, DEPENDENCY)\n\n\n\nJoining Geospatial and Attribute Data\n\n# Standardise case before joining\npopdata2020 &lt;- popdata2020 |&gt;\n  mutate(across(c(PA, SZ), toupper)) |&gt;\n  filter(`ECONOMY ACTIVE` &gt; 0)\n\n# Join using mpsz as the left table so the output remains a simple feature\nmpsz_pop2020 &lt;- left_join(mpsz, popdata2020,\n                           by = c(\"SUBZONE_N\" = \"SZ\"))\n\n# Save for reuse\nwrite_rds(mpsz_pop2020, \"mpszpop2020.rds\")"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex09a.html#choropleth-mapping-with-tmap",
@@ -1789,21 +1789,21 @@
     "href": "Hands-on_Ex/Hands-on_Ex09b.html",
     "title": "9b. Visualising Geospatial Point Data",
     "section": "",
-    "text": "Proportional symbol maps (also known as graduated symbol maps) use the visual variable of size to represent differences in the magnitude of a discrete phenomenon — for example, counts of people or number of wins. In this exercise, an interactive proportional symbol map is created showing the number of wins by Singapore Pools outlets, using the tmap package in R."
+    "text": "Proportional symbol maps (also known as graduated symbol maps) use the visual variable of size to represent differences in the magnitude of a discrete phenomenon. For example, counts of people or number of wins. In this exercise, an interactive proportional symbol map is created showing the number of wins by Singapore Pools outlets, using the tmap package in R."
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex09b.html#overview",
     "href": "Hands-on_Ex/Hands-on_Ex09b.html#overview",
     "title": "9b. Visualising Geospatial Point Data",
     "section": "",
-    "text": "Proportional symbol maps (also known as graduated symbol maps) use the visual variable of size to represent differences in the magnitude of a discrete phenomenon — for example, counts of people or number of wins. In this exercise, an interactive proportional symbol map is created showing the number of wins by Singapore Pools outlets, using the tmap package in R."
+    "text": "Proportional symbol maps (also known as graduated symbol maps) use the visual variable of size to represent differences in the magnitude of a discrete phenomenon. For example, counts of people or number of wins. In this exercise, an interactive proportional symbol map is created showing the number of wins by Singapore Pools outlets, using the tmap package in R."
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex09b.html#reflections",
     "href": "Hands-on_Ex/Hands-on_Ex09b.html#reflections",
     "title": "9b. Visualising Geospatial Point Data",
     "section": "Reflections",
-    "text": "Reflections\nWhat stood out in this exercise was the difference between tmap_mode(\"plot\") and tmap_mode(\"view\") — switching to view mode turns the map into a fully interactive Leaflet map in the browser. Being able to encode two variables simultaneously — size for the number of wins and colour for the outlet type — in a single proportional symbol map makes it far more informative than a basic dot map. The sync = TRUE argument in tm_facets() was particularly impressive: it keeps the zoom and pan of two separate maps synchronised, making comparison intuitive."
+    "text": "Reflections\nWhat stood out in this exercise was the difference between tmap_mode(\"plot\") and tmap_mode(\"view\"), switching to view mode turns the map into a fully interactive Leaflet map in the browser. Being able to encode two variables simultaneously — size for the number of wins and colour for the outlet type — in a single proportional symbol map makes it far more informative than a basic dot map. The sync = TRUE argument in tm_facets() was particularly impressive: it keeps the zoom and pan of two separate maps synchronised, making comparison intuitive."
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex09b.html#getting-started",
@@ -1817,7 +1817,7 @@
     "href": "Hands-on_Ex/Hands-on_Ex09b.html#data-wrangling",
     "title": "9b. Visualising Geospatial Point Data",
     "section": "Data Wrangling",
-    "text": "Data Wrangling\n\nImporting the Data\n\nsgpools &lt;- read_csv(\"data/aspatial/SGPools_svy21.csv\")\nlist(sgpools)\n\nThe dataset contains 306 Singapore Pools outlets with their x/y coordinates in SVY21 projection (EPSG: 3414).\n\n\nConverting to a Simple Feature Data Frame\n\n# st_as_sf() converts a data frame with coordinate columns into a spatial sf object\nsgpools_sf &lt;- st_as_sf(sgpools,\n                       coords = c(\"XCOORD\", \"YCOORD\"),\n                       crs = 3414)\nlist(sgpools_sf)\n\nKey arguments:\n\ncoords takes the column name for the x-coordinate first, then the y-coordinate\ncrs = 3414 is the EPSG code for Singapore’s SVY21 coordinate system\nA new geometry column is added with the point coordinates"
+    "text": "Data Wrangling\n\nImporting the Data\n\nsgpools &lt;- read_csv(\"SGPools_svy21.csv\")\nlist(sgpools)\n\nThe dataset contains 306 Singapore Pools outlets with their x/y coordinates in SVY21 projection (EPSG: 3414).\n\n\nConverting to a Simple Feature Data Frame\n\n# st_as_sf() converts a data frame with coordinate columns into a spatial sf object\nsgpools_sf &lt;- st_as_sf(sgpools,\n                       coords = c(\"XCOORD\", \"YCOORD\"),\n                       crs = 3414)\nlist(sgpools_sf)\n\nKey arguments:\n\ncoords takes the column name for the x-coordinate first, then the y-coordinate\ncrs = 3414 is the EPSG code for Singapore’s SVY21 coordinate system\nA new geometry column is added with the point coordinates"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex09b.html#drawing-proportional-symbol-maps",
@@ -1852,7 +1852,7 @@
     "href": "Hands-on_Ex/Hands-on_Ex09c.html#getting-started",
     "title": "9c. Analytical Mapping",
     "section": "Getting Started",
-    "text": "Getting Started\n\nLoading Packages\n\npacman::p_load(tmap, tidyverse, sf)\n\n\n\nImporting Data\n\n# NGA_wp is a polygon sf data frame of Nigeria Local Government Areas\n# with water point statistics attached\nNGA_wp &lt;- read_rds(\"data/rds/NGA_wp.rds\")"
+    "text": "Getting Started\n\nLoading Packages\n\npacman::p_load(tmap, tidyverse, sf)\n\n\n\nImporting Data\n\n# NGA_wp is a polygon sf data frame of Nigeria Local Government Areas\n# with water point statistics attached\nNGA_wp &lt;- read_rds(\"NGA_wp.rds\")"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex09c.html#basic-choropleth-maps",

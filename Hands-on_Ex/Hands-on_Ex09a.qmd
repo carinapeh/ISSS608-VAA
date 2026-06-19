@@ -38,7 +38,7 @@ pacman::p_load(sf, tmap, tidyverse)
 ### Importing Geospatial Data
 
 ```{r}
-mpsz <- st_read(dsn = "data/geospatial",
+mpsz <- st_read(dsn = "MP14_SUBZONE_WEB_PL",
                 layer = "MP14_SUBZONE_WEB_PL")
 ```
 
@@ -48,7 +48,7 @@ mpsz <- st_read(dsn = "data/geospatial",
 ### Importing Attribute Data
 
 ```{r}
-popdata <- read_csv("data/aspatial/respopagesextod2011to2020.csv")
+popdata <- read_csv("respopagesextod2011to2020.csv")
 ```
 
 ### Data Preparation
@@ -81,7 +81,7 @@ mpsz_pop2020 <- left_join(mpsz, popdata2020,
                            by = c("SUBZONE_N" = "SZ"))
 
 # Save for reuse
-write_rds(mpsz_pop2020, "data/rds/mpszpop2020.rds")
+write_rds(mpsz_pop2020, "mpszpop2020.rds")
 ```
 
 ## Choropleth Mapping with tmap

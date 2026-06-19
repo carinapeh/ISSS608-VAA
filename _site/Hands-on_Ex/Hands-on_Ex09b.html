@@ -362,11 +362,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="overview" class="level2">
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
-<p>Proportional symbol maps (also known as graduated symbol maps) use the visual variable of <strong>size</strong> to represent differences in the magnitude of a discrete phenomenon — for example, counts of people or number of wins. In this exercise, an interactive proportional symbol map is created showing the number of wins by Singapore Pools outlets, using the <code>tmap</code> package in R.</p>
+<p>Proportional symbol maps (also known as graduated symbol maps) use the visual variable of <strong>size</strong> to represent differences in the magnitude of a discrete phenomenon. For example, counts of people or number of wins. In this exercise, an interactive proportional symbol map is created showing the number of wins by Singapore Pools outlets, using the <code>tmap</code> package in R.</p>
 </section>
 <section id="reflections" class="level2">
 <h2 class="anchored" data-anchor-id="reflections">Reflections</h2>
-<p>What stood out in this exercise was the difference between <code>tmap_mode("plot")</code> and <code>tmap_mode("view")</code> — switching to view mode turns the map into a fully interactive Leaflet map in the browser. Being able to encode two variables simultaneously — size for the number of wins and colour for the outlet type — in a single proportional symbol map makes it far more informative than a basic dot map. The <code>sync = TRUE</code> argument in <code>tm_facets()</code> was particularly impressive: it keeps the zoom and pan of two separate maps synchronised, making comparison intuitive.</p>
+<p>What stood out in this exercise was the difference between <code>tmap_mode("plot")</code> and <code>tmap_mode("view")</code>, switching to view mode turns the map into a fully interactive Leaflet map in the browser. Being able to encode two variables simultaneously — size for the number of wins and colour for the outlet type — in a single proportional symbol map makes it far more informative than a basic dot map. The <code>sync = TRUE</code> argument in <code>tm_facets()</code> was particularly impressive: it keeps the zoom and pan of two separate maps synchronised, making comparison intuitive.</p>
 </section>
 <section id="getting-started" class="level2">
 <h2 class="anchored" data-anchor-id="getting-started">Getting Started</h2>
@@ -382,7 +382,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="importing-the-data" class="level3">
 <h3 class="anchored" data-anchor-id="importing-the-data">Importing the Data</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sgpools <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/aspatial/SGPools_svy21.csv"</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sgpools <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"SGPools_svy21.csv"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(sgpools)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The dataset contains 306 Singapore Pools outlets with their x/y coordinates in SVY21 projection (EPSG: 3414).</p>

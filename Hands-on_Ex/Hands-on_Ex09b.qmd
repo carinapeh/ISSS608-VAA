@@ -13,11 +13,11 @@ execute:
 
 ## Overview
 
-Proportional symbol maps (also known as graduated symbol maps) use the visual variable of **size** to represent differences in the magnitude of a discrete phenomenon — for example, counts of people or number of wins. In this exercise, an interactive proportional symbol map is created showing the number of wins by Singapore Pools outlets, using the `tmap` package in R.
+Proportional symbol maps (also known as graduated symbol maps) use the visual variable of **size** to represent differences in the magnitude of a discrete phenomenon. For example, counts of people or number of wins. In this exercise, an interactive proportional symbol map is created showing the number of wins by Singapore Pools outlets, using the `tmap` package in R.
 
 ## Reflections
 
-What stood out in this exercise was the difference between `tmap_mode("plot")` and `tmap_mode("view")` — switching to view mode turns the map into a fully interactive Leaflet map in the browser. Being able to encode two variables simultaneously — size for the number of wins and colour for the outlet type — in a single proportional symbol map makes it far more informative than a basic dot map. The `sync = TRUE` argument in `tm_facets()` was particularly impressive: it keeps the zoom and pan of two separate maps synchronised, making comparison intuitive.
+What stood out in this exercise was the difference between `tmap_mode("plot")` and `tmap_mode("view")`, switching to view mode turns the map into a fully interactive Leaflet map in the browser. Being able to encode two variables simultaneously — size for the number of wins and colour for the outlet type — in a single proportional symbol map makes it far more informative than a basic dot map. The `sync = TRUE` argument in `tm_facets()` was particularly impressive: it keeps the zoom and pan of two separate maps synchronised, making comparison intuitive.
 
 ## Getting Started
 
@@ -32,7 +32,7 @@ pacman::p_load(sf, tmap, tidyverse)
 ### Importing the Data
 
 ```{r}
-sgpools <- read_csv("data/aspatial/SGPools_svy21.csv")
+sgpools <- read_csv("SGPools_svy21.csv")
 list(sgpools)
 ```
 
@@ -50,9 +50,9 @@ list(sgpools_sf)
 
 **Key arguments:**
 
-- `coords` takes the column name for the x-coordinate first, then the y-coordinate
-- `crs = 3414` is the EPSG code for Singapore's SVY21 coordinate system
-- A new `geometry` column is added with the point coordinates
+-   `coords` takes the column name for the x-coordinate first, then the y-coordinate
+-   `crs = 3414` is the EPSG code for Singapore's SVY21 coordinate system
+-   A new `geometry` column is added with the point coordinates
 
 ## Drawing Proportional Symbol Maps
 

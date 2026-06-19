@@ -32,7 +32,7 @@ pacman::p_load(tmap, tidyverse, sf)
 ```{r}
 # NGA_wp is a polygon sf data frame of Nigeria Local Government Areas
 # with water point statistics attached
-NGA_wp <- read_rds("data/rds/NGA_wp.rds")
+NGA_wp <- read_rds("NGA_wp.rds")
 ```
 
 ## Basic Choropleth Maps
