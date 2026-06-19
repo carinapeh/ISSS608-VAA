@@ -54,17 +54,17 @@ popdata <- read_csv("respopagesextod2011to2020.csv")
 ### Data Preparation
 
 ```{r}
-popdata2020 <- popdata |>
-  filter(Time == 2020) |>
-  group_by(PA, SZ, AG) |>
-  summarise(POP = sum(Pop)) |>
-  ungroup() |>
-  pivot_wider(names_from = AG, values_from = POP) |>
-  mutate(YOUNG          = rowSums(.[3:6]) + rowSums(.[12]),
+popdata2020 <- popdata %>%
+  filter(Time == 2020) %>%
+  group_by(PA, SZ, AG) %>%
+  summarise(POP = sum(Pop)) %>%
+  ungroup() %>%
+  pivot_wider(names_from = AG, values_from = POP) %>%
+  mutate(YOUNG            = rowSums(.[3:6]) + rowSums(.[12]),
          `ECONOMY ACTIVE` = rowSums(.[7:11]) + rowSums(.[13:15]),
-         AGED           = rowSums(.[16:21]),
-         TOTAL          = rowSums(.[3:21]),
-         DEPENDENCY     = (YOUNG + AGED) / `ECONOMY ACTIVE`) |>
+         AGED             = rowSums(.[16:21]),
+         TOTAL            = rowSums(.[3:21]),
+         DEPENDENCY       = (YOUNG + AGED) / `ECONOMY ACTIVE`) %>%
   select(PA, SZ, YOUNG, `ECONOMY ACTIVE`, AGED, TOTAL, DEPENDENCY)
 ```
 
