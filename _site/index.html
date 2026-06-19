@@ -83,7 +83,8 @@ ul.task-list li input[type="checkbox"] {
 
     const options = {
       valueNames: ['listing-image','listing-date','listing-title','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
+      page: 18,
+    pagination: { item: "<li class='page-item'><a class='page page-link' href='#'></a></li>" },
       searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description"],
     };
 
@@ -306,6 +307,18 @@ window.Quarto = {
     <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex08.html">
  <span class="dropdown-text">8. Visualising and Analysing Time-oriented Data</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex09a.html">
+ <span class="dropdown-text">9a. Choropleth Mapping with R</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex09b.html">
+ <span class="dropdown-text">9b. Visualising Geospatial Point Data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex09c.html">
+ <span class="dropdown-text">9c. Analytical Mapping</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -404,60 +417,58 @@ window.Quarto = {
 <p><img src="images/handson-exercise-label.jpeg" class="img-fluid" style="width:30.0%"></p>
 <div id="listing-handson" class="quarto-listing quarto-listing-container-grid">
 <div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-listing-date-sort="1781107200000" data-listing-file-modified-sort="1781365496474" data-listing-date-modified-sort="1781365496000" data-listing-reading-time-sort="14" data-listing-word-count-sort="2755">
-<a href="./Hands-on_Ex/Hands-on_Ex08.html" class="quarto-grid-link">
+<div class="g-col-1" data-index="0" data-listing-date-sort="1781884800000" data-listing-file-modified-sort="1781881730301" data-listing-date-modified-sort="1781881730000" data-listing-reading-time-sort="5" data-listing-word-count-sort="805">
+<a href="./Hands-on_Ex/Hands-on_Ex09a.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./images/ex08-preview.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
+<div class="listing-item-img-placeholder card-img-top" style="height: 150px;">&nbsp;</div>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
-8. Visualising and Analysing Time-oriented Data
+9a. Choropleth Mapping with R
 </h5>
 <div class="card-text listing-description delink">
-<p>Time-oriented data captures how things change over time. In this exercise, three key visualisations for time-series analysis are explored: calendar heatmaps, cycle plots…</p>
+<p>Choropleth mapping visualises spatial distributions using graduated colours applied to enumeration units such as planning subzones, using the tmap and sf packages in R.</p>
 </div>
 <div class="card-attribution card-text-small end">
 <div class="listing-date">
-Jun 11, 2026
+Jun 20, 2026
 </div>
 </div>
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="1" data-listing-date-sort="1780070400000" data-listing-file-modified-sort="1780761331351" data-listing-date-modified-sort="1780761331000" data-listing-reading-time-sort="9" data-listing-word-count-sort="1719">
-<a href="./Hands-on_Ex/Hands-on_Ex07a.html" class="quarto-grid-link">
+<div class="g-col-1" data-index="1" data-listing-date-sort="1781884800000" data-listing-file-modified-sort="1781881730303" data-listing-date-modified-sort="1781881730000" data-listing-reading-time-sort="4" data-listing-word-count-sort="659">
+<a href="./Hands-on_Ex/Hands-on_Ex09b.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img loading='lazy' src="Hands-on_Ex/Hands-on_Ex07a_files/figure-html/unnamed-chunk-8-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
+<div class="listing-item-img-placeholder card-img-top" style="height: 150px;">&nbsp;</div>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
-7a. Modelling, Visualising and Analysing Network Data with R
+9b. Visualising Geospatial Point Data
 </h5>
 <div class="card-text listing-description delink">
-Network data consists of two key components — <strong>nodes</strong> (entities) and <strong>edges</strong> (relationships between entities). In this exercise, email correspondence data from GAStech, an oil…
+<p>Proportional symbol maps use the visual variable of size to represent differences in the magnitude of a discrete phenomenon, plotted as interactive maps using tmap.</p>
 </div>
 <div class="card-attribution card-text-small end">
 <div class="listing-date">
-May 30, 2026
+Jun 20, 2026
 </div>
 </div>
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="2" data-listing-date-sort="1780070400000" data-listing-file-modified-sort="1780157964288" data-listing-date-modified-sort="1780157964000" data-listing-reading-time-sort="12" data-listing-word-count-sort="2206">
-<a href="./Hands-on_Ex/Hands-on_Ex07b.html" class="quarto-grid-link">
+<div class="g-col-1" data-index="2" data-listing-date-sort="1781884800000" data-listing-file-modified-sort="1781881730304" data-listing-date-modified-sort="1781881730000" data-listing-reading-time-sort="7" data-listing-word-count-sort="1278">
+<a href="./Hands-on_Ex/Hands-on_Ex09c.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img loading='lazy' src="Hands-on_Ex/Hands-on_Ex07b_files/figure-html/unnamed-chunk-5-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
+<div class="listing-item-img-placeholder card-img-top" style="height: 150px;">&nbsp;</div>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
-7b. Visualising and Analysing Text Data with R
+9c. Analytical Mapping
 </h5>
 <div class="card-text listing-description delink">
-Text visualisation transforms unstructured text data into visual representations to support understanding, grouping, comparison and correlation of textual content. In this…<strong></strong>
+<p>Analytical mapping goes beyond visualisation by incorporating statistical techniques — rate maps, percentile maps, and box maps — to surface spatial outliers and extreme…</p>
 </div>
 <div class="card-attribution card-text-small end">
 <div class="listing-date">
-May 30, 2026
+Jun 20, 2026
 </div>
 </div>
 </div>

@@ -1,0 +1,120 @@
+---
+title: "9b. Visualising Geospatial Point Data"
+description: "Proportional symbol maps use the visual variable of size to represent differences in the magnitude of a discrete phenomenon, plotted as interactive maps using tmap."
+author: "carina peh"
+date: "June 20, 2026"
+date-modified: "last-modified"
+execute:
+  eval: false
+  echo: true
+  warning: false
+  freeze: true
+---
+
+## Overview
+
+Proportional symbol maps (also known as graduated symbol maps) use the visual variable of **size** to represent differences in the magnitude of a discrete phenomenon — for example, counts of people or number of wins. In this exercise, an interactive proportional symbol map is created showing the number of wins by Singapore Pools outlets, using the `tmap` package in R.
+
+## Reflections
+
+What stood out in this exercise was the difference between `tmap_mode("plot")` and `tmap_mode("view")` — switching to view mode turns the map into a fully interactive Leaflet map in the browser. Being able to encode two variables simultaneously — size for the number of wins and colour for the outlet type — in a single proportional symbol map makes it far more informative than a basic dot map. The `sync = TRUE` argument in `tm_facets()` was particularly impressive: it keeps the zoom and pan of two separate maps synchronised, making comparison intuitive.
+
+## Getting Started
+
+### Loading Packages
+
+```{r}
+pacman::p_load(sf, tmap, tidyverse)
+```
+
+## Data Wrangling
+
+### Importing the Data
+
+```{r}
+sgpools <- read_csv("data/aspatial/SGPools_svy21.csv")
+list(sgpools)
+```
+
+The dataset contains 306 Singapore Pools outlets with their x/y coordinates in SVY21 projection (EPSG: 3414).
+
+### Converting to a Simple Feature Data Frame
+
+```{r}
+# st_as_sf() converts a data frame with coordinate columns into a spatial sf object
+sgpools_sf <- st_as_sf(sgpools,
+                       coords = c("XCOORD", "YCOORD"),
+                       crs = 3414)
+list(sgpools_sf)
+```
+
+**Key arguments:**
+
+- `coords` takes the column name for the x-coordinate first, then the y-coordinate
+- `crs = 3414` is the EPSG code for Singapore's SVY21 coordinate system
+- A new `geometry` column is added with the point coordinates
+
+## Drawing Proportional Symbol Maps
+
+### Switching to Interactive Mode
+
+```{r}
+tmap_mode("view")
+```
+
+### Basic Point Symbol Map
+
+```{r}
+tm_shape(sgpools_sf) +
+  tm_bubbles(fill = "red",
+             size = 1,
+             col  = "black",
+             lwd  = 1)
+```
+
+### Making It Proportional
+
+```{r}
+# Size is now proportional to the number of wins
+tm_shape(sgpools_sf) +
+  tm_bubbles(fill = "red",
+             size = "Gp1Gp2 Winnings",
+             col  = "black",
+             lwd  = 1)
+```
+
+Assigning a numerical variable to `size` makes the symbol area proportional to the value — larger bubbles = more wins.
+
+### Encoding a Second Variable with Colour
+
+```{r}
+# Size = winnings, Colour = outlet type
+tm_shape(sgpools_sf) +
+  tm_bubbles(fill = "OUTLET TYPE",
+             size = "Gp1Gp2 Winnings",
+             col  = "black",
+             lwd  = 1)
+```
+
+Two variables are encoded at once: size for the quantity of wins and colour for the outlet category.
+
+### Synchronised Faceted Map
+
+```{r}
+# sync = TRUE keeps zoom and pan in sync across facets
+tm_shape(sgpools_sf) +
+  tm_bubbles(fill = "OUTLET TYPE",
+             size = "Gp1Gp2 Winnings",
+             col  = "black",
+             lwd  = 1) +
+  tm_facets(by   = "OUTLET TYPE",
+            nrow = 1,
+            sync = TRUE)
+```
+
+`tm_facets()` splits the map by outlet type. With `sync = TRUE`, zooming or panning one map automatically updates the other, which is very useful for direct spatial comparison.
+
+```{r}
+# Switch back to static mode at end of session
+tmap_mode("plot")
+```
