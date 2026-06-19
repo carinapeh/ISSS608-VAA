@@ -6,7 +6,7 @@ date: "June 20, 2026"
 date-modified: "last-modified"
 image: "../images/hands on ex 9b.jpg"
 execute:
-  eval: false
+  eval: true
   echo: true
   warning: false
   freeze: true
