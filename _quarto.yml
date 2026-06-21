@@ -79,6 +79,12 @@ website:
           - text: "Take-Home Exercise 2"
           - text: "Technical Report"
             href: "Take Home Exercise 2/Take_Home_Ex02.qmd"
+      - text: "Group Project"
+        menu:
+          - text: "Project Website"
+            href: "https://isss-608-vaa-project.vercel.app/"
+          - text: "Shiny App"
+            href: "https://myvaa.shinyapps.io/VAA_ShinyApp/"
     right:
       - icon: heart-fill
         href: about.qmd
